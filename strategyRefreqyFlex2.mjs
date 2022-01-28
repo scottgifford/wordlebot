@@ -9,9 +9,10 @@ export class StrategyRefreqyFlex2 extends StrategyRefreqy {
     }
 
     brandNewGuess() {
+        // v1 - Tweak the frequency table to remove (0-score) any letters we already know
         const freq2 = Object.fromEntries(Object.entries(this.leFreq)
-        .filter(([k,v]) => !this.letters.definitelyHasLetter(k)));
-return this.bestWord(this.words, freq2);
+            .filter(([k,v]) => !this.letters.definitelyHasLetter(k)));
+        return this.bestWord(this.words, freq2);
     }
 
     guess() {
