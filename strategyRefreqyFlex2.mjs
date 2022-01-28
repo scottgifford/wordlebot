@@ -8,6 +8,12 @@ export class StrategyRefreqyFlex2 extends StrategyRefreqy {
         this.knownLetters = 0;
     }
 
+    brandNewGuess() {
+        const freq2 = Object.fromEntries(Object.entries(this.leFreq)
+        .filter(([k,v]) => !this.letters.definitelyHasLetter(k)));
+return this.bestWord(this.words, freq2);
+    }
+
     guess() {
         // Choose both a word from the set of remaining possibilities, and from the set of words that contain none of the existing letters
         // If we know less than 3 letters, use the overall word instead of the possible word.
@@ -15,9 +21,7 @@ export class StrategyRefreqyFlex2 extends StrategyRefreqy {
         console.log(`Know ${knownLetters} / 6 letters`);
         if (this.letters.knownLetters() < MAX_WRONGNESS) {
             console.log(`Picking brand new word`);
-            const freq2 = Object.fromEntries(Object.entries(this.leFreq)
-                    .filter(([k,v]) => !this.letters.definitelyHasLetter(k)));
-            return this.bestWord(this.words, freq2);
+            return this.brandNewGuess();
         } else {
             return super.guess();
         }
