@@ -6,9 +6,7 @@ export class StrategyRefreqy extends StrategyFreqy {
     }
 
     update(guess, result) {
-        this.letters.update(guess, result);
-        this.remainingWords = this.remainingWords.filter(word => this.letters.wordHasLetters(word));
-        console.log(`${this.remainingWords.length} possibilities left`)
+        super.update(guess, result);
         this.leFreq = StrategyFreqy.frequencyAnalyze(this.remainingWords);
     }
 }

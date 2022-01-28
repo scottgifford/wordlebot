@@ -13,13 +13,13 @@ You guessed 'coyly' in 7 guesses!
 You guessed 'golly' in 7 guesses!
 You guessed 'frore' in 7 guesses!
 You guessed 'skeer' in 7 guesses!
+You guessed 'rager' in 8 guesses!
+You guessed 'roger' in 8 guesses!
 
 # not sure what made these fail
 You guessed 'giber' in 7 guesses!
 You guessed 'mazer' in 7 guesses!
 You guessed 'frame' in 7 guesses!
-You guessed 'rager' in 8 guesses!
-You guessed 'roger' in 8 guesses!
 You guessed 'bozal' in 7 guesses!
 
 Seems to struggle with duplicate letters (RefreqyFlex2 doesn't deal with them very well)
