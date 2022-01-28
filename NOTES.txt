@@ -1,26 +1,19 @@
-Current best version is RefreqyFlex2, MAX_WRONGNESS = 5, REMAINING_WORDS_THRESHOLD = 1
+Current best version is RefreqyFlex2, MAX_WRONGNESS = 5, REMAINING_WORDS_THRESHOLD = 1 with bugfix
 
-In last run failed on 8 words (arranged by type)
+In last run XXX
 # Duplicate Letters
-You guessed 'drier' in 7 guesses!
-You guessed 'inial' in 7 guesses!
-You guessed 'chaja' in 7 guesses!
-You guessed 'weeze' in 7 guesses!
-You guessed 'patta' in 7 guesses!
-You guessed 'cabda' in 7 guesses!
-You guessed 'jewel' in 7 guesses!
-You guessed 'coyly' in 7 guesses!
-You guessed 'golly' in 7 guesses!
-You guessed 'frore' in 7 guesses!
-You guessed 'skeer' in 7 guesses!
-You guessed 'rager' in 8 guesses!
-You guessed 'roger' in 8 guesses!
+You guessed 'every' in 7 guesses!
+You guessed 'ninny' in 7 guesses!
+You guessed 'doddy' in 7 guesses!
+You guessed 'doddy' in 7 guesses!
+You guessed 'doddy' in 7 guesses!
+You guessed 'rider' in 7 guesses!
 
 # not sure what made these fail
-You guessed 'giber' in 7 guesses!
-You guessed 'mazer' in 7 guesses!
-You guessed 'frame' in 7 guesses!
-You guessed 'bozal' in 7 guesses!
+You guessed 'payer' in 7 guesses!
+    Predecessor had double-letter - "paper"
+You guessed 'hazer' in 7 guesses!
+    Predecessor had double-letter - "razer"
 
 Seems to struggle with duplicate letters (RefreqyFlex2 doesn't deal with them very well)
 
@@ -34,3 +27,4 @@ This is different from using frequency tables (I think).
 
 ## Double-letter aware frequency
 Extend frequency data to have information on double/triple/etc. letters, and incorporate that into scoring.
+Maybe switch to RefreqyFlex2 v2 but filter out only single-letter choices instead of double-letter choices?

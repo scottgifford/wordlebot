@@ -26,10 +26,11 @@ export class StrategyRefreqyFlex2 extends StrategyRefreqy {
 
     guess() {
         // Choose both a word from the set of remaining possibilities, and from the set of words that contain none of the existing letters
-        // If we know less than 3 letters, use the overall word instead of the possible word.
+        // If we know less than MAX_WRONGNESS letters and there are more than REMAINING_WORDS_THRESHOLD possibilities,
+        // use the overall word instead of the possible word.
         const knownLetters = this.letters.knownLetters();
         console.log(`Know ${knownLetters} / 5 letters`);
-        if (this.remainingWords.length >= REMAINING_WORDS_THRESHOLD && this.letters.knownLetters() < MAX_WRONGNESS) {
+        if (this.remainingWords.length > REMAINING_WORDS_THRESHOLD && this.letters.knownLetters() < MAX_WRONGNESS) {
             console.log(`Picking brand new word`);
             const guess = this.brandNewGuess();
             if (guess) {

@@ -97,3 +97,7 @@ RefreqyFlex2 v1 MAX_WRONGNESS = 4
 RefreqyFlex2 v1 MAX_WRONGNESS = 5
   winRate: 0.992,
   averageGuesses: 4.541
+
+RefreqyFlex2 v3 MAX_WRONGNESS = 5 - Bugfix
+  winRate: 0.996,
+  averageGuesses: 4.322
