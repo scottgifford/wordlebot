@@ -11,7 +11,7 @@ export class StrategyFreqy extends Strategy {
     }
 
     guess() {
-        return this.remainingWords.map(word => ({ word, score: this.scoreWord(word)})).sort((a, b) => /* reverse sort */ b.score - a.score)[0].word;
+        return this.bestWord(this.remainingWords, this.leFreq);
     }
 
     update(guess, result) {
@@ -36,15 +36,19 @@ export class StrategyFreqy extends Strategy {
         return freq;
     }
     
-    scoreWord(word) {
+    bestWord(words, freq) {
+        return words.map(word => ({ word, score: this.scoreWord(word, freq)})).sort((a, b) => /* reverse sort */ b.score - a.score)[0].word;
+    }
+
+    scoreWord(word, freq) {
         let score = 0;
         let picked = { };
         for(let i=0;i<word.length;i++) {
             const letter = word[i];
-            if (!picked[letter]) {            
+            if (!picked[letter] && freq[letter]) {            
                 // Score is 0 if we have already picked the letter once
-                score += this.leFreq[letter][i] * RIGHT_PLACE_MULTIPLIER;
-                score += this.leFreq[letter].reduce((sum, cur) => sum + cur);
+                score += freq[letter][i] * RIGHT_PLACE_MULTIPLIER;
+                score += freq[letter].reduce((sum, cur) => sum + cur);
             } else {
                 // console.log(`No score for letter ${i} in word ${word}`);
             }

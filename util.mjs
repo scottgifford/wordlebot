@@ -3,14 +3,20 @@ export function randWord(words) {
     return words[wordNum];
 }
 
-export function occurencesBeforePos(str, ch, pos) {
+export function charOccurrences(str, ch) {
     let count = 0;
-    for(let i=0;i<pos;i++) {
-        if (str[i] === ch) {
-            count++;
+    if (str) {
+        for(let i=0;i<str.length;i++) {
+            if (str[i] === ch) {
+                count++;
+            }
         }
     }
     return count;
+}
+
+export function sum(arr) {
+    return arr.reduce((tot, i) => tot += i, 0);
 }
 
 export function takeGuess(guess, answer) {

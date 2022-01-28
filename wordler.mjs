@@ -1,7 +1,7 @@
 #!/usr/bin/env node --experimental-modules
 
 import { allwords } from "./allwords.mjs";
-import { randWord, takeGuess, occurencesBeforePos } from "./util.mjs";
+import { randWord, takeGuess } from "./util.mjs";
 import { strategyByName } from "./strategyByName.mjs";
 
 const DEFAULT_STRATEGY_NAME = 'random';

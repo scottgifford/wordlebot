@@ -1,6 +1,8 @@
 import { StrategyFreqy } from "./strategyFreqy.mjs";
 import { StrategyRandomRemaining } from "./strategyRandomRemaining.mjs";
 import { StrategyRefreqy } from "./strategyRefreqy.mjs";
+import { StrategyRefreqyFlex } from "./strategyRefreqyFlex.mjs";
+import { StrategyRefreqyFlex2 } from "./strategyRefreqyFlex2.mjs";
 import { StrategySimGuess } from "./strategySimGuess.mjs";
 
 export function strategyByName(name, words) {
@@ -11,6 +13,10 @@ export function strategyByName(name, words) {
             return new StrategyFreqy(words);
         case 'refreq':
             return new StrategyRefreqy(words);
+        case 'refreqflex':
+            return new StrategyRefreqyFlex(words);
+        case 'refreqflex2':
+            return new StrategyRefreqyFlex2(words);
         case 'simguess':
             return new StrategySimGuess(words);
     

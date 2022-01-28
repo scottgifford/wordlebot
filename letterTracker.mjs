@@ -1,4 +1,4 @@
-import { occurencesBeforePos } from "./util.mjs";
+import { charOccurrences } from "./util.mjs";
 
 export class LetterTracker {
     constructor(letters = { }) {
@@ -58,8 +58,7 @@ export class LetterTracker {
             const letterInfo = this.letters[letter];
             if (letterInfo) {
                 // console.log(`Found info on letter '${letter}': `, letterInfo);
-                // TODO: Do we still need occurrencesBeforePos here?!  It's always been wrong before
-                const letterCount = occurencesBeforePos(word, letter, word.length);
+                const letterCount = charOccurrences(word, letter, word.length);
                 if (letterInfo.min !== undefined && letterCount < letterInfo.min) {
                     return false;
                 }
@@ -83,5 +82,17 @@ export class LetterTracker {
             }
         }
         return true;
+    }
+
+    definitelyHasLetter(letter) {
+        const letterInfo = this.letters[letter];
+        if (!letterInfo) {
+            return false;
+        }
+        return letterInfo.min > 0;
+    }
+
+    knownLetters() {
+        return Object.entries(this.letters).filter(([ltr, stats]) => stats.min >= 1).length;
     }
 }
