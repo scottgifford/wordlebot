@@ -9,10 +9,9 @@ export class StrategyRefreqyFlex2 extends StrategyRefreqy {
     }
 
     brandNewGuess() {
-        // v2 - Restrict word list, use existing frequency table
-        const brandNewWords = this.words.filter((word) => Array.from(word).every((ltr) => !this.letters.definitelyHasLetter(ltr)));
-        console.log(`${brandNewWords.length} brand new words`);
-        return this.bestWord(brandNewWords, this.leFreq);
+        const freq2 = Object.fromEntries(Object.entries(this.leFreq)
+        .filter(([k,v]) => !this.letters.definitelyHasLetter(k)));
+return this.bestWord(this.words, freq2);
     }
 
     guess() {
