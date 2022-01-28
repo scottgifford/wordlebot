@@ -92,6 +92,14 @@ export class LetterTracker {
         return letterInfo.min > 0;
     }
 
+    definitelyDoesNotHaveLetter(letter) {
+        const letterInfo = this.letters[letter];
+        if (!letterInfo) {
+            return false;
+        }
+        return letterInfo.max === 0;
+    }
+
     knownLetters() {
         return Object.entries(this.letters).filter(([ltr, stats]) => stats.min >= 1).length;
     }
