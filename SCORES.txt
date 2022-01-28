@@ -1,0 +1,99 @@
+RandomRemaining
+  averageGuesses: 4.741
+
+Freqy v1 (buggy)
+  averageGuesses: 5.209
+
+Freqy v3
+  averageGuesses: 4.446
+
+Refreqy mul 5
+  averageGuesses: 4.274
+
+Refreqy mul 4
+  averageGuesses: 4.341
+
+Refreqy mul 3
+  averageGuesses: 4.254
+
+Refreqy mul 2
+  averageGuesses: 4.354
+
+Refreqy mul 1
+  averageGuesses: 4.26
+
+Refreqy mul 0
+  averageGuesses: 4.288
+
+Refreqy mul 10
+  averageGuesses: 4.271
+
+Simguess guess_rate=.001 sim_rate=.001
+  averageGuesses: 4.898
+
+Simguess guess_rate=.001 sim_rate=.002
+  averageGuesses: 4.956
+
+Simguess guess_rate=.002 sim_rate=.001
+  averageGuesses: 4.9
+
+Simguess v2 guess_rate=.001 sim_rate=.001
+  averageGuesses: 4.945
+
+Simguess v3 guess_rate=.001 sim_rate=.001
+  averageGuesses: 4.594
+
+
+Simguess v2 guess_rate=.001 sim_rate=.001
+  winRate: 0.897,
+  averageGuesses: 4.902
+
+Refreqy mul 3
+  winRate: 0.963,
+  averageGuesses: 4.233
+
+RandomRemaining
+  winRate: 0.915,
+  averageGuesses: 4.774
+
+RefreqyFlex ratio 0.20
+  winRate: 0.959,
+  averageGuesses: 4.329
+
+RefreqyFlex ratio 0.30
+  winRate: 0.967,
+  averageGuesses: 4.235
+
+RefreqyFlex ratio 0.10
+  winRate: 0.969,
+  averageGuesses: 4.621
+
+
+RefreqyFlex ratio 0.50
+  winRate: 0.964,
+  averageGuesses: 4.29
+
+RefreqyFlex ratio 0.40
+  winRate: 0.955,
+  averageGuesses: 4.319
+
+RefreqyFlex2 v1 MAX_WRONGNESS = 3
+  winRate: 0.97,
+  averageGuesses: 4.132
+
+
+RefreqyFlex2 v2 MAX_WRONGNESS = 3
+  winRate: 0.964,
+  averageGuesses: 4.17
+
+RefreqyFlex2 v1 MAX_WRONGNESS = 2
+  winRate: 0.948,
+  averageGuesses: 4.294
+
+RefreqyFlex2 v1 MAX_WRONGNESS = 4
+  winRate: 0.976,
+  averageGuesses: 4.314
+
+RefreqyFlex2 v1 MAX_WRONGNESS = 5
+  winRate: 0.992,
+  averageGuesses: 4.541
