@@ -9,9 +9,17 @@ export class StrategyRefreqyFlex2 extends StrategyRefreqy {
         this.knownLetters = 0;
     }
 
+    reFreq() {
+        return this.leFreq.clone(([k,v]) => !this.letters.definitelyHasLetter(k) && !this.letters.definitelyDoesNotHaveLetter(k));
+    }
+
+    shouldUseBrandNewGuess() {
+        return this.remainingWords.length > REMAINING_WORDS_THRESHOLD && this.letters.knownLetters() < MAX_WRONGNESS;
+    }
+
     brandNewGuess() {
         // v1 - Tweak the frequency table to remove (0-score) any letters we already know
-        const freq2 = this.leFreq.clone(([k,v]) => !this.letters.definitelyHasLetter(k) && !this.letters.definitelyDoesNotHaveLetter(k));
+        const freq2 = this.reFreq();
         const word = this.bestWord(this.words, freq2);
         const score = this.scoreWord(word, freq2);
         console.log(`Chose ${word} with score ${score}`);
@@ -29,7 +37,7 @@ export class StrategyRefreqyFlex2 extends StrategyRefreqy {
         // use the overall word instead of the possible word.
         const knownLetters = this.letters.knownLetters();
         console.log(`Know ${knownLetters} / 5 letters`);
-        if (this.remainingWords.length > REMAINING_WORDS_THRESHOLD && this.letters.knownLetters() < MAX_WRONGNESS) {
+        if (this.shouldUseBrandNewGuess()) {
             console.log(`Picking brand new word`);
             const guess = this.brandNewGuess();
             if (guess) {
@@ -40,10 +48,5 @@ export class StrategyRefreqyFlex2 extends StrategyRefreqy {
         }
 
         return super.guess();
-    }
-
-    update(guess, result) {
-        this.lastResult = result;
-        super.update(guess, result);
     }
 }

@@ -7,13 +7,17 @@ export class StrategyRefreqyFlex extends StrategyRefreqy {
         super(words);
     }
 
+    reFreq() {
+        return this.leFreq.clone(([k, v]) => !this.letters.definitelyHasLetter(k));
+    }
+
     guess() {
         // Choose and score both a word from the set of remaining possibilities, and from the set of words that contain none of the existing letters
         // As a (maybe nonsense?) heuristic, look at the ration of the overall choice to the remaining word choice,
         // and if it is above a threshold, choose the overall choice instead.
         // The threshold is kind of arbitrary and its meaning is not clear; but the remaining choice will usually be better because it's
         // used up the most common (therefore higher scoring) letters.
-        const freq2 = this.leFreq.clone(([k,v]) => !this.letters.definitelyHasLetter(k));
+        const freq2 = this.reFreq();
         const bestOverallWord = this.bestWord(this.words, freq2);
         const bestOverallWordScore = bestOverallWord ? this.scoreWord(bestOverallWord, freq2) : 0;
 
