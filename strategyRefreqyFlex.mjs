@@ -13,8 +13,7 @@ export class StrategyRefreqyFlex extends StrategyRefreqy {
         // and if it is above a threshold, choose the overall choice instead.
         // The threshold is kind of arbitrary and its meaning is not clear; but the remaining choice will usually be better because it's
         // used up the most common (therefore higher scoring) letters.
-        const freq2 = Object.fromEntries(Object.entries(this.leFreq)
-                .filter(([k,v]) => !this.letters.definitelyHasLetter(k)));
+        const freq2 = this.leFreq.clone(([k,v]) => !this.letters.definitelyHasLetter(k));
         const bestOverallWord = this.bestWord(this.words, freq2);
         const bestOverallWordScore = bestOverallWord ? this.scoreWord(bestOverallWord, freq2) : 0;
 

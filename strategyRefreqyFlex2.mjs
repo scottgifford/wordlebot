@@ -11,8 +11,7 @@ export class StrategyRefreqyFlex2 extends StrategyRefreqy {
 
     brandNewGuess() {
         // v1 - Tweak the frequency table to remove (0-score) any letters we already know
-        const freq2 = Object.fromEntries(Object.entries(this.leFreq)
-            .filter(([k,v]) => !this.letters.definitelyHasLetter(k) && !this.letters.definitelyDoesNotHaveLetter(k)));
+        const freq2 = this.leFreq.clone(([k,v]) => !this.letters.definitelyHasLetter(k) && !this.letters.definitelyDoesNotHaveLetter(k));
         const word = this.bestWord(this.words, freq2);
         const score = this.scoreWord(word, freq2);
         console.log(`Chose ${word} with score ${score}`);
