@@ -28,3 +28,17 @@ This is different from using frequency tables (I think).
 ## Double-letter aware frequency
 Extend frequency data to have information on double/triple/etc. letters, and incorporate that into scoring.
 Maybe switch to RefreqyFlex2 v2 but filter out only single-letter choices instead of double-letter choices?
+
+### Score
+  winRate: 0.993,
+  averageGuesses: 4.329
+
+## Misses
+You guessed 'jazzy' in 8 guesses!
+You guessed 'stomp' in 7 guesses!
+You guessed 'buzzy' in 7 guesses!
+You guessed 'moggy' in 7 guesses!
+You guessed 'bichy' in 7 guesses!
+You guessed 'jager' in 7 guesses!
+You guessed 'manny' in 7 guesses!
+

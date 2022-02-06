@@ -84,12 +84,12 @@ export class LetterTracker {
         return true;
     }
 
-    definitelyHasLetter(letter) {
+    definitelyHasLetter(letter, min = 0) {
         const letterInfo = this.letters[letter];
         if (!letterInfo) {
             return false;
         }
-        return letterInfo.min > 0;
+        return letterInfo.min >= min;
     }
 
     definitelyDoesNotHaveLetter(letter) {
@@ -98,6 +98,14 @@ export class LetterTracker {
             return false;
         }
         return letterInfo.max === 0;
+    }
+
+    minLetters(letter) {
+        const letterInfo = this.letters[letter];
+        if (!letterInfo) {
+            return undefined;
+        }
+        return letterInfo.min ;
     }
 
     knownLetters() {

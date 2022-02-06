@@ -9,6 +9,7 @@ export class StrategyFreqy extends Strategy {
         this.remainingWords = words;
         this.letters = new LetterTracker();
         this.leFreq = StrategyFreqy.frequencyAnalyze(words);
+        console.log(`FrequencyAnalysis:\n${this.leFreq.debugString()}`);
     }
 
     static frequencyAnalyze(words) {
@@ -31,7 +32,9 @@ export class StrategyFreqy extends Strategy {
     }
 
     bestWord(words, freq) {
-        return words.map(word => ({ word, score: this.scoreWord(word, freq)})).sort((a, b) => /* reverse sort */ b.score - a.score)[0].word;
+        const scores = words.map(word => ({ word, score: this.scoreWord(word, freq)})).sort((a, b) => /* reverse sort */ b.score - a.score);
+        console.log('Top 10 Scores:', scores.slice(0,10));
+        return scores[0].word;
     }
 
     scoreWord(word, freq) {
