@@ -2,7 +2,7 @@ import { FrequencyAnalysis } from "./freq.mjs";
 import { StrategyRefreqyFlex2 } from "./strategyRefreqyFlex2.mjs";
 import { charOccurrences } from "./util.mjs";
 
-const RIGHT_PLACE_MULTIPLIER = 3; // Determined experimentally, though doesn't seem to matter much
+const RIGHT_PLACE_MULTIPLIER = 1; // Determined experimentally, though doesn't seem to matter much
 
 export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
     // TODO: CopyPasta from StrategyFreqy, refactor to avoid needing this

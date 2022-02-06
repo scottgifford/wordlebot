@@ -106,6 +106,14 @@ RefreqyFlex3 MAX_WRONGNESS = 5
   winRate: 0.993,
   averageGuesses: 4.329
 
-RefreqyFlex3 v2 MAX_WRONGNESS = 5
-  winRate: 0.993,
-  averageGuesses: 4.329
+RefreqyFlex3 v2 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 3
+  winRate: 0.987,
+  averageGuesses: 4.405
+
+RefreqyFlex3 v2 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 0
+  winRate: 0.989,
+  averageGuesses: 4.473
+
+RefreqyFlex3 v2 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1
+  winRate: 0.989,
+  averageGuesses: 4.473  

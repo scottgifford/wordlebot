@@ -30,15 +30,17 @@ Extend frequency data to have information on double/triple/etc. letters, and inc
 Maybe switch to RefreqyFlex2 v2 but filter out only single-letter choices instead of double-letter choices?
 
 ### Score
-  winRate: 0.993,
-  averageGuesses: 4.329
+RefreqyFlex3 v2 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1
+  winRate: 0.992,
+  averageGuesses: 4.334
 
 ## Misses
-You guessed 'jazzy' in 8 guesses!
-You guessed 'stomp' in 7 guesses!
-You guessed 'buzzy' in 7 guesses!
-You guessed 'moggy' in 7 guesses!
-You guessed 'bichy' in 7 guesses!
-You guessed 'jager' in 7 guesses!
+You guessed 'bezel' in 7 guesses!
+You guessed 'hazel' in 7 guesses!
+You guessed 'hawky' in 8 guesses!
+You guessed 'bumpy' in 7 guesses!
+You guessed 'foppy' in 7 guesses!
 You guessed 'manny' in 7 guesses!
+You guessed 'wanny' in 7 guesses!
+You guessed 'pinny' in 7 guesses!
 
