@@ -18,15 +18,31 @@ export class FrequencyAnalysis {
             .filter(filt)));
     }
 
+    cloneMap(f = () => true) {
+        return new FrequencyAnalysis([], Object.fromEntries(Object.entries(this.freq)
+            .map(f)
+            .filter(([k, v]) => v !== undefined)));
+    }
+
     hasLetter(letter) {
-        return !!this.freq[letter];
+        return this.letterFrequency(letter) > 0;
     }
 
     letterFrequencyAtPosition(letter, position) {
+        if (!this.freq[letter]) {
+            return 0;
+        }
         return this.freq[letter][position];
     }
 
     letterFrequency(letter) {
+        if (!this.freq[letter]) {
+            return 0;
+        }
         return this.freq[letter].reduce((sum, cur) => sum + cur);
+    }
+
+    getEntry(letter) {
+        return this.freq[letter];
     }
 }
