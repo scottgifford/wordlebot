@@ -70,20 +70,20 @@ export class FrequencyAnalysis {
     getEntryAdjustedLetterCount(letter, count) {
         const entry = JSON.parse(JSON.stringify(this.freq[letter]));
         for(let i=0; i<count; i++) {
-            entry[i] = entry[count];
+            entry[i] = [0,0,0,0,0];
         }
-        // console.log(`Adjusted letter count for letter '${letter}' count ${count} from:`, this.freq[letter], 'to:', entry);
+        // if (count > 0) {
+        //     console.log(`Adjusted letter count for letter '${letter}' count ${count} from:`, this.freq[letter], 'to:', entry);
+        // }
         return entry;
     }
 
     debugString() {
         return Object.entries(this.freq)
-            .map(([letter, entry]) => {
-                return [letter, entry.filter((occEntry) => !occEntry.every((val) => val === 0))];
-            }).filter(([letter, entry]) => {
+            .filter(([letter, entry]) => {
                 return entry.length > 0;
-        }).map(([letter, entry]) => {
-            return `${letter}: ${JSON.stringify(entry)}`;
-        }).join("\n");
+            }).map(([letter, entry]) => {
+                return `${letter}: ${JSON.stringify(entry)}`;
+            }).join("\n");
     }
 }

@@ -44,3 +44,18 @@ You guessed 'manny' in 7 guesses!
 You guessed 'wanny' in 7 guesses!
 You guessed 'pinny' in 7 guesses!
 
+## Enhancement: Adjust letter tracker based on possibilities
+Sometimes the limited number of possibilities let us infer things in the letter tracker, e.g. all of the possibilities
+have a particular letter, sometimes in a particular position.
+
+## Enhancement: In RefreqyFlex modes, take a real guess on the last guess
+Instead of searching for words, if it's our last guess, might as well give it a shot.
+
+## Enhancement: In RefreqyFlex modes, no score for a letter whose place we already know
+Even if it could be a double letter, etc.
+
+# Things to look into
+
+## Deep-dive scoring
+Make sure scoring is sensible and only values additional data
+
