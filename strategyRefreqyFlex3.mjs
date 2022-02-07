@@ -16,15 +16,21 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
                 prevCount[letter] = 0;
             }
             Logger.log('strategy', 'trace', `${letter}: prevCount=${prevCount[letter]}, minLetters=${this.letters.minLetters(letter) || 0}`);
-            if (freq.hasLetter(letter, prevCount[letter]) && 
-                prevCount[letter] == (this.letters.minLetters(letter) || 0) // Score only if this is the first new occurrence of this letter in this guess
-            ) {
+            if (freq.hasLetter(letter, prevCount[letter])) {
                 if (this.letters.minLetters(letter) === undefined || (this.letters.minLetters(letter) < charOccurrences(word, letter))) {
                     if (!this.letters.definitelyHasLetterAtPosition('letter', i)) {
-                        score += freq.letterFrequencyAtPosition(letter, i, prevCount[letter]) * RIGHT_PLACE_MULTIPLIER;
+                        if (prevCount[letter] == (this.letters.minLetters(letter) || 0)) {
+                            // This is the first new occurence of a letter we don't know about.
+                            score += freq.letterFrequencyAtPosition(letter, i, prevCount[letter]) * RIGHT_PLACE_MULTIPLIER;
+                            score += freq.letterFrequency(letter, prevCount[letter]) - prevCount[letter] /* subtract for the letters we already know about */;
+                        } else {
+                             // This is an additional new occurrence of a letter when we don't yet know if the previous occurrence is here!
+                             // The value of this is lower, but it is not 0; it is better to guess an extra occurrence early than to guess
+                             // a letter we already know is or isn't in the word.
+                             // So just give this a very low score, instead of the 0 score in v4-
+                             score += 0.5;
+                        }
                     }
-
-                    score += freq.letterFrequency(letter, prevCount[letter]) - prevCount[letter] /* subtract for the letters we already know about */;
                 }
             } else {
                 Logger.log('score', 'trace', `No score for letter ${i} in word ${word}`);

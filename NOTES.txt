@@ -77,6 +77,21 @@ RefreqyFlex3 v4 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 2
 -> GAME            [INFO ] You guessed 'roper' in 7 guesses!
 -> GAME            [INFO ] You guessed 'mower' in 7 guesses!
 
+### v5
+Instead of no score for a duplicate letter, give a very low score.
+Better to pick a duplicate letter than something we know is not in the word!
+
+#### Score
+RefreqyFlex3 v5 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 2
+  winRate: 0.997,
+  averageGuesses: 4.25
+
+#### Misses
+-> GAME            [INFO ] You guessed 'wafer' in 7 guesses!
+-> GAME            [INFO ] You guessed 'jazzy' in 7 guesses!
+-> GAME            [INFO ] You guessed 'hoper' in 7 guesses!
+-> GAME            [INFO ] You guessed 'hoper' in 7 guesses!
+
 ### Possible Enhancements
 #### Enhancement: Adjust letter tracker based on possibilities
 Sometimes the limited number of possibilities let us infer things in the letter tracker, e.g. all of the possibilities
@@ -84,9 +99,6 @@ have a particular letter, sometimes in a particular position.
 
 #### Enhancement: In RefreqyFlex modes, take a real guess on the last guess
 Instead of searching for words, if it's our last guess, might as well give it a shot.
-
-#### Enhancement: In RefreqyFlex3, instead of no score for a duplicate letter, give a very low score
-Better to pick a duplicate letter than something we know is not in the word!
 
 ## Maximum Discernment
 When we have the list of words narrowed down, which letters would most help us discern from the remaining ones?
