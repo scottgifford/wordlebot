@@ -100,6 +100,14 @@ export class LetterTracker {
         return letterInfo.max === 0;
     }
 
+    definitelyHasLetterAtPosition(letter, position) {
+        const letterInfo = this.letters[letter];
+        if (!letterInfo) {
+            return false;
+        }
+        return letterInfo.pos[position] === 1;
+    }
+
     minLetters(letter) {
         const letterInfo = this.letters[letter];
         if (!letterInfo) {

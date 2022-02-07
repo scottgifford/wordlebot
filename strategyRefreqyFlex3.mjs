@@ -20,8 +20,11 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
                 prevCount[letter] == (this.letters.minLetters(letter) || 0) // Score only if this is the first new occurrence of this letter in this guess
             ) {
                 if (this.letters.minLetters(letter) === undefined || (this.letters.minLetters(letter) < charOccurrences(word, letter))) {
-                    score += freq.letterFrequencyAtPosition(letter, i, prevCount[letter]) * RIGHT_PLACE_MULTIPLIER;
-                    score += freq.letterFrequency(letter, prevCount[letter]);
+                    if (!this.letters.definitelyHasLetterAtPosition('letter', i)) {
+                        score += freq.letterFrequencyAtPosition(letter, i, prevCount[letter]) * RIGHT_PLACE_MULTIPLIER;
+                    }
+
+                    score += freq.letterFrequency(letter, prevCount[letter]) - prevCount[letter] /* subtract for the letters we already know about */;
                 }
             } else {
                 Logger.log('score', 'trace', `No score for letter ${i} in word ${word}`);
@@ -52,7 +55,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
                 newFreq.getAllLetters()
                 .flatMap((letter) => {
                     return [0, 1, 2, 3, 4, 5].map((prevCount) => {
-                        return [`${letter}/${prevCount}`, newFreq.letterFrequency(letter, prevCount)]
+                        return [`${letter}/${prevCount}`, newFreq.letterFrequency(letter, prevCount) - prevCount]
                     })
                 })
                 .sort((a, b) => b[1]-a[1])
