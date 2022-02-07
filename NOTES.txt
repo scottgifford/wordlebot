@@ -29,12 +29,13 @@ This is different from using frequency tables (I think).
 Extend frequency data to have information on double/triple/etc. letters, and incorporate that into scoring.
 Maybe switch to RefreqyFlex2 v2 but filter out only single-letter choices instead of double-letter choices?
 
-### Score
+### v2
+#### Score
 RefreqyFlex3 v2 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1
   winRate: 0.992,
   averageGuesses: 4.334
 
-## Misses
+#### Misses
 You guessed 'bezel' in 7 guesses!
 You guessed 'hazel' in 7 guesses!
 You guessed 'hawky' in 8 guesses!
@@ -43,6 +44,26 @@ You guessed 'foppy' in 7 guesses!
 You guessed 'manny' in 7 guesses!
 You guessed 'wanny' in 7 guesses!
 You guessed 'pinny' in 7 guesses!
+
+### v3
+Only score the first new occurrence of each letter, to favor a wider variety of letters over guessing double-letters that are likely.
+
+#### Score
+RefreqyFlex3 v3 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 2
+  winRate: 0.99,
+  averageGuesses: 4.299
+
+#### Missed
+-> GAME            [INFO ] You guessed 'vower' in 7 guesses!
+-> GAME            [INFO ] You guessed 'roper' in 7 guesses!
+-> GAME            [INFO ] You guessed 'widdy' in 7 guesses!
+-> GAME            [INFO ] You guessed 'hazel' in 7 guesses!
+-> GAME            [INFO ] You guessed 'javer' in 7 guesses!
+-> GAME            [INFO ] You guessed 'hoppy' in 7 guesses!
+-> GAME            [INFO ] You guessed 'javer' in 7 guesses!
+-> GAME            [INFO ] You guessed 'awing' in 7 guesses!
+-> GAME            [INFO ] You guessed 'bevel' in 7 guesses!
+-> GAME            [INFO ] You guessed 'linja' in 7 guesses!
 
 ## Enhancement: Adjust letter tracker based on possibilities
 Sometimes the limited number of possibilities let us infer things in the letter tracker, e.g. all of the possibilities

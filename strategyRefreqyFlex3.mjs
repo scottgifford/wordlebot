@@ -15,8 +15,10 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
             if (prevCount[letter] === undefined) {
                 prevCount[letter] = 0;
             }
-            if (freq.hasLetter(letter, prevCount[letter])) {
-                // TODO: I think this check can be removed
+            Logger.log('strategy', 'trace', `${letter}: prevCount=${prevCount[letter]}, minLetters=${this.letters.minLetters(letter) || 0}`);
+            if (freq.hasLetter(letter, prevCount[letter]) && 
+                prevCount[letter] == (this.letters.minLetters(letter) || 0) // Score only if this is the first new occurrence of this letter in this guess
+            ) {
                 if (this.letters.minLetters(letter) === undefined || (this.letters.minLetters(letter) < charOccurrences(word, letter))) {
                     score += freq.letterFrequencyAtPosition(letter, i, prevCount[letter]) * RIGHT_PLACE_MULTIPLIER;
                     score += freq.letterFrequency(letter, prevCount[letter]);
