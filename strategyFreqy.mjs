@@ -27,7 +27,7 @@ export class StrategyFreqy extends Strategy {
 
         Logger.log('strategy', 'info', `${this.remainingWords.length} possibilities left`);
         if (this.remainingWords.length < 20) {
-            Logger.log('words', 'debug', this.remainingWords);
+            Logger.log('strategy', 'info', this.remainingWords);
         }
 
     }
