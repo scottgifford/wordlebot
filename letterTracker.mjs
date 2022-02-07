@@ -1,3 +1,4 @@
+import { Logger } from "./log.mjs";
 import { charOccurrences } from "./util.mjs";
 
 export class LetterTracker {
@@ -52,12 +53,11 @@ export class LetterTracker {
     }
 
     wordHasLetters(word) {
-        // console.log(`Considering if '${word}' matches ${letters.length} letters: `, letters);
         for (let i=0; i<26; i++) {
             const letter = String.fromCharCode(0x61 + i);
             const letterInfo = this.letters[letter];
             if (letterInfo) {
-                // console.log(`Found info on letter '${letter}': `, letterInfo);
+                Logger.log('lettertrack', 'debug', `Found info on letter '${letter}': `, letterInfo);
                 const letterCount = charOccurrences(word, letter, word.length);
                 if (letterInfo.min !== undefined && letterCount < letterInfo.min) {
                     return false;
@@ -110,5 +110,13 @@ export class LetterTracker {
 
     knownLetters() {
         return Object.entries(this.letters).filter(([ltr, stats]) => stats.min >= 1).length;
+    }
+
+    debugString() {
+        return "LetterTracker:\n" + 
+        Object.entries(this.letters)
+            .map(([letter, entry]) => {
+                return `${letter}: ${JSON.stringify(entry)}`;
+            }).join("\n");
     }
 }

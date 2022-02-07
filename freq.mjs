@@ -1,4 +1,7 @@
-import { charOccurrences, sum } from "./util.mjs";
+import { Logger } from "./log.mjs";
+import { sum } from "./util.mjs";
+
+const log = new Logger('freq');
 
 export class FrequencyAnalysis {
     constructor(words, initialFreq = { }) {
@@ -11,7 +14,7 @@ export class FrequencyAnalysis {
                 result[letter] = letterEntry;
                 return result;
             }, { });
-            // console.log(`Word ${word} letters:`, letters);
+            log.trace(`Word ${word} letters:`, letters);
             for (const letter in letters) {
                 const letterEntry = letters[letter];
                 const charCount = sum(letterEntry);
@@ -67,14 +70,18 @@ export class FrequencyAnalysis {
         return this.freq[letter];
     }
 
+    getAllLetters() {
+        return Object.keys(this.freq);
+    }
+
     getEntryAdjustedLetterCount(letter, count) {
         const entry = JSON.parse(JSON.stringify(this.freq[letter]));
         for(let i=0; i<count; i++) {
             entry[i] = [0,0,0,0,0];
         }
-        // if (count > 0) {
-        //     console.log(`Adjusted letter count for letter '${letter}' count ${count} from:`, this.freq[letter], 'to:', entry);
-        // }
+        if (count > 0) {
+            log.trace(`Adjusted letter count for letter '${letter}' count ${count} from:`, this.freq[letter], 'to:', entry);
+        }
         return entry;
     }
 

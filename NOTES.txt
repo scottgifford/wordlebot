@@ -48,6 +48,9 @@ You guessed 'pinny' in 7 guesses!
 Sometimes the limited number of possibilities let us infer things in the letter tracker, e.g. all of the possibilities
 have a particular letter, sometimes in a particular position.
 
+## Enhancement: In RefreqyFlex modes, don't guess a double letter without a single letter
+Scorer doesn't realize it can learn more by preferring a variety of letters over double+ letters.
+
 ## Enhancement: In RefreqyFlex modes, take a real guess on the last guess
 Instead of searching for words, if it's our last guess, might as well give it a shot.
 

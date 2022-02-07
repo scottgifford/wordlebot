@@ -1,6 +1,7 @@
 import { Strategy } from "./strategy.mjs";
 import { randWord } from "./util.mjs";
 import { LetterTracker } from "./letterTracker.mjs";
+import { Logger } from "./log.mjs";
 
 export class StrategyRandomRemaining extends Strategy {
     constructor(words) {
@@ -17,6 +18,6 @@ export class StrategyRandomRemaining extends Strategy {
         this.letters.update(guess, result);
 
         this.remainingWords = this.remainingWords.filter(word => this.letters.wordHasLetters(word));
-        console.log(`${this.remainingWords.length} possibilities left`)
+        Logger.log('strategy', 'info', `${this.remainingWords.length} possibilities left`)
     }
 }

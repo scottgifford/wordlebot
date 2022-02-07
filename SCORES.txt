@@ -115,5 +115,9 @@ RefreqyFlex3 v2 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 0
   averageGuesses: 4.473
 
 RefreqyFlex3 v2 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1
-  winRate: 0.989,
-  averageGuesses: 4.473  
+  winRate: 0.992,
+  averageGuesses: 4.334
+
+RefreqyFlex3 v2 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 2
+  winRate: 0.983,
+  averageGuesses: 4.324

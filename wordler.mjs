@@ -3,6 +3,7 @@
 import { allwords } from "./allwords.mjs";
 import { randWord, takeGuess } from "./util.mjs";
 import { strategyByName } from "./strategyByName.mjs";
+import { Logger } from "./log.mjs";
 
 const DEFAULT_STRATEGY_NAME = 'random';
 const DEFAULT_NUM_GAMES = 1;
@@ -28,26 +29,26 @@ function playGame() {
     const strategy = strategyByName(options.strategyName,allwords);
     const word = options.answer || randWord(allwords);
 
-    console.log(`Picked word '${word}', strategy ${strategy.constructor.name}`);
+    Logger.log('game', 'info', `Picked word '${word}', strategy ${strategy.constructor.name}`);
 
     let remainingWords = allwords;
     let guesses = 0;
     while(1) {
         const guess = chooseGuess(strategy, guesses);
         guesses++;
-        console.log(`Guessed word '${guess}'`);
+        Logger.log('game', 'info', `Guessed word '${guess}'`);
 
         const result = takeGuess(guess, word);
         const resultStr = result.join("");
-        console.log(resultStr);
+        Logger.log('game', 'info', `Result: ${resultStr}`);
         if (resultStr === "GGGGG") {
-            console.log(`You guessed '${guess}' in ${guesses} guesses!`);
+            Logger.log('game', 'info', `You guessed '${guess}' in ${guesses} guesses!`);
             gameStats.guesses[guesses] = (gameStats.guesses[guesses] || 0) + 1;
             break;
         }
         strategy.update(guess, result);
         if (remainingWords.length === 0) {
-            console.error("Ran out of guesses!");
+            Logger.log('game', 'info', "Ran out of guesses!");
             gameStats.failures++;
             break;
         }
@@ -55,9 +56,9 @@ function playGame() {
 }
 
 
-console.log(`Found ${allwords.length} words`);
+Logger.log('init', 'info', `Found ${allwords.length} words`);
 for(let i=0;i<options.numGames;i++) {
-    console.log(`===== Game ${i}`);
+    Logger.log('game', 'info', `===== Game ${i}`);
     playGame();
 }
 
@@ -72,6 +73,6 @@ gameStats.wins = gameStats.guesses.reduce((sum, val, i) => sum + ((i <= MAX_GUES
 gameStats.losses = gameStats.numGames - gameStats.wins;
 gameStats.winRate = gameStats.wins / gameStats.numGames * 1.0;
 gameStats.averageGuesses = gameStats.guesses.reduce((sum, val, i) => sum + i * val) / gameStats.numGames;
-console.log(gameStats);
+Logger.log('summary', 'info', 'Game Statistics:', gameStats);
 
 

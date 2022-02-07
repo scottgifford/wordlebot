@@ -1,4 +1,5 @@
 import { FrequencyAnalysis } from "./freq.mjs";
+import { Logger } from "./log.mjs";
 import { StrategyRefreqyFlex2 } from "./strategyRefreqyFlex2.mjs";
 import { charOccurrences } from "./util.mjs";
 
@@ -15,16 +16,17 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
                 prevCount[letter] = 0;
             }
             if (freq.hasLetter(letter, prevCount[letter])) {
+                // TODO: I think this check can be removed
                 if (this.letters.minLetters(letter) === undefined || (this.letters.minLetters(letter) < charOccurrences(word, letter))) {
                     score += freq.letterFrequencyAtPosition(letter, i, prevCount[letter]) * RIGHT_PLACE_MULTIPLIER;
                     score += freq.letterFrequency(letter, prevCount[letter]);
                 }
             } else {
-                // console.log(`No score for letter ${i} in word ${word}`);
+                Logger.log('score', 'trace', `No score for letter ${i} in word ${word}`);
             }
             prevCount[letter]++;
         }
-        // console.log(`Score for ${word} is ${score}`);
+        Logger.log('score', 'trace', `Score for ${word} is ${score}`);
         return score;
     }
 
@@ -35,11 +37,26 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
         // Here, if we know a letter is in the word at least once, we only want to consider possibilities where it is there more than once
         // Or more generally, if we know a letter is in the word at least n times, we only want to consider possibilities where it is there more than n times.
 
-        return this.leFreq.cloneMap(([k,v]) => {
+        const newFreq = this.leFreq.cloneMap(([k,v]) => {
             if (this.letters.definitelyDoesNotHaveLetter(k)) {
                 return [k, undefined];
             }
             return [k, this.leFreq.getEntryAdjustedLetterCount(k, this.letters.minLetters(k))];
         });
+        Logger.dynLog('strategy', 'debug', () => {
+            const TOP_N_LETTERS = 10;
+            return [
+                `Top ${TOP_N_LETTERS} letters`,
+                newFreq.getAllLetters()
+                .flatMap((letter) => {
+                    return [0, 1, 2, 3, 4, 5].map((prevCount) => {
+                        return [`${letter}/${prevCount}`, newFreq.letterFrequency(letter, prevCount)]
+                    })
+                })
+                .sort((a, b) => b[1]-a[1])
+                .filter((val, index) => index < TOP_N_LETTERS),
+            ]
+        })
+        return newFreq;
     }
 }

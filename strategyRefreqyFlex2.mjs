@@ -1,3 +1,4 @@
+import { Logger } from "./log.mjs";
 import { StrategyRefreqy } from "./strategyRefreqy.mjs";
 
 const MAX_WRONGNESS = 5;
@@ -20,13 +21,13 @@ export class StrategyRefreqyFlex2 extends StrategyRefreqy {
     brandNewGuess() {
         // v1 - Tweak the frequency table to remove (0-score) any letters we already know
         const freq2 = this.reFreq();
-        console.log(`Freq2:\n${freq2.debugString()}`);
-        console.log("Letters", this.letters);
+        Logger.log('freq', 'debug', `Freq2:\n${freq2.debugString()}`);
+        Logger.log('letters', 'debug', "Letters", this.letters.debugString());
         const word = this.bestWord(this.words, freq2);
         const score = this.scoreWord(word, freq2);
-        console.log(`Chose ${word} with score ${score}`);
+        Logger.log('score', 'debug', `Chose ${word} with score ${score}`);
         if (score === 0) {
-            console.log(`Score too low, returning nothing!`);
+            Logger.log('score', 'debug', `Score too low, returning nothing!`);
             return undefined;
         }
 
@@ -38,14 +39,14 @@ export class StrategyRefreqyFlex2 extends StrategyRefreqy {
         // If we know less than MAX_WRONGNESS letters and there are more than REMAINING_WORDS_THRESHOLD possibilities,
         // use the overall word instead of the possible word.
         const knownLetters = this.letters.knownLetters();
-        console.log(`Know ${knownLetters} / 5 letters`);
+        Logger.log('strategy', 'info', `Know ${knownLetters} / 5 letters`);
         if (this.shouldUseBrandNewGuess()) {
-            console.log(`Picking brand new word`);
+            Logger.log('strategy', 'info', `Picking brand new word`);
             const guess = this.brandNewGuess();
             if (guess) {
                 return guess;
             } else {
-                console.log(`Could not find brand new word, using remaining word`);
+                console.debug('strategy', 'debug', `Could not find brand new word, using remaining word`);
             }
         }
 

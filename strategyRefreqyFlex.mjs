@@ -1,3 +1,4 @@
+import { Logger } from "./log.mjs";
 import { StrategyRefreqy } from "./strategyRefreqy.mjs";
 
 const SCORE_RATIO = 0.30;
@@ -27,7 +28,7 @@ export class StrategyRefreqyFlex extends StrategyRefreqy {
         const scoreRatio = bestOverallWordScore / bestRemainingWordScore;
         
         const chosenWord = scoreRatio > SCORE_RATIO ? bestOverallWord : bestRemainingWord;
-        console.log(`Chose ${chosenWord} with score ratio ${scoreRatio} (vs. ${SCORE_RATIO}); Best overall word ${bestOverallWord} score ${bestOverallWordScore}; Best remaining word ${bestRemainingWord} score ${bestRemainingWordScore}`);
+        Logger.log('strategy', 'info', `Chose ${chosenWord} with score ratio ${scoreRatio} (vs. ${SCORE_RATIO}); Best overall word ${bestOverallWord} score ${bestOverallWordScore}; Best remaining word ${bestRemainingWord} score ${bestRemainingWordScore}`);
 
         return chosenWord;
     }

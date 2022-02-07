@@ -1,6 +1,7 @@
 import { Strategy } from "./strategy.mjs";
 import { LetterTracker } from "./letterTracker.mjs";
 import { FrequencyAnalysis } from "./freq.mjs";
+import { Logger } from "./log.mjs";
 
 const RIGHT_PLACE_MULTIPLIER = 3; // Determined experimentally, though doesn't seem to matter much
 export class StrategyFreqy extends Strategy {
@@ -9,7 +10,7 @@ export class StrategyFreqy extends Strategy {
         this.remainingWords = words;
         this.letters = new LetterTracker();
         this.leFreq = StrategyFreqy.frequencyAnalyze(words);
-        console.log(`FrequencyAnalysis:\n${this.leFreq.debugString()}`);
+        Logger.log('freq', 'debug', `FrequencyAnalysis:\n${this.leFreq.debugString()}`);
     }
 
     static frequencyAnalyze(words) {
@@ -24,16 +25,16 @@ export class StrategyFreqy extends Strategy {
         this.letters.update(guess, result);
         this.remainingWords = this.remainingWords.filter(word => this.letters.wordHasLetters(word));
 
-        console.log(`${this.remainingWords.length} possibilities left`)
+        Logger.log('strategy', 'info', `${this.remainingWords.length} possibilities left`);
         if (this.remainingWords.length < 20) {
-            console.log(this.remainingWords);
+            Logger.log('words', 'debug', this.remainingWords);
         }
 
     }
 
     bestWord(words, freq) {
         const scores = words.map(word => ({ word, score: this.scoreWord(word, freq)})).sort((a, b) => /* reverse sort */ b.score - a.score);
-        console.log('Top 10 Scores:', scores.slice(0,10));
+        Logger.log('score', 'debug', 'Top 10 Scores:', scores.slice(0,10));
         return scores[0].word;
     }
 
@@ -47,11 +48,11 @@ export class StrategyFreqy extends Strategy {
                 score += freq.letterFrequencyAtPosition(letter, i) * RIGHT_PLACE_MULTIPLIER;
                 score += freq.letterFrequency(letter);
             } else {
-                // console.log(`No score for letter ${i} in word ${word}`);
+                Logger.log('score', 'trace', `No score for letter ${i} in word ${word}`);
             }
             picked[letter] = (picked[letter] || 0) + 1;
         }
-        // console.log(`Score for ${word} is ${score}`);
+        Logger.log('score', 'trace', `Score for ${word} is ${score}`);
         return score;
     }
 }

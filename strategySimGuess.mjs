@@ -2,6 +2,7 @@ import { Strategy } from "./strategy.mjs";
 import { randWord } from "./util.mjs";
 import { LetterTracker } from "./letterTracker.mjs";
 import { takeGuess } from "./util.mjs";
+import { Logger } from "./log.mjs";
 
 const GUESS_SAMPLE_RATE = 0.001;
 const SIMULATE_SAMPLE_RATE = 0.001;
@@ -43,11 +44,11 @@ export class StrategySimGuess extends Strategy {
 
     guess() {
         const possibleGuesses = this.sample(this.remainingWords, GUESS_SAMPLE_RATE);
-        // console.log("Possible Guesses: ", possibleGuesses);
+        Logger.log('strategy', 'debug', "Possible Guesses: ", possibleGuesses);
         const sortedGuesses = possibleGuesses.map(word => ({ word, score: this.scoreWord(word)})).sort((a, b) => /* low to high */ a.score - b.score);
-        // console.log("Sorted Guesses: ", sortedGuesses);
+        Logger.log('strategy', 'debug', "Sorted Guesses: ", sortedGuesses);
         const bestGuess = sortedGuesses[0];
-        console.log("Best guess:", bestGuess);
+        Logger.log('strategy', 'info', "Best guess:", bestGuess);
         return bestGuess.word;
     }
 
@@ -55,7 +56,7 @@ export class StrategySimGuess extends Strategy {
         this.letters.update(guess, result);
 
         this.remainingWords = this.remainingWords.filter(word => this.letters.wordHasLetters(word));
-        console.log(`${this.remainingWords.length} possibilities left`)
+        Logger.log('strategy', 'info', `${this.remainingWords.length} possibilities left`);
     }
 
     scoreWord(word) {
@@ -85,12 +86,12 @@ export class StrategySimGuess extends Strategy {
             const score = Math.floor(Math.abs(tempRemainingWords.length - this.remainingWords.length/2));
             // Score v3 - Remaining is low
             // const score = tempRemainingWords.length;
-            // console.log(`Word ${word} answer ${ans} simulation: ${eliminatedWords} eliminated, ${tempRemainingWords.length} remaining, ${score} score`);
+            // Logger.log('strategy', 'info', `Word ${word} answer ${ans} simulation: ${eliminatedWords} eliminated, ${tempRemainingWords.length} remaining, ${score} score`);
             totalScore += score;
         }
         // Average score
         const averageScore = totalScore / simulatedAnswers.length;
-        // console.log(`Word '${word}' has score of ${averageScore}`);
+        Logger.log('strategy', 'debug', `Word '${word}' has score of ${averageScore}`);
         return averageScore;
     }
 }
