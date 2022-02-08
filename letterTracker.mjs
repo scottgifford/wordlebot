@@ -1,6 +1,17 @@
 import { Logger } from "./log.mjs";
 import { charOccurrences } from "./util.mjs";
 
+const ALL_LETTERS = (() => {
+    let letters = [];
+    for (let i=0; i<26; i++) {
+        const letter = String.fromCharCode(0x61 + i);
+        letters.push(letter);
+    }
+    return letters;
+})();
+
+const makeDefaultLetter = () => { return { pos: [-1, -1, -1, -1, -1], min: undefined, max: undefined } };
+
 export class LetterTracker {
     constructor(letters = { }) {
         this.letters = letters;
@@ -34,7 +45,7 @@ export class LetterTracker {
         };
     
         for(let i=0;i<result.length;i++) {
-            let letterInfo = this.letters[guess[i]] || { pos: [-1,-1,-1,-1,-1], min: undefined, max: undefined};
+            let letterInfo = this.letters[guess[i]] || makeDefaultLetter();
             
             if (result[i] === 'G') {
                 letterInfo.pos[i] = 1;
@@ -45,16 +56,42 @@ export class LetterTracker {
             } else if (result[i] === '-') {
                 letterInfo.pos[i] = 0;
                 letterInfo.min = Math.max(letterInfo.min || 0, countOccurrences(guess[i]));
-                letterInfo.max = Math.max(letterInfo.max || 0, countOccurrences(guess[i]));
+                letterInfo.max = Math.min(letterInfo.max || 0, countOccurrences(guess[i]));
             }
     
             this.letters[guess[i]] = letterInfo;
         }
     }
 
+    updateFromRemaining(words) {
+        ALL_LETTERS.forEach((letter) => {
+            const letterInfo = this.letters[letter] || makeDefaultLetter();
+            Logger.log('letters', 'trace', `Updated letter ${letter} from:`, letterInfo);
+
+            // Positions
+            [0, 1, 2, 3, 4].forEach((pos) => {
+                const letterAtPos = (word) => word[pos] === letter;
+                const definitely = words.every(letterAtPos);
+                const definitelyNot = !words.some(letterAtPos);
+                Logger.log('letters', 'trace', `letter ${letter} position ${pos} definitely=${definitely} definitelyNot=${definitelyNot}`);
+                if (definitely) {
+                    letterInfo.pos[pos] = 1;
+                } else if (definitelyNot) {
+                    letterInfo.pos[pos] = 0;
+                }
+            });
+
+            // Overall max/min
+            letterInfo.min = Math.max(letterInfo.min || 0, Math.min(...(words.map((word) => charOccurrences(word, letter)))));
+            letterInfo.max = Math.min(letterInfo.max === undefined ? 5 : letterInfo.max, Math.max(...(words.map((word) => charOccurrences(word, letter)))));
+
+            Logger.log('letters','trace', `Updated letter ${letter}   to:`, letterInfo);
+            this.letters[letter] = letterInfo;
+        });
+    }
+
     wordHasLetters(word) {
-        for (let i=0; i<26; i++) {
-            const letter = String.fromCharCode(0x61 + i);
+        for (const letter of ALL_LETTERS) {
             const letterInfo = this.letters[letter];
             if (letterInfo) {
                 Logger.log('lettertrack', 'debug', `Found info on letter '${letter}': `, letterInfo);
