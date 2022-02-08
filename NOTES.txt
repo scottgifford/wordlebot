@@ -92,10 +92,33 @@ RefreqyFlex3 v5 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 2
 -> GAME            [INFO ] You guessed 'hoper' in 7 guesses!
 -> GAME            [INFO ] You guessed 'hoper' in 7 guesses!
 
-### Possible Enhancements
-#### Enhancement: Adjust letter tracker based on possibilities
+### v6
+Adjust letter tracker based on possibilities.
+
 Sometimes the limited number of possibilities let us infer things in the letter tracker, e.g. all of the possibilities
 have a particular letter, sometimes in a particular position.
+
+#### Score
+RefreqyFlex3 v6 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 2
+  winRate: 0.991,
+  averageGuesses: 4.321
+
+#### Misses
+-> GAME            [INFO ] You guessed 'hazer' in 7 guesses!
+-> GAME            [INFO ] You guessed 'inial' in 7 guesses!
+-> GAME            [INFO ] You guessed 'viver' in 7 guesses!
+-> GAME            [INFO ] You guessed 'hover' in 7 guesses!
+-> GAME            [INFO ] You guessed 'mower' in 7 guesses!
+-> GAME            [INFO ] You guessed 'gazel' in 7 guesses!
+-> GAME            [INFO ] You guessed 'faffy' in 7 guesses!
+-> GAME            [INFO ] You guessed 'poker' in 7 guesses!
+-> GAME            [INFO ] You guessed 'lolly' in 7 guesses!
+
+### Possible Enhancements
+
+#### Enhancement: In RefreqyFlex modes, take a real guess if it's as good as a new guess
+If the score of the real guess and the new guess are the same, migt as well take a real guess; alternative
+use real possibility as a tiebreaker among new guesses.
 
 #### Enhancement: In RefreqyFlex modes, take a real guess on the last guess
 Instead of searching for words, if it's our last guess, might as well give it a shot.

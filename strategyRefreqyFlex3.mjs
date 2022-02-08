@@ -42,6 +42,9 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
     }
 
     reFreq() {
+        // v6: Update letter info based on remaining possibilities
+        this.letters.updateFromRemaining(this.remainingWords);
+
         // Our goal here is to eliminate letter guesses that will not give us any new information.
         // We definitely want to eliminate letters that we know for sure are not in the word, they will teach us nothing.
         // Flex2 also filters out letters we know for sure are in the word at least once, but that doesn't account for double letters.
