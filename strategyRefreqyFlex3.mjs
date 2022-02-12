@@ -6,8 +6,15 @@ import { charOccurrences } from "./util.mjs";
 const RIGHT_PLACE_MULTIPLIER = 1; // Determined experimentally, though doesn't seem to matter much
 
 export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
-    // TODO: CopyPasta from StrategyFreqy, refactor to avoid needing this
+
     scoreWord(word, freq) {
+        return this.wordWithScore(word, freq).score;
+    }
+
+    // TODO: CopyPasta from StrategyFreqy, refactor to avoid needing this
+    // TODO: Change other scoreWord's to match debug info
+    wordWithScore(word, freq) {
+        let ret = { word, debug: "" }
         let score = 0;
         let prevCount = { };
         for(let i=0;i<word.length;i++) {
@@ -21,14 +28,17 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
                     if (!this.letters.definitelyHasLetterAtPosition('letter', i)) {
                         if (prevCount[letter] == (this.letters.minLetters(letter) || 0)) {
                             // This is the first new occurence of a letter we don't know about.
-                            score += freq.letterFrequencyAtPosition(letter, i, prevCount[letter]) * RIGHT_PLACE_MULTIPLIER;
-                            score += freq.letterFrequency(letter, prevCount[letter]) - prevCount[letter] /* subtract for the letters we already know about */;
+                            const addScore = freq.letterFrequencyAtPosition(letter, i, prevCount[letter]) * RIGHT_PLACE_MULTIPLIER +
+                                freq.letterFrequency(letter, prevCount[letter]) - prevCount[letter] /* subtract for the letters we already know about */;
+                            ret.debug += `${letter}+${addScore} `;
+                            score += addScore;
                         } else {
                              // This is an additional new occurrence of a letter when we don't yet know if the previous occurrence is here!
                              // The value of this is lower, but it is not 0; it is better to guess an extra occurrence early than to guess
                              // a letter we already know is or isn't in the word.
                              // So just give this a very low score, instead of the 0 score in v4-
                              score += 0.5;
+                            ret.debug += `${letter}+0.5 `;
                         }
                     }
                 }
@@ -38,11 +48,33 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
             prevCount[letter]++;
         }
         Logger.log('score', 'trace', `Score for ${word} is ${score}`);
-        return score;
+        ret.score = score;
+        return ret;
     }
 
+    // TODO: CopyPasta from StrategyFreqy, refactor or move logic up
+    bestWord(words, freq) {
+        const scores = words.map(word => (this.wordWithScore(word, freq))).sort((a, b) => /* reverse sort */ b.score - a.score);
+        Logger.log('score', 'debug', 'Top 10 Scores:', scores.slice(0,10).map((s) => JSON.stringify(s)).join(",\n"));
+        const firstChoice = scores[0];
+
+        // Look at all words whose score ties the first one, and as a tiebreaker, see which ones could actually be valid.
+        for(let i=1;i<scores.length;i++) {
+            if (scores[i].score < firstChoice.score) {
+                break;
+            }
+            if (this.letters.wordHasLetters(scores[i].word)) {
+                Logger.log('strategy', 'debug', `Used LetterInfo as tiebreaker, chose ${JSON.stringify(scores[i])} instead of ${JSON.stringify(firstChoice)}`);
+                return scores[i].word;
+            }
+        }
+
+        return firstChoice.word;
+    }
+
+
     reFreq() {
-        // v6: Update letter info based on remaining possibilities
+        // v6+: Update letter info based on remaining possibilities
         this.letters.updateFromRemaining(this.remainingWords);
 
         // Our goal here is to eliminate letter guesses that will not give us any new information.
