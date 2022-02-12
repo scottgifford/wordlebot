@@ -12,6 +12,7 @@ const ALL_LETTERS = (() => {
 
 const makeDefaultLetter = () => { return { pos: [-1, -1, -1, -1, -1], min: undefined, max: undefined } };
 
+const MAX_LETTERS = 5;
 export class LetterTracker {
     constructor(letters = { }) {
         this.letters = letters;
@@ -46,21 +47,27 @@ export class LetterTracker {
     
         for(let i=0;i<result.length;i++) {
             let letterInfo = this.letters[guess[i]] || makeDefaultLetter();
+            const letterOccurrences = countOccurrences(guess[i]);
             
             if (result[i] === 'G') {
                 letterInfo.pos[i] = 1;
-                letterInfo.min = Math.max(letterInfo.min || 1, countOccurrences(guess[i]));
+                letterInfo.min = Math.max(letterInfo.min || 1, letterOccurrences);
             } else if (result[i] === 'Y') {
                 letterInfo.pos[i] = 0;
-                letterInfo.min = Math.max(letterInfo.min || 1, countOccurrences(guess[i]));
+                letterInfo.min = Math.max(letterInfo.min || 1, letterOccurrences);
             } else if (result[i] === '-') {
                 letterInfo.pos[i] = 0;
-                letterInfo.min = Math.max(letterInfo.min || 0, countOccurrences(guess[i]));
-                letterInfo.max = Math.min(letterInfo.max || 0, countOccurrences(guess[i]));
+                letterInfo.min = Math.max(letterInfo.min || 0, letterOccurrences);
+                if (letterInfo.max === undefined || letterInfo.max > letterOccurrences) {
+                    letterInfo.max = letterOccurrences;
+                    Logger.log('lettertrack','trace',`Letter '${guess[i]}' new max = ${letterInfo.max}`);
+                }
             }
     
             this.letters[guess[i]] = letterInfo;
         }
+
+        Logger.log('lettertrack', 'trace', `After update: ` + this.debugString());
     }
 
     updateFromRemaining(words) {
@@ -88,29 +95,35 @@ export class LetterTracker {
             Logger.log('letters','trace', `Updated letter ${letter}   to:`, letterInfo);
             this.letters[letter] = letterInfo;
         });
+        Logger.log('lettertrack', 'trace', `After updateFromRemaining: ` + this.debugString());
+
     }
 
     wordHasLetters(word) {
         for (const letter of ALL_LETTERS) {
             const letterInfo = this.letters[letter];
             if (letterInfo) {
-                Logger.log('lettertrack', 'debug', `Found info on letter '${letter}': `, letterInfo);
+                Logger.log('lettertrack', 'trace', `Found info on letter '${letter}': `, letterInfo);
                 const letterCount = charOccurrences(word, letter, word.length);
                 if (letterInfo.min !== undefined && letterCount < letterInfo.min) {
+                    Logger.log('lettertrack', 'trace', `word '${word}' does not match for letter ${letter} because it letterCount ${letterCount} < min ${letterInfo.min}`);
                     return false;
                 }
                 if (letterInfo.max !== undefined && letterCount > letterInfo.max) {
+                    Logger.log('lettertrack', 'trace', `word '${word}' does not match for letter ${letter} because it letterCount ${letterCount} > max ${letterInfo.max}`);
                     return false;
                 }
                 for(let j=0;j<letterInfo.pos.length;j++) {
                     switch(letterInfo.pos[j]) {
                         case 1:
                             if (word[j] !== letter) {
+                                Logger.log('lettertrack', 'trace', `word '${word}' does not match for letter ${letter} position ${j} because letter ${word[j]} != expected ${letter}`);
                                 return false;
                             }
                             break;
                         case 0:
                             if (word[j] === letter) {
+                                Logger.log('lettertrack', 'trace', `word '${word}' does not match for letter ${letter} position ${j} because letter ${word[j]} == unexpected ${letter}`);
                                 return false;
                             }
                             break;
@@ -118,6 +131,9 @@ export class LetterTracker {
                 }
             }
         }
+
+        Logger.log('lettertrack', 'trace', `word '${word}' matches letter info`);
+
         return true;
     }
 
@@ -134,7 +150,7 @@ export class LetterTracker {
         if (!letterInfo) {
             return false;
         }
-        return letterInfo.max === 0;
+        return !letterInfo.max;
     }
 
     definitelyHasLetterAtPosition(letter, position) {

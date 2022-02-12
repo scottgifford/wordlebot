@@ -114,6 +114,26 @@ RefreqyFlex3 v6 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 2
 -> GAME            [INFO ] You guessed 'poker' in 7 guesses!
 -> GAME            [INFO ] You guessed 'lolly' in 7 guesses!
 
+### v6b
+Bugfix to v6
+
+#### Score
+RefreqyFlex3 v6b MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1
+  winRate: 0.99,
+  averageGuesses: 4.282
+
+#### Misses
+-> GAME            [INFO ] You guessed 'cover' in 7 guesses!
+-> GAME            [INFO ] You guessed 'hazer' in 7 guesses!
+-> GAME            [INFO ] You guessed 'lolly' in 7 guesses!
+-> GAME            [INFO ] You guessed 'hover' in 7 guesses!
+-> GAME            [INFO ] You guessed 'froze' in 7 guesses!
+-> GAME            [INFO ] You guessed 'linja' in 7 guesses!
+-> GAME            [INFO ] You guessed 'bezel' in 7 guesses!
+-> GAME            [INFO ] You guessed 'hazer' in 7 guesses!
+-> GAME            [INFO ] You guessed 'jazzy' in 7 guesses!
+-> GAME            [INFO ] You guessed 'hiver' in 7 guesses!
+
 ### Possible Enhancements
 
 #### Enhancement: In RefreqyFlex modes, take a real guess if it's as good as a new guess
