@@ -23,17 +23,24 @@ export class StrategyFreqy extends Strategy {
 
     update(guess, result) {
         this.letters.update(guess, result);
-        this.remainingWords = this.remainingWords.filter(word => this.letters.wordHasLetters(word));
 
+        Logger.log('strategy', 'debug', `${this.remainingWords.length} possible words before filtering`);
+        this.remainingWords = this.remainingWords.filter(word => this.letters.wordHasLetters(word));
         Logger.log('strategy', 'info', `${this.remainingWords.length} possibilities left`);
+
+        if (this.remainingWords.length === 0) {
+            throw new Error('No remaining possibilities, giving up');
+        }
         if (this.remainingWords.length < 20) {
-            Logger.log('strategy', 'info', this.remainingWords);
+            Logger.log('strategy', 'info', this.remainingWords.map((word) => { return { word, score: this.scoreWord(word, this.leFreq) } }));
         }
 
     }
 
     bestWord(words, freq) {
+        Logger.log('strategy', 'info', `Choosing best word from ${words.length} possibilities`);
         const scores = words.map(word => ({ word, score: this.scoreWord(word, freq)})).sort((a, b) => /* reverse sort */ b.score - a.score);
+        Logger.log('strategy', 'info', `Choosing best score from ${scores.length} possibilities`);
         Logger.log('score', 'debug', 'Top 10 Scores:', scores.slice(0,10));
         return scores[0].word;
     }

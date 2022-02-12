@@ -29,11 +29,12 @@ function playGame() {
     const strategy = strategyByName(options.strategyName,allwords);
     const word = options.answer || randWord(allwords);
 
-    Logger.log('game', 'info', `Picked word '${word}', strategy ${strategy.constructor.name}`);
+    Logger.log('game', 'info', `Picked solution word '${word}', solving with strategy ${strategy.constructor.name}`);
 
     let remainingWords = allwords;
     let guesses = 0;
     while(1) {
+        Logger.log('game', 'info', `Guess #${guesses+1}`);
         const guess = chooseGuess(strategy, guesses);
         guesses++;
         Logger.log('game', 'info', `Guessed word '${guess}'`);
