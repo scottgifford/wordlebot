@@ -228,6 +228,19 @@ RefreqyFlex3 v7g MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1 GUESS_POSSIBILITIE
 PERFECT SCORE!!
 
 
+### v7h: Conditional probability / Surrogate Pairs
+For example, we never need to guess "q" unless "u" is in the word.  Can we encode that into a strategy somehow?
+Fiture out which letters we don't need to guess because they are implied by other letters?
+
+#### Score
+RefreqyFlex3 v7g MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1 GUESS_POSSIBILITIES_ON_LAST_GUESS = true
+  winRate: 0.995,
+  averageGuesses: 4.242
+
+#### Misses
+-> GAME            [INFO ] You guessed 'woozy' in 7 guesses!
+-> GAME            [INFO ] You guessed 'pence' in 7 guesses!
+
 ### Possible Enhancements
 
 ## Maximum Discernment
@@ -240,10 +253,6 @@ This is different from using frequency tables (I think).
 By starting with the most popular letters, we are left with letters that are infrequent and so hard to incorporate into
 other words; often later guesses only get 1-2 new characters out of all 5.  In other words, the very popular letters
 we will get naturally when guessing other words, so maybe we should start with the least popular ones?
-
-## Conditional probability / Surrogate Pairs
-For example, we never need to guess "q" unless "u" is in the word.  Can we encode that into a strategy somehow?
-Fiture out which letters we don't need to guess because they are implied by other letters?
 
 # Things to look into
 

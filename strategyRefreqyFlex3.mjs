@@ -29,13 +29,41 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
         }
         let score = 0;
         let prevCount = { };
+        let deScore = { };
+
+        // v7h: See if, after making any particular letter choices, all remaining choices contain some other letter
+        // TODO: I don't think this deals with repeated letters right
+        // TODO: This is very very slow, likely the .clone(), is there a shortcut?
+        for(let i=0;i<word.length;i++) {
+            const letter = word[i];
+            const remainingLetters = this.letters.clone();
+            const occurrences = charOccurrences(word, letter);
+            // TODO: Should really exactly set max and min
+            remainingLetters.updateMinForLetter(letter, occurrences);
+            for(let j=0;j<word.length;j++) {
+                const letter2 = word[j];
+                if (letter !== letter2) {
+                    if (remainingLetters.definitelyHasLetter(letter2) || remainingLetters.definitelyDoesNotHaveLetter(letter2)) {
+                        const letterScore = freq.letterFrequency(letter);
+                        const letter2Score = freq.letterFrequency(letter2);
+                        const alwaysNever = remainingLetters.definitelyHasLetter(letter2) ? 'always' : 'never';
+                        if (letter2Score < letterScore) {
+                            Logger.log('strategy', 'trace', `In ${word}, de-scoring ${letter2} if ${letter} appears ${occurrences} times because will ${alwaysNever} be present`);
+                            Logger.log('strategy', 'trace', 'Letter Info:', remainingLetters.debugString())
+                            deScore[letter2] = true;
+                        }
+                    }
+                }
+            }
+        }
+
         for(let i=0;i<word.length;i++) {
             const letter = word[i];
             if (prevCount[letter] === undefined) {
                 prevCount[letter] = 0;
             }
-            Logger.log('strategy', 'trace', `${letter}: prevCount=${prevCount[letter]}, minLetters=${this.letters.minLetters(letter) || 0}`);
-            if (freq.hasLetter(letter, prevCount[letter])) {
+            Logger.log('strategy', 'trace', `${letter}: prevCount=${prevCount[letter]}, minLetters=${this.letters.minLetters(letter) || 0}, deScore=${deScore[letter]}`);
+            if (!deScore[letter] && freq.hasLetter(letter, prevCount[letter])) {
                 if (this.letters.minLetters(letter) === undefined || (this.letters.minLetters(letter) < charOccurrences(word, letter))) {
                     if (!this.letters.definitelyHasLetterAtPosition('letter', i)) {
                         if (prevCount[letter] == (this.letters.minLetters(letter) || 0)) {
