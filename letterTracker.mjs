@@ -137,7 +137,7 @@ export class LetterTracker {
         return true;
     }
 
-    definitelyHasLetter(letter, min = 0) {
+    definitelyHasLetter(letter, min = 1) {
         const letterInfo = this.letters[letter];
         if (!letterInfo) {
             return false;
