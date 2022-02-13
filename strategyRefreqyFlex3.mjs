@@ -45,7 +45,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
                             ret.debug += `${letter}+${addScore} `;
                             score += addScore;
                             ret.newLetters++;
-                        } else {
+                        } else if (prevCount[letter] > (this.letters.minLetters(letter) || 0)) {
                              // This is an additional new occurrence of a letter when we don't yet know if the previous occurrence is here!
                              // The value of this is lower, but it is not 0; it is better to guess an extra occurrence early than to guess
                              // a letter we already know is or isn't in the word.

@@ -217,6 +217,15 @@ RefreqyFlex3 v7f MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1 GUESS_POSSIBILITIE
 -> GAME            [INFO ] You guessed 'jolly' in 7 guesses!
 -> GAME            [INFO ] You guessed 'vower' in 7 guesses!
 
+### v7g
+Fix bug where duplicate letters we already know about get a 0.5 score instead of a 0 score.
+
+#### Score
+RefreqyFlex3 v7g MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1 GUESS_POSSIBILITIES_ON_LAST_GUESS = true
+  winRate: 1,
+  averageGuesses: 4.232
+
+PERFECT SCORE!!
 
 
 ### Possible Enhancements
