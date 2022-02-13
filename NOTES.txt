@@ -165,14 +165,13 @@ RefreqyFlex3 v7c MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 0
   winRate: 0.997,
   averageGuesses: 4.37
 
-### Misses
+#### Misses
 -> GAME            [INFO ] You guessed 'jerky' in 7 guesses!
 -> GAME            [INFO ] You guessed 'tiger' in 7 guesses!
 -> GAME            [INFO ] You guessed 'kanga' in 7 guesses!
 
-### Possible Enhancements
-
-#### Enhancement: In RefreqyFlex modes, prefer score with more letters over more frequency
+### v7d
+Enhancement: In RefreqyFlex modes, use number of new letters as a tiebreaker with equal score.
 Example:
   -> SCORE           [DEBUG] Top 50 Scores:
   {"word":"awaft","debug":"w/2 f/4 ","score":4},
@@ -181,6 +180,19 @@ Example:
   {"word":"swift","debug":"w/2 f/4 ","score":4},
 
 "jowpy" is a better guess because it tests 3 new letters, but we score "awaft" the same because 'f' has a higher frequency.
+
+#### Score
+RefreqyFlex3 v7d MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1
+  winRate: 0.998,
+  averageGuesses: 4.193
+
+#### Misses
+-> GAME            [INFO ] You guessed 'veery' in 7 guesses!
+-> GAME            [INFO ] You guessed 'mazer' in 7 guesses!
+
+### Possible Enhancements
+
+#### Enhancement: In RefreqyFlex modes, try sorting by new letter count first
 
 #### Enhancement: In RefreqyFlex modes, take a real guess on the last guess
 Instead of searching for words, if it's our last guess, might as well give it a shot.

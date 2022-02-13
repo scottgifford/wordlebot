@@ -17,6 +17,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
         let ret = {
             word,
             possible: this.letters.wordHasLetters(word) ? 1 : 0,
+            newLetters: 0,
             debug: "",
         }
         let score = 0;
@@ -36,6 +37,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
                                 freq.letterFrequency(letter, prevCount[letter]) - prevCount[letter] /* subtract for the letters we already know about */;
                             ret.debug += `${letter}+${addScore} `;
                             score += addScore;
+                            ret.newLetters++;
                         } else {
                              // This is an additional new occurrence of a letter when we don't yet know if the previous occurrence is here!
                              // The value of this is lower, but it is not 0; it is better to guess an extra occurrence early than to guess
@@ -59,6 +61,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
     scoreAndSortWords(words, freq) {
         return words.map(word => this.wordWithScore(word, freq)).sort((a, b) => {
             return b.score - a.score || // Reverse sort, highest to lowest
+                b.newLetters - a.newLetters || // Reverse sort, highest to lowest
                 b.possible - a.possible // Reverse sort, highest to lowest
         });
     }
