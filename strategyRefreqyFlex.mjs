@@ -9,6 +9,7 @@ export class StrategyRefreqyFlex extends StrategyRefreqy {
     }
 
     reFreq() {
+        Logger.log('strategy', 'debug', `RefreqyFlex reFreq`);
         return this.leFreq.clone(([k, v]) => !this.letters.definitelyHasLetter(k));
     }
 

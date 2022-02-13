@@ -4,13 +4,14 @@ import { StrategyRefreqy } from "./strategyRefreqy.mjs";
 const MAX_WRONGNESS = 5;
 const REMAINING_WORDS_THRESHOLD = 1;
 
-export class StrategyRefreqyFlex2 extends StrategyRefreqy {
+export class StrategyRefreqyFlex2 extends StrategyRefreqy /* Note this is not StrategyRefreqyFlex, we are using a different strategy */ {
     constructor(words) {
         super(words);
         this.knownLetters = 0;
     }
 
     reFreq() {
+        Logger.log('strategy', 'debug', `RefreqyFlex2 reFreq`);
         return this.leFreq.clone(([k,v]) => !this.letters.definitelyHasLetter(k) && !this.letters.definitelyDoesNotHaveLetter(k));
     }
 

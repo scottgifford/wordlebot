@@ -42,7 +42,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
                             // This is the first new occurence of a letter we don't know about.
                             const addScore = freq.letterFrequencyAtPosition(letter, i, prevCount[letter]) * RIGHT_PLACE_MULTIPLIER +
                                 freq.letterFrequency(letter, prevCount[letter]) - prevCount[letter] /* subtract for the letters we already know about */;
-                            ret.debug += `${letter}+${addScore} `;
+                            ret.debug += `${letter}${prevCount[letter]}+${addScore} `;
                             score += addScore;
                             ret.newLetters++;
                         } else if (prevCount[letter] > (this.letters.minLetters(letter) || 0)) {
@@ -51,7 +51,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
                              // a letter we already know is or isn't in the word.
                              // So just give this a very low score, instead of the 0 score in v4-
                              score += 0.5;
-                            ret.debug += `${letter}+0.5 `;
+                            ret.debug += `${letter}${prevCount[letter]}+0.5 `;
                         }
                     }
                 }
@@ -85,11 +85,16 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
     bestWord(words, freq) {
         const scores = this.scoreAndSortWords(words, freq);
         Logger.log('score', 'debug', 'Top 10 Scores:', scores.slice(0,10).map((s) => JSON.stringify(s)).join(",\n"));
+        if (process.env["EXTRA_SCORE_WORDS"]) {
+            Logger.log('score', 'debug', 'Extra word scores:',this.scoreAndSortWords(process.env["EXTRA_SCORE_WORDS"].split(' '), freq).map((s) => JSON.stringify(s)).join(",\n"));
+        }
         return scores[0].word;
     }
 
 
     reFreq() {
+        Logger.log('strategy', 'info', `RefreqyFlex3 reFreq`);
+
         // v6+: Update letter info based on remaining possibilities
         this.letters.updateFromRemaining(this.remainingWords);
 
@@ -112,7 +117,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
                 newFreq.getAllLetters()
                 .flatMap((letter) => {
                     return [0, 1, 2, 3, 4, 5].map((prevCount) => {
-                        return [`${letter}/${prevCount}`, newFreq.letterFrequency(letter, prevCount) - prevCount]
+                        return [`${letter}${prevCount}`, newFreq.letterFrequency(letter, prevCount) - prevCount]
                     })
                 })
                 .sort((a, b) => b[1]-a[1])
