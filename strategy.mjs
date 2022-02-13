@@ -3,7 +3,7 @@ export class Strategy {
         this.words = words;
     }
 
-    guess() {
+    guess(guessNum) {
         throw new Error("Abstract method");
     }
 

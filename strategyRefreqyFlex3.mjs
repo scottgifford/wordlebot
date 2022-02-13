@@ -66,6 +66,14 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
         });
     }
 
+    shouldUseBrandNewGuess(guessNum) {
+        if (guessNum >= 6) {
+            Logger.log('score', 'info', `Last guess ${guessNum}/6, considering only possible words`);
+            return false;
+        }
+        return super.shouldUseBrandNewGuess(guessNum);
+    }
+
     // TODO: CopyPasta from StrategyFreqy, refactor or move logic up
     bestWord(words, freq) {
         const scores = this.scoreAndSortWords(words, freq);

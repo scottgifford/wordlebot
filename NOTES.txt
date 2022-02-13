@@ -201,6 +201,15 @@ RefreqyFlex3 v7e MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1
 
 NOT GOOD!
 
+### v7f
+Revert to v7d, then take a real guess on the last guess
+
+#### Score
+RefreqyFlex3 v7f MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1
+
+#### Misses
+
+
 ### Possible Enhancements
 
 #### Enhancement: In RefreqyFlex modes, take a real guess on the last guess

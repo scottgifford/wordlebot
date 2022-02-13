@@ -34,13 +34,13 @@ export class StrategyRefreqyFlex2 extends StrategyRefreqy {
         return word;
     }
 
-    guess() {
+    guess(guessNum) {
         // Choose both a word from the set of remaining possibilities, and from the set of words that contain none of the existing letters
         // If we know less than MAX_WRONGNESS letters and there are more than REMAINING_WORDS_THRESHOLD possibilities,
         // use the overall word instead of the possible word.
         const knownLetters = this.letters.knownLetters();
         Logger.log('strategy', 'info', `Know ${knownLetters} / 5 letters`);
-        if (this.shouldUseBrandNewGuess()) {
+        if (this.shouldUseBrandNewGuess(guessNum)) {
             Logger.log('strategy', 'info', `Picking brand new word`);
             const guess = this.brandNewGuess();
             if (guess) {

@@ -22,7 +22,7 @@ const options = {
 }; 
 
 function chooseGuess(strategy, num) {
-    return options.guesses[num] || strategy.guess();
+    return options.guesses[num] || strategy.guess(num+1);
 }
 
 function playGame() {

@@ -17,8 +17,8 @@ export class StrategyFreqy extends Strategy {
         return new FrequencyAnalysis(words);
     }
 
-    guess() {
-        return this.bestWord(this.remainingWords, this.leFreq);
+    guess(guessNum) {
+        return this.bestWord(this.remainingWords, this.leFreq, guessNum);
     }
 
     update(guess, result) {
