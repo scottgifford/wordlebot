@@ -18,7 +18,7 @@ export class StrategyFreqy extends Strategy {
     }
 
     guess(guessNum) {
-        return this.bestWord(this.remainingWords, this.leFreq, guessNum);
+        return this.bestWord(this.remainingWords, this.leFreq);
     }
 
     update(guess, result) {

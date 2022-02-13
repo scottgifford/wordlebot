@@ -202,19 +202,24 @@ RefreqyFlex3 v7e MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1
 NOT GOOD!
 
 ### v7f
-Revert to v7d, then take a real guess on the last guess
+Revert to v7d, then take a real guess on the last guess.
+
+Note this is a tradeoff, we are more likely to guess within the number of guesses,
+but if we don't the number of extra guesses will be larger.
 
 #### Score
-RefreqyFlex3 v7f MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1
+RefreqyFlex3 v7f MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1 GUESS_POSSIBILITIES_ON_LAST_GUESS = true
+  winRate: 0.997,
+  averageGuesses: 4.207
 
 #### Misses
+-> GAME            [INFO ] You guessed 'mazer' in 8 guesses!
+-> GAME            [INFO ] You guessed 'jolly' in 7 guesses!
+-> GAME            [INFO ] You guessed 'vower' in 7 guesses!
+
 
 
 ### Possible Enhancements
-
-#### Enhancement: In RefreqyFlex modes, take a real guess on the last guess
-Instead of searching for words, if it's our last guess, might as well give it a shot.
-
 
 ## Maximum Discernment
 When we have the list of words narrowed down, which letters would most help us discern from the remaining ones?

@@ -50,6 +50,7 @@ export class StrategyRefreqyFlex2 extends StrategyRefreqy {
             }
         }
 
+        Logger.log('strategy', 'info', `Falling back to possible word`);
         return super.guess();
     }
 }
