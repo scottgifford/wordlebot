@@ -14,7 +14,11 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
     // TODO: CopyPasta from StrategyFreqy, refactor to avoid needing this
     // TODO: Change other scoreWord's to match debug info
     wordWithScore(word, freq) {
-        let ret = { word, debug: "" }
+        let ret = {
+            word,
+            possible: this.letters.wordHasLetters(word) ? 1 : 0,
+            debug: "",
+        }
         let score = 0;
         let prevCount = { };
         for(let i=0;i<word.length;i++) {
@@ -52,24 +56,18 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
         return ret;
     }
 
+    scoreAndSortWords(words, freq) {
+        return words.map(word => this.wordWithScore(word, freq)).sort((a, b) => {
+            return b.score - a.score || // Reverse sort, highest to lowest
+                b.possible - a.possible // Reverse sort, highest to lowest
+        });
+    }
+
     // TODO: CopyPasta from StrategyFreqy, refactor or move logic up
     bestWord(words, freq) {
-        const scores = words.map(word => (this.wordWithScore(word, freq))).sort((a, b) => /* reverse sort */ b.score - a.score);
+        const scores = this.scoreAndSortWords(words, freq);
         Logger.log('score', 'debug', 'Top 10 Scores:', scores.slice(0,10).map((s) => JSON.stringify(s)).join(",\n"));
-        const firstChoice = scores[0];
-
-        // Look at all words whose score ties the first one, and as a tiebreaker, see which ones could actually be valid.
-        for(let i=1;i<scores.length;i++) {
-            if (scores[i].score < firstChoice.score) {
-                break;
-            }
-            if (this.letters.wordHasLetters(scores[i].word)) {
-                Logger.log('strategy', 'debug', `Used LetterInfo as tiebreaker, chose ${JSON.stringify(scores[i])} instead of ${JSON.stringify(firstChoice)}`);
-                return scores[i].word;
-            }
-        }
-
-        return firstChoice.word;
+        return scores[0].word;
     }
 
 
