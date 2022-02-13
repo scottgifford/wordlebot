@@ -51,10 +51,10 @@ export class LetterTracker {
             
             if (result[i] === 'G') {
                 letterInfo.pos[i] = 1;
-                letterInfo.min = Math.max(letterInfo.min || 1, letterOccurrences);
+                this.updateMin(letterInfo, letterOccurrences);
             } else if (result[i] === 'Y') {
                 letterInfo.pos[i] = 0;
-                letterInfo.min = Math.max(letterInfo.min || 1, letterOccurrences);
+                this.updateMin(letterInfo, letterOccurrences);
             } else if (result[i] === '-') {
                 letterInfo.pos[i] = 0;
                 letterInfo.min = Math.max(letterInfo.min || 0, letterOccurrences);
@@ -68,6 +68,16 @@ export class LetterTracker {
         }
 
         Logger.log('lettertrack', 'trace', `After update: ` + this.debugString());
+    }
+
+    updateMin(letterInfo, letterOccurrences) {
+        letterInfo.min = Math.max(letterInfo.min || 1, letterOccurrences);
+    }
+
+    updateMinForLetter(letter, letterOccurences) {
+        let letterInfo = this.letters[letter] || makeDefaultLetter();
+        this.updateMin(letterInfo, letterOccurences);
+        this.letters[letter] = letterInfo;
     }
 
     updateFromRemaining(words) {
