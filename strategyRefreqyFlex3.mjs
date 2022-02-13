@@ -60,9 +60,8 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
 
     scoreAndSortWords(words, freq) {
         return words.map(word => this.wordWithScore(word, freq)).sort((a, b) => {
-            return
+            return b.score - a.score || // Reverse sort, highest to lowest
                 b.newLetters - a.newLetters || // Reverse sort, highest to lowest
-                b.score - a.score || // Reverse sort, highest to lowest
                 b.possible - a.possible // Reverse sort, highest to lowest
         });
     }

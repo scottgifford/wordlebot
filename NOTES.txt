@@ -195,7 +195,7 @@ RefreqyFlex3 v7d MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1
 In RefreqyFlex modes, try sorting by new letter count first
 
 #### Score
-RefreqyFlex3 v73 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1
+RefreqyFlex3 v7e MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1
   winRate: 0.82,
   averageGuesses: 5.211
 
