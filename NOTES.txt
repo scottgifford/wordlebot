@@ -190,9 +190,18 @@ RefreqyFlex3 v7d MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1
 -> GAME            [INFO ] You guessed 'veery' in 7 guesses!
 -> GAME            [INFO ] You guessed 'mazer' in 7 guesses!
 
-### Possible Enhancements
 
-#### Enhancement: In RefreqyFlex modes, try sorting by new letter count first
+### v7e
+In RefreqyFlex modes, try sorting by new letter count first
+
+#### Score
+RefreqyFlex3 v73 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1
+  winRate: 0.82,
+  averageGuesses: 5.211
+
+NOT GOOD!
+
+### Possible Enhancements
 
 #### Enhancement: In RefreqyFlex modes, take a real guess on the last guess
 Instead of searching for words, if it's our last guess, might as well give it a shot.
