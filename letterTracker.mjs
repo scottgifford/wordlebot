@@ -83,14 +83,14 @@ export class LetterTracker {
     updateFromRemaining(words) {
         ALL_LETTERS.forEach((letter) => {
             const letterInfo = this.letters[letter] || makeDefaultLetter();
-            Logger.log('letters', 'trace', `Updated letter ${letter} from:`, letterInfo);
+            Logger.log('lettertrack', 'trace', `Updated letter ${letter} from:`, letterInfo);
 
             // Positions
             [0, 1, 2, 3, 4].forEach((pos) => {
                 const letterAtPos = (word) => word[pos] === letter;
                 const definitely = words.every(letterAtPos);
                 const definitelyNot = !words.some(letterAtPos);
-                Logger.log('letters', 'trace', `letter ${letter} position ${pos} definitely=${definitely} definitelyNot=${definitelyNot}`);
+                Logger.log('lettertrack', 'trace', `letter ${letter} position ${pos} definitely=${definitely} definitelyNot=${definitelyNot}`);
                 if (definitely) {
                     letterInfo.pos[pos] = 1;
                 } else if (definitelyNot) {
@@ -102,7 +102,7 @@ export class LetterTracker {
             letterInfo.min = Math.max(letterInfo.min || 0, Math.min(...(words.map((word) => charOccurrences(word, letter)))));
             letterInfo.max = Math.min(letterInfo.max === undefined ? 5 : letterInfo.max, Math.max(...(words.map((word) => charOccurrences(word, letter)))));
 
-            Logger.log('letters','trace', `Updated letter ${letter}   to:`, letterInfo);
+            Logger.log('lettertrack','trace', `Updated letter ${letter}   to:`, letterInfo);
             this.letters[letter] = letterInfo;
         });
         Logger.log('lettertrack', 'trace', `After updateFromRemaining: ` + this.debugString());

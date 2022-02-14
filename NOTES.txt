@@ -1,21 +1,6 @@
-Current best version is RefreqyFlex2, MAX_WRONGNESS = 5, REMAINING_WORDS_THRESHOLD = 1 with bugfix
+# Recommended Strategy
+Current best version is RefreqyFlex3
 
-In last run XXX
-# Duplicate Letters
-You guessed 'every' in 7 guesses!
-You guessed 'ninny' in 7 guesses!
-You guessed 'doddy' in 7 guesses!
-You guessed 'doddy' in 7 guesses!
-You guessed 'doddy' in 7 guesses!
-You guessed 'rider' in 7 guesses!
-
-# not sure what made these fail
-You guessed 'payer' in 7 guesses!
-    Predecessor had double-letter - "paper"
-You guessed 'hazer' in 7 guesses!
-    Predecessor had double-letter - "razer"
-
-Seems to struggle with duplicate letters (RefreqyFlex2 doesn't deal with them very well)
 
 # Other Strategies
 

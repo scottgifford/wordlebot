@@ -1,4 +1,4 @@
-export const allwords = [
+export const allWords = [
   "aalii",
   "abaca",
   "aback",
@@ -8499,3 +8499,5 @@ export const allwords = [
   "zymic",
   "zymin"
 ];
+
+export const solutionWords = allWords;

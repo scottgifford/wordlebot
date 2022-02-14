@@ -52,5 +52,5 @@ export function takeGuess(guess, answer) {
             resultArr[i] = '-';
         }
     }
-    return resultArr;
+    return resultArr.join("");
 }
