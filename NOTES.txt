@@ -241,6 +241,36 @@ RefreqyFlex3 v7g MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1 GUESS_POSSIBILITIE
 -> GAME            [INFO ] You guessed 'woozy' in 7 guesses!
 -> GAME            [INFO ] You guessed 'pence' in 7 guesses!
 
+
+## RefreqyFlex4: Avoid letters which are too popular at first
+By starting with the most popular letters, we are left with letters that are infrequent and so hard to incorporate into
+other words; often later guesses only get 1-2 new characters out of all 5.  In other words, the very popular letters
+we will get naturally when guessing other words, so maybe we should start with the least popular ones?
+
+At 1.00, this is the same as RefreqyFlex3 v7h
+
+#### Score
+RefreqyFlex4 v1 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1 GUESS_POSSIBILITIES_ON_LAST_GUESS = true HIGH_SCORE_PERCENTILE = 1.00
+  winRate: 0.999,
+  averageGuesses: 4.273
+
+#### Score
+RefreqyFlex4 v1 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1 GUESS_POSSIBILITIES_ON_LAST_GUESS = true HIGH_SCORE_PERCENTILE = 0.50
+  winRate: 0.683,
+  averageGuesses: 5.716
+
+RefreqyFlex4 v1 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1 GUESS_POSSIBILITIES_ON_LAST_GUESS = true HIGH_SCORE_PERCENTILE = 0.90
+  winRate: 0.889,
+  averageGuesses: 5.164
+
+RefreqyFlex4 v1 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1 GUESS_POSSIBILITIES_ON_LAST_GUESS = true HIGH_SCORE_PERCENTILE = 0.95
+  winRate: 0.922,
+  averageGuesses: 5.009
+
+RefreqyFlex4 v1 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1 GUESS_POSSIBILITIES_ON_LAST_GUESS = true HIGH_SCORE_PERCENTILE = 0.99
+  winRate: 0.983,
+  averageGuesses: 4.679
+
 ### Possible Enhancements
 
 ## Maximum Discernment
@@ -248,11 +278,6 @@ When we have the list of words narrowed down, which letters would most help us d
 For example, if our possible words are: glare, blare, flare and we have xLARE, our best approach is not to try
 the words serially, but to try a word with "g", "b", and "f" in it, e.g. "befog"
 This is different from using frequency tables (I think).
-
-## Avoid letters which are too popular at first (or vowels)
-By starting with the most popular letters, we are left with letters that are infrequent and so hard to incorporate into
-other words; often later guesses only get 1-2 new characters out of all 5.  In other words, the very popular letters
-we will get naturally when guessing other words, so maybe we should start with the least popular ones?
 
 # Things to look into
 
