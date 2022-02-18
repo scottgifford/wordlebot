@@ -1,0 +1,25 @@
+{
+  "name": "wordlebot",
+  "version": "1.0.0",
+  "description": "Friendly Robot that Plays Wordle",
+  "bin": {
+    "wordlebot": "wordlebot.js"
+  },
+  "scripts": {
+    "test": "./testUtil.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scottgifford/wordlebot.git"
+  },
+  "keywords": [
+    "wordle",
+    "game"
+  ],
+  "author": "Scott Gifford <sgifford@suspectclass.com>",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/scottgifford/wordlebot/issues"
+  },
+  "homepage": "https://github.com/scottgifford/wordlebot#readme"
+}
