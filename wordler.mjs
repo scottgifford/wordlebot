@@ -110,19 +110,18 @@ async function promptForAnswer() {
 
 async function playGame(allwords, strategyOptions) {
     const strategy = strategyByName(options.strategyName, allwords, strategyOptions);
-
-    // TODO: This is messy!
-    let word;
-    if (!options.interactive) {
-        word = options.answer || randWord(allwords);
+    const word = !options.interactive ? options.answer || randWord(allwords) : undefined;
+    if (word) {
         Logger.log('game', 'info', `Picked solution word '${word}', solving with strategy ${strategy.constructor.name}`);
     }
 
-    let remainingWords = allwords;
     let guesses = 0;
     while(1) {
         Logger.log('game', 'info', `Guess #${guesses+1}`);
         const guess = chooseGuess(strategy, guesses);
+        if (!guess) {
+            throw new Error(`Ran out of guesses!`);
+        }
         guesses++;
         Logger.log('game', 'info', `Guessed word '${guess}'`);
 
@@ -130,7 +129,7 @@ async function playGame(allwords, strategyOptions) {
         if (options.interactive) {
             resultStr = await promptForAnswer();
         } else {
-            resultStr= takeGuess(guess, word);
+            resultStr = takeGuess(guess, word);
         }
 
         Logger.log('game', 'info', `Result: ${resultStr}`);
@@ -140,42 +139,47 @@ async function playGame(allwords, strategyOptions) {
             break;
         }
         strategy.update(guess, resultStr.split(""));
-        if (remainingWords.length === 0) {
-            Logger.log('game', 'info', "Ran out of guesses!");
-            gameStats.failures++;
-            break;
-        }
     }
 }
 
 (async () => {
-    const { allWords } = await import(options.wordList);
+    try {
+        const { allWords } = await import(options.wordList);
 
-    if (options.logConfigString) {
-        Logger.updateConfig(JSON.parse(options.logConfigString));
-    }
-
-    const strategyOptions = JSON.parse(options.strategyOptionsString);
-
-    Logger.log('init', 'info', `Found ${allWords.length} words`);
-    for(let i=0;i<options.numGames;i++) {
-        Logger.log('game', 'info', `===== Game ${i}`);
-        await playGame(allWords, strategyOptions);
-    }
-
-    // Clean up stats
-    for(let i=0;i<gameStats.guesses.length;i++) {
-        if (!gameStats.guesses[i]) {
-            gameStats.guesses[i] = 0;
+        if (options.logConfigString) {
+            Logger.updateConfig(JSON.parse(options.logConfigString));
         }
-    }
-    gameStats.numGames = gameStats.guesses.reduce((sum, val) => sum + val);
-    gameStats.wins = gameStats.guesses.reduce((sum, val, i) => sum + ((i <= MAX_GUESSES) ? val : 0));
-    gameStats.losses = gameStats.numGames - gameStats.wins;
-    gameStats.winRate = gameStats.wins / gameStats.numGames * 1.0;
-    gameStats.averageGuesses = gameStats.guesses.reduce((sum, val, i) => sum + i * val) / gameStats.numGames;
-    Logger.log('summary', 'info', 'Game Statistics:', gameStats);
 
+        const strategyOptions = JSON.parse(options.strategyOptionsString);
+
+        Logger.log('init', 'info', `Found ${allWords.length} words`);
+        for(let i=0;i<options.numGames;i++) {
+            Logger.log('game', 'info', `===== Game ${i} Started`);
+
+            try {
+                await playGame(allWords, strategyOptions);
+            } catch (ex) {
+                Logger.log('game', 'error', 'Game failed: ' + ex);
+                gameStats.failures++;
+            }
+            Logger.log('game', 'info', `===== Game ${i} Ended`);
+        }
+
+        // Clean up stats
+        for(let i=0;i<gameStats.guesses.length;i++) {
+            if (!gameStats.guesses[i]) {
+                gameStats.guesses[i] = 0;
+            }
+        }
+        gameStats.numGames = gameStats.guesses.reduce((sum, val) => sum + val, 0);
+        gameStats.wins = gameStats.guesses.reduce((sum, val, i) => sum + ((i <= MAX_GUESSES) ? val : 0), 0);
+        gameStats.losses = gameStats.numGames - gameStats.wins;
+        gameStats.winRate = gameStats.wins / gameStats.numGames * 1.0;
+        gameStats.averageGuesses = gameStats.guesses.reduce((sum, val, i) => sum + i * val, 0) / gameStats.numGames;
+        Logger.log('summary', 'info', 'Game Statistics:', gameStats);
+    } catch (ex) {
+        Logger.log('game', 'fatal', 'Wordler main loop failed', ex);
+    }
     LINE_READER.close();
 })();
 
