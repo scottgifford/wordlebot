@@ -67,11 +67,6 @@ const LINE_READER = readline.createInterface({
     output: process.stdout
 });
 
-const gameStats = {
-    guesses: [],
-    failures: 0,
-}
-
 const commandLineOptions = commandLineArgs(optionDefinitions);
 if (commandLineOptions.help) {
     console.log(commandLineUsage(help));
@@ -135,8 +130,7 @@ async function playGame(allwords, strategyOptions) {
         Logger.log('game', 'info', `Result: ${resultStr}`);
         if (resultStr === "GGGGG") {
             Logger.log('game', 'info', `You guessed '${guess}' in ${guesses} guesses!`);
-            gameStats.guesses[guesses] = (gameStats.guesses[guesses] || 0) + 1;
-            break;
+            return guesses;
         }
         strategy.update(guess, resultStr.split(""));
     }
@@ -144,12 +138,16 @@ async function playGame(allwords, strategyOptions) {
 
 (async () => {
     try {
-        const { allWords } = await import(options.wordList);
-
         if (options.logConfigString) {
             Logger.updateConfig(JSON.parse(options.logConfigString));
         }
 
+        const { allWords } = await import(options.wordList);
+        const gameStats = {
+            guesses: [],
+            failures: 0,
+        };
+        
         const strategyOptions = JSON.parse(options.strategyOptionsString);
 
         Logger.log('init', 'info', `Found ${allWords.length} words`);
@@ -157,7 +155,9 @@ async function playGame(allwords, strategyOptions) {
             Logger.log('game', 'info', `===== Game ${i} Started`);
 
             try {
-                await playGame(allWords, strategyOptions);
+                const guesses = await playGame(allWords, strategyOptions);
+                gameStats.guesses[guesses] = (gameStats.guesses[guesses] || 0) + 1;
+
             } catch (ex) {
                 Logger.log('game', 'error', 'Game failed: ' + ex);
                 gameStats.failures++;
