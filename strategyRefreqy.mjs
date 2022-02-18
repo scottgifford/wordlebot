@@ -2,8 +2,8 @@ import { Logger } from "./log.mjs";
 import { StrategyFreqy } from "./strategyFreqy.mjs";
 
 export class StrategyRefreqy extends StrategyFreqy {
-    constructor(words) {
-        super(words);
+    constructor(words, options) {
+        super(words, options);
     }
 
     update(guess, result) {

@@ -5,8 +5,8 @@ import { Logger } from "./log.mjs";
 
 const RIGHT_PLACE_MULTIPLIER = 3; // Determined experimentally, though doesn't seem to matter much
 export class StrategyFreqy extends Strategy {
-    constructor(words) {
-        super(words);
+    constructor(words, options) {
+        super(words, options);
         this.remainingWords = words;
         this.letters = new LetterTracker();
         this.leFreq = StrategyFreqy.frequencyAnalyze(words);

@@ -4,8 +4,8 @@ import { LetterTracker } from "./letterTracker.mjs";
 import { Logger } from "./log.mjs";
 
 export class StrategyRandomRemaining extends Strategy {
-    constructor(words) {
-        super(words);
+    constructor(words, options) {
+        super(words, options);
         this.remainingWords = words;
         this.letters = new LetterTracker();
     }

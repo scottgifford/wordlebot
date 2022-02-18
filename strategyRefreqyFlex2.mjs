@@ -5,8 +5,9 @@ const MAX_WRONGNESS = 5;
 const REMAINING_WORDS_THRESHOLD = 1;
 
 export class StrategyRefreqyFlex2 extends StrategyRefreqy /* Note this is not StrategyRefreqyFlex, we are using a different strategy */ {
-    constructor(words) {
-        super(words);
+    constructor(words, options) {
+        console.log('strategy', 'debug', 'Constructor options:', options);
+        super(words, options);
         this.knownLetters = 0;
     }
 

@@ -4,8 +4,8 @@ import { StrategyRefreqy } from "./strategyRefreqy.mjs";
 const SCORE_RATIO = 0.30;
 
 export class StrategyRefreqyFlex extends StrategyRefreqy {
-    constructor(words) {
-        super(words);
+    constructor(words, options) {
+        super(words, options);
     }
 
     reFreq() {

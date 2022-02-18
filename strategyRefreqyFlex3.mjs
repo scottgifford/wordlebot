@@ -85,8 +85,8 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
     bestWord(words, freq) {
         const scores = this.scoreAndSortWords(words, freq);
         Logger.log('score', 'debug', 'Top 10 Scores:', scores.slice(0,10).map((s) => JSON.stringify(s)).join(",\n"));
-        if (process.env["EXTRA_SCORE_WORDS"]) {
-            Logger.log('score', 'debug', 'Extra word scores:',this.scoreAndSortWords(process.env["EXTRA_SCORE_WORDS"].split(' '), freq).map((s) => JSON.stringify(s)).join(",\n"));
+        if (this.options.extraScoreWords) {
+            Logger.log('score', 'debug', 'Extra word scores:',this.scoreAndSortWords(this.options.extraScoreWords, freq).map((s) => JSON.stringify(s)).join(",\n"));
         }
         return scores[0].word;
     }

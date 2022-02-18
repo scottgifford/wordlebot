@@ -1,4 +1,5 @@
-const LOG_CONFIG_ENV = 'LOG_CONFIG';
+import { config } from "process";
+
 const NAME_LEVELS = {
     'fatal': 1,
     'error': 2,
@@ -10,7 +11,7 @@ const NAME_LEVELS = {
 const LEVEL_NAMES = Object.fromEntries(Object.entries(NAME_LEVELS).map(([k, v]) => [v, k]));
 const DEFAULT_NAME = 'default';
 const DEFAULT_LEVEL = NAME_LEVELS['info'];
-const DEFAULT_CONFIG = `{"${DEFAULT_NAME}": ${DEFAULT_LEVEL}}`;
+const DEFAULT_CONFIG = { DEFAULT_NAME: DEFAULT_LEVEL };
 
 function parseLevel(levelStr) {
     if (typeof (levelStr) === 'number') {
@@ -20,27 +21,25 @@ function parseLevel(levelStr) {
         if (level) {
             return level;
         } else {
-            throw new Error(`Unrecognized level '${levelStr}'`);
+            throw new Error(`Unrecognized level '${levelStr}' when parsing log config`);
         }
     } else {
         return parseInt(levelStr);
     }
 }
 
-function parseConfig(configStr) {
-    return Object.fromEntries(Object.entries(JSON.parse(configStr))
+function parseConfig(config) {
+    return Object.fromEntries(Object.entries(config)
         .map(([k, v]) => [k, parseLevel(v)]));
 }
-
-function parseConfigEnv() {
-    return parseConfig(process.env[LOG_CONFIG_ENV] || DEFAULT_CONFIG)
-}
-
-const LOG_CONFIG = parseConfigEnv();
 
 export class Logger {
     constructor(name) {
         this.name = name;
+    }
+
+    static updateConfig(config) {
+        Logger.config = parseConfig(config);
     }
 
     fatal(...msg) {
@@ -68,7 +67,7 @@ export class Logger {
     }
 
     static getConfiguredLevel(name) {
-        return LOG_CONFIG[name] || LOG_CONFIG[DEFAULT_NAME] || DEFAULT_LEVEL;
+        return Logger.config[name] || Logger.config[DEFAULT_NAME] || DEFAULT_LEVEL;
     }
 
     static log(name, levelStr, ...msg) {
@@ -87,3 +86,5 @@ export class Logger {
         }
     }
 }
+
+Logger.updateConfig(DEFAULT_CONFIG);

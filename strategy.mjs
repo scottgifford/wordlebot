@@ -1,6 +1,7 @@
 export class Strategy {
-    constructor(words) {
+    constructor(words, options) {
         this.words = words;
+        this.options = options;
     }
 
     guess(guessNum) {
