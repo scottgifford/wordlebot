@@ -1,12 +1,13 @@
 #!/usr/bin/env node --experimental-modules
 
-import { randWord, takeGuess } from "./util.mjs";
+import { randWord, sum, takeGuess } from "./util.mjs";
 import { strategyByName, STRATEGIES } from "./strategyByName.mjs";
 import { Logger } from "./log.mjs";
 
 import * as readline from 'readline';
 import commandLineArgs from "command-line-args";
 import commandLineUsage from "command-line-usage";
+import asciiHistogram from "bars";
 
 const optionDefinitions = [
     { name: 'help', alias: 'h', type: Boolean, description: "Show usage instructions"},
@@ -62,6 +63,8 @@ const DEFAULT_STRATEGY_NAME = 'random';
 const DEFAULT_NUM_GAMES = 1;
 const DEFAULT_WORD_LIST = './allWords.mjs';
 const MAX_GUESSES = 6;
+const STATS_DESCRIPTION_COL_WIDTH = 35;
+const STATS_FORMAT_SIG_DIG = 2;
 const LINE_READER = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -83,6 +86,37 @@ const options = {
     strategyOptionsString: commandLineOptions['strategy-options'] || '{}',
     logConfigString: commandLineOptions['log-config'],
 }; 
+
+
+const simpleFormatter = n => n.toString();
+const averageFormatter = n => n.toFixed(STATS_FORMAT_SIG_DIG).toString();
+const percentFormatter = n => averageFormatter(n) + " %";
+
+const statDescriptions = {
+    numGames: ["Number of games played", simpleFormatter],
+    wins: ["Number of wins", simpleFormatter],
+    losses: ["Number of losses", simpleFormatter],
+    winPercent: ["Winning Percentage", percentFormatter],
+    averageGuesses: ["Overall average guesses", averageFormatter],
+    averageGuessesForWins: ["Average guesses for winning games", averageFormatter],
+};
+
+function formatGameStats(gameStats) {
+    let formattedStr = '';
+    Object.entries(statDescriptions).forEach(([statName, [description, formatter]]) => {
+        const statValue = gameStats[statName];
+        formattedStr += `${description.padStart(STATS_DESCRIPTION_COL_WIDTH)}: ${formatter(statValue)}\n`;
+    });
+    const histogramData = Object.fromEntries(gameStats.guesses
+        .map((count, numGuesses) => [count, numGuesses])
+        .filter(([count, numGuesses]) => numGuesses > 0)
+        .map(([count, numGuesses]) => [`${numGuesses} Guess${numGuesses > 1 ? 'es' : ''}`, count])
+    );
+    formattedStr += `Game Histogram:\n`;
+    formattedStr += asciiHistogram(histogramData);
+
+    return formattedStr;
+}
 
 function chooseGuess(strategy, num) {
     return options.guesses[num] || strategy.guess(num+1);
@@ -171,15 +205,22 @@ async function playGame(allwords, strategyOptions) {
                 gameStats.guesses[i] = 0;
             }
         }
+
+        const isWinningGuess = (count, numGuesses) => numGuesses <= MAX_GUESSES;
+        const averageGuesses = (sum, val, i) => sum + i * val;
+
         gameStats.numGames = gameStats.guesses.reduce((sum, val) => sum + val, 0);
-        gameStats.wins = gameStats.guesses.reduce((sum, val, i) => sum + ((i <= MAX_GUESSES) ? val : 0), 0);
+        gameStats.wins = sum(gameStats.guesses.filter(isWinningGuess));
         gameStats.losses = gameStats.numGames - gameStats.wins;
         gameStats.winRate = gameStats.wins / gameStats.numGames * 1.0;
-        gameStats.averageGuesses = gameStats.guesses.reduce((sum, val, i) => sum + i * val, 0) / gameStats.numGames;
-        Logger.log('summary', 'info', 'Game Statistics:', gameStats);
+        gameStats.winPercent = gameStats.winRate * 100.0;
+        gameStats.averageGuesses = gameStats.guesses.reduce(averageGuesses, 0) / gameStats.numGames;
+        gameStats.averageGuessesForWins = gameStats.guesses.filter(isWinningGuess).reduce(averageGuesses, 0) / gameStats.wins;
+
+        Logger.log('summary', 'debug', `Game stats object: `, gameStats)
+        Logger.log('summary', 'info', `===== Game Statistics\n` + formatGameStats(gameStats));
     } catch (ex) {
         Logger.log('game', 'fatal', 'Wordler main loop failed', ex);
     }
     LINE_READER.close();
 })();
-
