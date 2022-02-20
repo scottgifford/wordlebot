@@ -13,6 +13,7 @@ const optionDefinitions = [
     { name: 'help', alias: 'h', type: Boolean, description: "Show usage instructions"},
     { name: 'strategy', alias: 's', type: String, description: "Choose a strategy, one of: " + Object.keys(STRATEGIES).join(", ") },
     { name: 'runs', alias: 'r', type: Number, description: "Number of times to run"},
+    { name: 'pick-strategy', alias: 'p', type: String, description: "How to pick solution words (default random)"},
     { name: 'interactive', alias: 'i', type: Boolean, description: "Interactively prompt for Wordle result" },
     { name: 'words', alias: 'w', type: String, description: "JavaScript module exporting valid words" },
     { name: 'answer', alias: 'a', type: String, description: "Use the given answer instead of a random one" },
@@ -85,6 +86,7 @@ const options = {
     interactive: commandLineOptions.interactive,
     strategyOptionsString: commandLineOptions['strategy-config'] || '{}',
     logConfigString: commandLineOptions['log-config'],
+    solutionPicker: solutionPickerForOptions(commandLineOptions),
 }; 
 
 
@@ -127,6 +129,28 @@ function formatGameStats(gameStats, strategyName, strategyOptions) {
     return formattedStr;
 }
 
+function solutionPickerForOptions(options) {
+    if (options.answer) {
+        return () => options.answer;
+    } else if (options.interactive) {
+        return () => undefined;
+    } else switch(options['pick-strategy']) {
+        case 'random':
+        case '':
+        case undefined:
+            return randWord;
+
+        case 'inorder': {
+            let i = 0;
+            return (words) => {
+                return words[i++];
+            }
+        }
+        default:
+            throw new Error(`Unrecognized pick-strategy '${options['pick-strategy']}'`);
+    }
+}
+
 function chooseGuess(strategy, num) {
     return options.guesses[num] || strategy.guess(num+1);
 }
@@ -146,9 +170,11 @@ async function promptForAnswer() {
     }
 }
 
-async function playGame(strategyName, solutionWords, allwords, strategyOptions) {
+async function playGame(strategyName, solutionWords, allwords, solutionPicker, strategyOptions) {
     const strategy = strategyByName(strategyName, allwords, strategyOptions);
-    const solution = !options.interactive ? options.answer || randWord(solutionWords) : undefined;
+
+    const solution = solutionPicker(solutionWords);
+    // !options.interactive ? options.answer || randWord(solutionWords) : undefined;
     if (solution) {
         Logger.log('game', 'info', `Picked solution word '${solution}', solving with strategy ${strategy.constructor.name}`);
     }
@@ -194,12 +220,14 @@ async function playGame(strategyName, solutionWords, allwords, strategyOptions) 
         const strategyName = options.strategyName;
         const strategyOptions = JSON.parse(options.strategyOptionsString);
 
-        Logger.log('init', 'info', `Found ${allWords.length} words`);
+        Logger.log('init', 'info', `Found ${solutionWords.length} possible solutions, ${allWords.length} total words`);
+        Logger.log('init', 'debug', `Using solution picker ${options.solutionPicker}`);
+
         for(let i=0;i<options.numGames;i++) {
             Logger.log('game', 'info', `===== Game ${i} Started`);
 
             try {
-                const guesses = await playGame(strategyName, solutionWords, allWords, strategyOptions);
+                const guesses = await playGame(strategyName, solutionWords, allWords, options.solutionPicker, strategyOptions);
                 gameStats.guesses[guesses] = (gameStats.guesses[guesses] || 0) + 1;
 
             } catch (ex) {
