@@ -133,3 +133,47 @@ RefreqyFlex3 v4 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 2
 RefreqyFlex3 v5 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 2
   winRate: 0.997,
   averageGuesses: 4.25
+
+-> SUMMARY         [INFO ] ===== Game Statistics
+                      Strategy Name: freq
+                   Strategy Options: {}
+             Number of games played: 1000
+                     Number of wins: 929
+                   Number of losses: 71
+                 Winning Percentage: 92.90 %
+            Overall average guesses: 4.53
+  Average guesses for winning games: 4.30
+Game Histogram:
+     1 Guess |                                                              | 0
+   2 Guesses | ###                                                          | 21
+   3 Guesses | #########################                                    | 156
+   4 Guesses | ############################################################ | 380
+   5 Guesses | ##########################################                   | 264
+   6 Guesses | #################                                            | 108
+   7 Guesses | ########                                                     | 48
+   8 Guesses | ###                                                          | 18
+   9 Guesses | #                                                            | 4
+  10 Guesses |                                                              | 0
+  11 Guesses |                                                              | 0
+  12 Guesses |                                                              | 1
+
+-> SUMMARY         [INFO ] ===== Game Statistics
+                        Strategy Name: freq
+                   Strategy Options: {"scoreDuplicateLetters":true}
+             Number of games played: 1000
+                     Number of wins: 854
+                   Number of losses: 146
+                 Winning Percentage: 85.40 %
+            Overall average guesses: 5.12
+  Average guesses for winning games: 4.73
+Game Histogram:
+     1 Guess |                                                              | 0
+   2 Guesses | #                                                            | 7
+   3 Guesses | #################                                            | 85
+   4 Guesses | ##################################################           | 250
+   5 Guesses | ############################################################ | 301
+   6 Guesses | ##########################################                   | 211
+   7 Guesses | #####################                                        | 103
+   8 Guesses | ######                                                       | 28
+   9 Guesses | ##                                                           | 11
+  10 Guesses | #                                                            | 4
