@@ -137,11 +137,11 @@ async function promptForAnswer() {
     }
 }
 
-async function playGame(allwords, strategyOptions) {
-    const strategy = strategyByName(options.strategyName, allwords, strategyOptions);
-    const word = !options.interactive ? options.answer || randWord(allwords) : undefined;
-    if (word) {
-        Logger.log('game', 'info', `Picked solution word '${word}', solving with strategy ${strategy.constructor.name}`);
+async function playGame(strategyName, solutionWords, allwords, strategyOptions) {
+    const strategy = strategyByName(strategyName, allwords, strategyOptions);
+    const solution = !options.interactive ? options.answer || randWord(solutionWords) : undefined;
+    if (solution) {
+        Logger.log('game', 'info', `Picked solution word '${solution}', solving with strategy ${strategy.constructor.name}`);
     }
 
     let guesses = 0;
@@ -158,7 +158,7 @@ async function playGame(allwords, strategyOptions) {
         if (options.interactive) {
             resultStr = await promptForAnswer();
         } else {
-            resultStr = takeGuess(guess, word);
+            resultStr = takeGuess(guess, solution);
         }
 
         Logger.log('game', 'info', `Result: ${resultStr}`);
@@ -176,12 +176,13 @@ async function playGame(allwords, strategyOptions) {
             Logger.updateConfig(JSON.parse(options.logConfigString));
         }
 
-        const { allWords } = await import(options.wordList);
+        const { solutionWords, allWords } = await import(options.wordList);
         const gameStats = {
             guesses: [],
             failures: 0,
         };
         
+        const strategyName = options.strategyName;
         const strategyOptions = JSON.parse(options.strategyOptionsString);
 
         Logger.log('init', 'info', `Found ${allWords.length} words`);
@@ -189,7 +190,7 @@ async function playGame(allwords, strategyOptions) {
             Logger.log('game', 'info', `===== Game ${i} Started`);
 
             try {
-                const guesses = await playGame(allWords, strategyOptions);
+                const guesses = await playGame(strategyName, solutionWords, allWords, strategyOptions);
                 gameStats.guesses[guesses] = (gameStats.guesses[guesses] || 0) + 1;
 
             } catch (ex) {
