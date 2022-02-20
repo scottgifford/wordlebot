@@ -17,7 +17,7 @@ const optionDefinitions = [
     { name: 'words', alias: 'w', type: String, description: "JavaScript module exporting valid words" },
     { name: 'answer', alias: 'a', type: String, description: "Use the given answer instead of a random one" },
     { name: 'guess', alias: 'g', type: String, multiple: true, description: "Use these as initial guesses" },
-    { name: 'strategy-options', alias: 'o', type: String, description: "JSON string of configuration-specific options"},
+    { name: 'strategy-config', alias: 'o', type: String, description: "JSON string of strategy-specific configuration options, see strategy source"},
     { name: 'log-config', alias: 'l', type: String, description: "JSON string with log configuration options, see README" },
 ];
 
@@ -83,7 +83,7 @@ const options = {
     answer: commandLineOptions.answer,
     guesses: commandLineOptions.guess || [],
     interactive: commandLineOptions.interactive,
-    strategyOptionsString: commandLineOptions['strategy-options'] || '{}',
+    strategyOptionsString: commandLineOptions['strategy-config'] || '{}',
     logConfigString: commandLineOptions['log-config'],
 }; 
 
