@@ -55,11 +55,18 @@ Randomly choose a word which matches the information known so far.
 
 ## freq
 Use a frequency analyzer, and choose the word with the highest score from the frequency analyzer
-(i.e., the word with the letters seen most frequently in the list of words).
+(i.e., the word with the letters seen most frequently in the list of words).  Double/Triple/etc.
+letter occurrences are not scored.
 
 ## refreq
 Use the frequency analyzer as above, but after each guess, create a new frequency analyzer
 with the remaining possibilities.
+
+## doublefreq
+Use a smarter scorer that takes into account double/triple/etc. letter occurrences.
+
+## doublerefreq
+Re-analyze frequency of remaining words as in `refreq`, but use the improved scorer from `doublefreq`.
 
 ## refreqflex
 Like the `refreq` strategy, but be more flexible about choosing words: Instead of guessing only real possibilities,

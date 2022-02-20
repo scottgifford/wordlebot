@@ -207,3 +207,49 @@ Game Histogram:
   11 Guesses |                                                              | 1
 
 
+
+  ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s doublefreq |tee tmp/doublefreq-wordle-2309.out
+  -> SUMMARY         [INFO ] ===== Game Statistics
+                      Strategy Name: doublefreq
+                   Strategy Options: {}
+             Number of games played: 2309
+                     Number of wins: 2141
+                   Number of losses: 168
+                 Winning Percentage: 92.72 %
+            Overall average guesses: 4.55
+  Average guesses for winning games: 4.31
+Game Histogram:
+     1 Guess |                                                              | 0
+   2 Guesses | ##                                                           | 33
+   3 Guesses | ##############################                               | 415
+   4 Guesses | ############################################################ | 820
+   5 Guesses | ############################################                 | 599
+   6 Guesses | ####################                                         | 274
+   7 Guesses | #######                                                      | 101
+   8 Guesses | ###                                                          | 39
+   9 Guesses | #                                                            | 17
+  10 Guesses | #                                                            | 9
+  11 Guesses |                                                              | 1
+  12 Guesses |                                                              | 1
+
+./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s doublerefreq |tee tmp/doublerefreq-wordle-2309.out
+                      Strategy Name: doublerefreq
+                   Strategy Options: {}
+             Number of games played: 2309
+                     Number of wins: 2258
+                   Number of losses: 51
+                 Winning Percentage: 97.79 %
+            Overall average guesses: 4.09
+  Average guesses for winning games: 4.01
+Game Histogram:
+     1 Guess |                                                              | 0
+   2 Guesses | ###                                                          | 50
+   3 Guesses | #################################                            | 577
+   4 Guesses | ############################################################ | 1048
+   5 Guesses | ###########################                                  | 466
+   6 Guesses | #######                                                      | 117
+   7 Guesses | ##                                                           | 29
+   8 Guesses | #                                                            | 15
+   9 Guesses |                                                              | 5
+  10 Guesses |                                                              | 1
+  11 Guesses |                                                              | 1
