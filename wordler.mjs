@@ -91,8 +91,11 @@ const options = {
 const simpleFormatter = n => n.toString();
 const averageFormatter = n => n.toFixed(STATS_FORMAT_SIG_DIG).toString();
 const percentFormatter = n => averageFormatter(n) + " %";
+const jsonFormatter = n => JSON.stringify(n);
 
 const statDescriptions = {
+    strategyName: ["Strategy Name", simpleFormatter],
+    strategyOptions: ["Strategy Options", jsonFormatter],
     numGames: ["Number of games played", simpleFormatter],
     wins: ["Number of wins", simpleFormatter],
     losses: ["Number of losses", simpleFormatter],
@@ -101,10 +104,16 @@ const statDescriptions = {
     averageGuessesForWins: ["Average guesses for winning games", averageFormatter],
 };
 
-function formatGameStats(gameStats) {
+function formatGameStats(gameStats, strategyName, strategyOptions) {
     let formattedStr = '';
+    const printOptions = {
+        ...gameStats,
+        strategyName,
+        strategyOptions,
+    }
+
     Object.entries(statDescriptions).forEach(([statName, [description, formatter]]) => {
-        const statValue = gameStats[statName];
+        const statValue = printOptions[statName];
         formattedStr += `${description.padStart(STATS_DESCRIPTION_COL_WIDTH)}: ${formatter(statValue)}\n`;
     });
     const histogramData = Object.fromEntries(gameStats.guesses
@@ -219,7 +228,7 @@ async function playGame(strategyName, solutionWords, allwords, strategyOptions) 
         gameStats.averageGuessesForWins = gameStats.guesses.filter(isWinningGuess).reduce(averageGuesses, 0) / gameStats.wins;
 
         Logger.log('summary', 'debug', `Game stats object: `, gameStats)
-        Logger.log('summary', 'info', `===== Game Statistics\n` + formatGameStats(gameStats));
+        Logger.log('summary', 'info', `===== Game Statistics\n` + formatGameStats(gameStats, strategyName, strategyOptions));
     } catch (ex) {
         Logger.log('game', 'fatal', 'Wordler main loop failed', ex);
     }
