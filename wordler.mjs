@@ -231,7 +231,7 @@ async function playGame(strategyName, solutionWords, allwords, solutionPicker, s
                 gameStats.guesses[guesses] = (gameStats.guesses[guesses] || 0) + 1;
 
             } catch (ex) {
-                Logger.log('game', 'error', 'Game failed: ' + ex);
+                Logger.log('game', 'error', 'Game failed: ', ex);
                 gameStats.failures++;
             }
             Logger.log('game', 'info', `===== Game ${i} Ended`);

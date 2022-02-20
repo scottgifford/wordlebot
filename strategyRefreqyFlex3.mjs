@@ -14,13 +14,13 @@ const GUESS_POSSIBILITIES_ON_LAST_GUESS = true;
 
 export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
 
-    scoreWord(word, freq) {
-        return this.wordWithScore(word, freq).score;
+    scoreWord(word) {
+        return this.wordWithScore(word).score;
     }
 
     // TODO: CopyPasta from StrategyFreqy, refactor to avoid needing this
     // TODO: Change other scoreWord's to match debug info
-    wordWithScore(word, freq) {
+    wordWithScore(word) {
         let ret = {
             word,
             possible: this.letters.wordHasLetters(word) ? 1 : 0,
@@ -35,13 +35,13 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
                 prevCount[letter] = 0;
             }
             Logger.log('strategy', 'trace', `${letter}: prevCount=${prevCount[letter]}, minLetters=${this.letters.minLetters(letter) || 0}`);
-            if (freq.hasLetter(letter, prevCount[letter])) {
+            if (this.leFreq.hasLetter(letter, prevCount[letter])) {
                 if (this.letters.minLetters(letter) === undefined || (this.letters.minLetters(letter) < charOccurrences(word, letter))) {
                     if (!this.letters.definitelyHasLetterAtPosition('letter', i)) {
                         if (prevCount[letter] == (this.letters.minLetters(letter) || 0)) {
                             // This is the first new occurence of a letter we don't know about.
-                            const addScore = freq.letterFrequencyAtPosition(letter, i, prevCount[letter]) * RIGHT_PLACE_MULTIPLIER +
-                                freq.letterFrequency(letter, prevCount[letter]) - prevCount[letter] /* subtract for the letters we already know about */;
+                            const addScore = this.leFreq.letterFrequencyAtPosition(letter, i, prevCount[letter]) * RIGHT_PLACE_MULTIPLIER +
+                            this.leFreq.letterFrequency(letter, prevCount[letter]) - prevCount[letter] /* subtract for the letters we already know about */;
                             ret.debug += `${letter}${prevCount[letter]}+${addScore} `;
                             score += addScore;
                             ret.newLetters++;
@@ -65,8 +65,8 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
         return ret;
     }
 
-    scoreAndSortWords(words, freq) {
-        return words.map(word => this.wordWithScore(word, freq)).sort((a, b) => {
+    scoreAndSortWords(words) {
+        return words.map(word => this.wordWithScore(word)).sort((a, b) => {
             return b.score - a.score || // Reverse sort, highest to lowest
                 b.newLetters - a.newLetters || // Reverse sort, highest to lowest
                 b.possible - a.possible // Reverse sort, highest to lowest
@@ -82,11 +82,11 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
     }
 
     // TODO: CopyPasta from StrategyFreqy, refactor or move logic up
-    bestWord(words, freq) {
-        const scores = this.scoreAndSortWords(words, freq);
+    bestWord(words) {
+        const scores = this.scoreAndSortWords(words);
         Logger.log('score', 'debug', 'Top 10 Scores:', scores.slice(0,10).map((s) => JSON.stringify(s)).join(",\n"));
         if (this.options.extraScoreWords) {
-            Logger.log('score', 'debug', 'Extra word scores:',this.scoreAndSortWords(this.options.extraScoreWords, freq).map((s) => JSON.stringify(s)).join(",\n"));
+            Logger.log('score', 'debug', 'Extra word scores:',this.scoreAndSortWords(this.options.extraScoreWords).map((s) => JSON.stringify(s)).join(",\n"));
         }
         return scores[0].word;
     }
