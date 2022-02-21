@@ -49,10 +49,12 @@ export class StrategyScoringAbstract extends Strategy {
         throw new Error('Not implemented, abstract class');
     }
 
+    wordScoreCompare(a, b) {
+        return b.score - a.score; // Reverse sort, highest to lowest
+    }
+
     scoreAndSortWords(words) {
-        return words.map(word => this.wordWithScore(word)).sort((a, b) => {
-            return b.score - a.score  // Reverse sort, highest to lowest
-        });
+        return words.map(word => this.wordWithScore(word)).sort((a, b) => this.wordScoreCompare(a, b));
     }
 
     bestWordWithScore(words) {
