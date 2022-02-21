@@ -94,6 +94,7 @@ const simpleFormatter = n => n.toString();
 const averageFormatter = n => n.toFixed(STATS_FORMAT_SIG_DIG).toString();
 const percentFormatter = n => averageFormatter(n) + " %";
 const jsonFormatter = n => JSON.stringify(n);
+const loserFormatter = n => n.map(loss => `${loss.solution}/${loss.guesses}`).join(" ");
 
 const statDescriptions = {
     strategyName: ["Strategy Name", simpleFormatter],
@@ -104,6 +105,7 @@ const statDescriptions = {
     winPercent: ["Winning Percentage", percentFormatter],
     averageGuesses: ["Overall average guesses", averageFormatter],
     averageGuessesForWins: ["Average guesses for winning games", averageFormatter],
+    losingGuesses: ["Worst Losses", loserFormatter],
 };
 
 function formatGameStats(gameStats, strategyName, strategyOptions) {
@@ -199,10 +201,15 @@ async function playGame(strategyName, solutionWords, allwords, solutionPicker, s
         Logger.log('game', 'info', `Result: ${resultStr}`);
         if (resultStr === "GGGGG") {
             Logger.log('game', 'info', `You guessed '${guess}' in ${guesses} guesses!`);
-            return guesses;
+            break;
         }
         strategy.update(guess, resultStr.split(""));
     }
+
+    return {
+        solution,
+        guesses,
+    };
 }
 
 (async () => {
@@ -215,6 +222,7 @@ async function playGame(strategyName, solutionWords, allwords, solutionPicker, s
         const gameStats = {
             guesses: [],
             failures: 0,
+            losingGuesses: [],
         };
         
         const strategyName = options.strategyName;
@@ -227,9 +235,18 @@ async function playGame(strategyName, solutionWords, allwords, solutionPicker, s
             Logger.log('game', 'info', `===== Game ${i} Started`);
 
             try {
-                const guesses = await playGame(strategyName, solutionWords, allWords, options.solutionPicker, strategyOptions);
-                gameStats.guesses[guesses] = (gameStats.guesses[guesses] || 0) + 1;
+                const gameResult = await playGame(strategyName, solutionWords, allWords, options.solutionPicker, strategyOptions);
+                gameStats.guesses[gameResult.guesses] = (gameStats.guesses[gameResult.guesses] || 0) + 1;
 
+                // Track losing guesses for logging
+                if (gameResult.guesses > MAX_GUESSES) {
+                    gameStats.losingGuesses.push(gameResult);
+                    gameStats.losingGuesses.sort((a, b) => b.guesses - a.guesses);
+                    // TODO: 5 should be a constant
+                    while (gameStats.losingGuesses.length > 5) {
+                        gameStats.losingGuesses.pop();
+                    }
+                }
             } catch (ex) {
                 Logger.log('game', 'error', 'Game failed: ', ex);
                 gameStats.failures++;
