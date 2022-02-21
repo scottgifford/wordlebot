@@ -9,7 +9,7 @@ import { StrategyRefreqyFlex3 } from "./strategyRefreqyFlex3.mjs";
 import { StrategyRefreqyFlex4 } from "./strategyRefreqyFlex4.mjs";
 import { StrategySimGuess } from "./strategySimGuess.mjs";
 
-export function strategyByName(name, words, strategyOptions) {
+export function strategyByName(name, words, strategyOptions = { }) {
     switch(name) {
         case 'random':
             return new StrategyRandomRemaining(words, strategyOptions);
@@ -42,7 +42,7 @@ export const STRATEGIES = {
     freq: 'Choose the valid word with the overall most frequently occuring letters, with no score for additional instances of the same letter',
     doublefreq: 'Choose valid word with most frequently occuring letters, but score additional instances of the same letter according to the frequency of that letter appearing that many times',
     refreq: 'Choose the valid word with the most frequently occuring letters among the remaining options',
-    doulerefreq: 'Choose valid word based on frequency of remaining letters (as in refreq), with the smarter scoring strategy from doublefreq',
+    doublerefreq: 'Choose valid word based on frequency of remaining letters (as in refreq), with the smarter scoring strategy from doublefreq',
     refreqflex: 'Choose the word with the most frequently occuring letters among the remaining options, whether or not it is valid',
     refreqflex2: 'Like the `refreqflex` strategy, but keep guessing words which may not be possible until we have some threshold of found letters',
     refreqflex3: 'Like the `refreqflex` strategy, but with lots of additional optimizations',
