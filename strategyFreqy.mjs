@@ -22,7 +22,7 @@ export class StrategyFreqy extends StrategyScoringAbstract {
         });
         this.remainingWords = words;
         this.letters = new LetterTracker();
-        this.leFreq = StrategyFreqy.frequencyAnalyze(words);
+        this.leFreq = options.freq ? options.freq : StrategyFreqy.frequencyAnalyze(words);
         Logger.log('freq', 'debug', `FrequencyAnalysis:\n${this.leFreq.debugString()}`);
     }
 
