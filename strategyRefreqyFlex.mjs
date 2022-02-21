@@ -1,5 +1,4 @@
 import { Logger } from "./log.mjs";
-import { StrategyFreqy } from "./strategyFreqy.mjs";
 import { StrategyRefreqy } from "./strategyRefreqy.mjs";
 
 const DEFAULT_SCORE_RATIO = 0.30;
