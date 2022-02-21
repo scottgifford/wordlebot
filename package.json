@@ -6,7 +6,7 @@
     "wordlebot": "wordlebot.js"
   },
   "scripts": {
-    "test": "./testUtil.mjs"
+    "test": "./testUtil.mjs && ./testSmoke.mjs"
   },
   "repository": {
     "type": "git",
