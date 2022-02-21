@@ -18,7 +18,6 @@ const DEFAULT_REMAINING_WORDS_THRESHOLD = 1;
  */
 export class StrategyRefreqyFlex2 extends StrategyRefreqyFlex {
     constructor(words, options) {
-        Logger.log('strategy', 'debug', 'StrategyRefreqyFlex2 constructor options:', options);
         super(words, {
             maxWrongness: DEFAULT_MAX_WRONGNESS,
             remainingWordsThreshold: DEFAULT_REMAINING_WORDS_THRESHOLD,

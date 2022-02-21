@@ -69,7 +69,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
     }
 
     reFreq() {
-        Logger.log('strategy', 'info', `RefreqyFlex3 reFreq`);
+        Logger.log('strategy', 'debug', `RefreqyFlex3 reFreq`);
 
         // v6+: Update letter info based on remaining possibilities (does this actually help?!  Try it as an option)
         this.letters.updateFromRemaining(this.remainingWords);

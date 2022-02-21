@@ -59,7 +59,7 @@ export class StrategyScoringAbstract extends Strategy {
 
     bestWordWithScore(words) {
         const scores = this.scoreAndSortWords(words);
-        Logger.log('score', 'debug', `Top ${this.options.logTopNScores} Scores:`, scores.slice(0,this.options.logTopNScores).map((s) => JSON.stringify(s)).join(",\n"));
+        Logger.log('score', 'debug', `Top ${this.options.logTopNScores} Scores:\n`, scores.slice(0,this.options.logTopNScores).map((s) => JSON.stringify(s)).join(",\n"));
         if (this.options.extraScoreWords) {
             Logger.log('score', 'debug', 'Extra word scores:',this.scoreAndSortWords(this.options.extraScoreWords, freq).map((s) => JSON.stringify(s)).join(",\n"));
         }

@@ -54,7 +54,7 @@ export class StrategyFreqy extends StrategyScoringAbstract {
         Logger.log('strategy', 'debug', this.letters.debugString());
         Logger.log('strategy', 'info', `${this.remainingWords.length} possibilities left`);
         if (this.remainingWords.length <= this.options.logNRemainingWords) {
-            Logger.dynLog('strategy', 'debug', () => this.remainingWords.map(word => JSON.stringify(this.wordWithScore(word))).join("\n"));
+            Logger.dynLog('strategy', 'debug', () => "Remaining possibilities:\n" + this.remainingWords.map(word => JSON.stringify(this.wordWithScore(word))).join("\n"));
         }
     }
 
