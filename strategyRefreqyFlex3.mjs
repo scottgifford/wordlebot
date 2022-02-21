@@ -1,7 +1,9 @@
 import { Logger } from "./log.mjs";
 import { StrategyRefreqyFlex2 } from "./strategyRefreqyFlex2.mjs";
+import { WordWithScore } from "./strategyScoringAbstract.mjs";
 import { charOccurrences } from "./util.mjs";
 
+// TODO: Turn these into options
 const RIGHT_PLACE_MULTIPLIER = 1; // Determined experimentally, though doesn't seem to matter much
 const NUM_GUESSES = 6; // Game rule, should really be in some other layer
 
@@ -10,91 +12,66 @@ const NUM_GUESSES = 6; // Game rule, should really be in some other layer
 // at the cost of a larger number of guesses past the last one if we don't guess right.
 const GUESS_POSSIBILITIES_ON_LAST_GUESS = true;
 
-
 export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
 
-    scoreWord(word) {
-        return this.wordWithScore(word).score;
-    }
-
-    // TODO: CopyPasta from StrategyFreqy, refactor to avoid needing this
-    // TODO: Change other scoreWord's to match debug info
     wordWithScore(word) {
-        let ret = {
-            word,
-            possible: this.letters.wordHasLetters(word) ? 1 : 0,
-            newLetters: 0,
-            debug: "",
-        }
-        let score = 0;
+        let score = new WordWithScore(word);
+        score.newLetters = 0;
+        score.possible = this.letters.wordHasLetters(word) ? 1 : 0;
+
         let prevCount = { };
         for(let i=0;i<word.length;i++) {
             const letter = word[i];
-            if (prevCount[letter] === undefined) {
-                prevCount[letter] = 0;
-            }
-            Logger.log('strategy', 'trace', `${letter}: prevCount=${prevCount[letter]}, minLetters=${this.letters.minLetters(letter) || 0}`);
-            if (this.leFreq.hasLetter(letter, prevCount[letter])) {
+            const letterPrevCount = prevCount[letter] || 0;
+            // Above here, method is the same as in parent class.
+            // TODO: Factor out interior part?  And simplify logic?
+            if (this.leFreq.hasLetter(letter, letterPrevCount)) { // Similar to parent class but with prevCount passed in
                 if (this.letters.minLetters(letter) === undefined || (this.letters.minLetters(letter) < charOccurrences(word, letter))) {
+                    // The guess has more occurrences of this letter than we know the word has (so would provide new information)
                     if (!this.letters.definitelyHasLetterAtPosition('letter', i)) {
-                        if (prevCount[letter] == (this.letters.minLetters(letter) || 0)) {
+                        if (letterPrevCount == (this.letters.minLetters(letter) || 0)) {
                             // This is the first new occurence of a letter we don't know about.
-                            const addScore = this.leFreq.letterFrequencyAtPosition(letter, i, prevCount[letter]) * RIGHT_PLACE_MULTIPLIER +
-                            this.leFreq.letterFrequency(letter, prevCount[letter]) - prevCount[letter] /* subtract for the letters we already know about */;
-                            ret.debug += `${letter}${prevCount[letter]}+${addScore} `;
-                            score += addScore;
-                            ret.newLetters++;
-                        } else if (prevCount[letter] > (this.letters.minLetters(letter) || 0)) {
-                             // This is an additional new occurrence of a letter when we don't yet know if the previous occurrence is here!
-                             // The value of this is lower, but it is not 0; it is better to guess an extra occurrence early than to guess
-                             // a letter we already know is or isn't in the word.
-                             // So just give this a very low score, instead of the 0 score in v4-
-                             score += 0.5;
-                            ret.debug += `${letter}${prevCount[letter]}+0.5 `;
+                            const addScore = this.leFreq.letterFrequencyAtPosition(letter, i, letterPrevCount) * RIGHT_PLACE_MULTIPLIER +
+                                this.leFreq.letterFrequency(letter, letterPrevCount) - letterPrevCount /* subtract for the letters we already know about */;
+                            score.addScore(letter, `/${letterPrevCount}@${i}`, addScore);
+                            score.newLetters++;
+                        } else if (letterPrevCount > (this.letters.minLetters(letter) || 0)) {
+                            // This is an additional new occurrence of a letter when we don't yet know if the previous occurrence is here!
+                            // The value of this is lower, but it is not 0; it is better to guess an extra occurrence early than to guess
+                            // a letter we already know is or isn't in the word.
+                            // So just give this a very low score, instead of the 0 score in v4-
+                            score.addScore(letter, `/${letterPrevCount}@${i}`, 0.5);
                         }
                     }
                 }
             } else {
                 Logger.log('score', 'trace', `No score for letter ${i} in word ${word}`);
             }
-            prevCount[letter]++;
+            // Below here this is the same as parent method
+            prevCount[letter] = letterPrevCount + 1;
         }
-        Logger.log('score', 'trace', `Score for ${word} is ${score}`);
-        ret.score = score;
-        return ret;
+        Logger.log('score', 'trace', `Score for ${word} is ${score.score}: ${score.debug}`);
+        return score;
     }
 
-    scoreAndSortWords(words) {
-        return words.map(word => this.wordWithScore(word)).sort((a, b) => {
-            return b.score - a.score || // Reverse sort, highest to lowest
-                b.newLetters - a.newLetters || // Reverse sort, highest to lowest
-                b.possible - a.possible // Reverse sort, highest to lowest
-        });
+    wordScoreCompare(a, b) {
+        return super.wordScoreCompare(a, b) || // Reverse sort, highest to lowest
+            b.newLetters - a.newLetters || // Reverse sort, highest to lowest
+            b.possible - a.possible; // Reverse sort, highest to lowest
     }
 
     shouldUseBrandNewGuess(guessNum) {
         if (GUESS_POSSIBILITIES_ON_LAST_GUESS && guessNum >= NUM_GUESSES) {
-            Logger.log('score', 'info', `Last guess ${guessNum}/${NUM_GUESSES}, considering only possible words`);
+            Logger.log('score', 'info', `Last guess ${guessNum} / ${NUM_GUESSES}, considering only possible words`);
             return false;
         }
         return super.shouldUseBrandNewGuess(guessNum);
     }
 
-    // TODO: CopyPasta from StrategyFreqy, refactor or move logic up
-    bestWord(words) {
-        const scores = this.scoreAndSortWords(words);
-        Logger.log('score', 'debug', 'Top 10 Scores:', scores.slice(0,10).map((s) => JSON.stringify(s)).join(",\n"));
-        if (this.options.extraScoreWords) {
-            Logger.log('score', 'debug', 'Extra word scores:',this.scoreAndSortWords(this.options.extraScoreWords).map((s) => JSON.stringify(s)).join(",\n"));
-        }
-        return scores[0].word;
-    }
-
-
     reFreq() {
         Logger.log('strategy', 'info', `RefreqyFlex3 reFreq`);
 
-        // v6+: Update letter info based on remaining possibilities
+        // v6+: Update letter info based on remaining possibilities (does this actually help?!  Try it as an option)
         this.letters.updateFromRemaining(this.remainingWords);
 
         // Our goal here is to eliminate letter guesses that will not give us any new information.
@@ -109,6 +86,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
             }
             return [k, this.leFreq.getEntryAdjustedLetterCount(k, this.letters.minLetters(k))];
         });
+        // TODO: This is useful for other strategies too, is there somewhere we can put it to use across strategies?
         Logger.dynLog('strategy', 'debug', () => {
             const TOP_N_LETTERS = 10;
             return [
