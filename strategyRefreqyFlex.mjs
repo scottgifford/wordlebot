@@ -31,7 +31,6 @@ export class StrategyRefreqyFlex extends StrategyRefreqy {
     }
 
     /**
-     *
      * Chose the flex word for this strategy.
      *
      * @returns Word and score for flex word choice
@@ -46,6 +45,9 @@ export class StrategyRefreqyFlex extends StrategyRefreqy {
 
     /**
      * From the given flex word and remaining word, choose one and return it.
+     *
+     * In the base class, we compute the ratio betweeen the flex word and the remaining word, and if it is above a threshold,
+     * choose the flex word.
      *
      * @param {*} flexWordAndScore Flex word and score to consider
      * @param {*} remainingWordAndScore Remaining word and score to consider
@@ -66,6 +68,7 @@ export class StrategyRefreqyFlex extends StrategyRefreqy {
             this.chooseFlexWordAndScore(),
             this.bestWordWithScore(this.remainingWords)
         );
+        super.guessLog();
         return wordAndScore.word;
     }
 }

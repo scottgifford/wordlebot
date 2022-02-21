@@ -29,7 +29,9 @@ export class StrategyScoringAbstract extends Strategy {
     }
 
     guess(guessNum) {
-        return this.bestWord(this.remainingWords, this.leFreq);
+        const guess = this.bestWord(this.remainingWords, this.leFreq);
+        super.guessLog();
+        return guess;
     }
 
     // TODO: Deprecate
@@ -39,7 +41,7 @@ export class StrategyScoringAbstract extends Strategy {
 
     /**
      * Score the given word.
-     * 
+     *
      * @param {score} word Word to score
      * @returns {WordWithScore} Word with score object
      */

@@ -11,4 +11,12 @@ export class Strategy {
     update(guess, result) {
         throw new Error("Abstract method");
     }
+
+    guessLog() {
+        // Do nothing
+    }
+
+    updateLog() {
+        // Do nothing
+    }
 }

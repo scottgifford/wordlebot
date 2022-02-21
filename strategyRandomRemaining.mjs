@@ -11,13 +11,15 @@ export class StrategyRandomRemaining extends Strategy {
     }
 
     guess() {
-        return randWord(this.remainingWords);
+        const guess = randWord(this.remainingWords);
+        super.guessLog();
+        return guess;
     }
 
     update(guess, result) {
         this.letters.update(guess, result);
 
         this.remainingWords = this.remainingWords.filter(word => this.letters.wordHasLetters(word));
-        Logger.log('strategy', 'info', `${this.remainingWords.length} possibilities left`)
+        super.updateLog();
     }
 }

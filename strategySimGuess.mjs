@@ -49,6 +49,7 @@ export class StrategySimGuess extends Strategy {
         Logger.log('strategy', 'debug', "Sorted Guesses: ", sortedGuesses);
         const bestGuess = sortedGuesses[0];
         Logger.log('strategy', 'info', "Best guess:", bestGuess);
+        super.guessLog();
         return bestGuess.word;
     }
 
@@ -56,7 +57,7 @@ export class StrategySimGuess extends Strategy {
         this.letters.update(guess, result);
 
         this.remainingWords = this.remainingWords.filter(word => this.letters.wordHasLetters(word));
-        Logger.log('strategy', 'info', `${this.remainingWords.length} possibilities left`);
+        super.updateLog();
     }
 
     scoreWord(word) {

@@ -13,7 +13,8 @@ export class StrategyDoubleRefreqy extends StrategyDoubleFreqy {
 
     update(guess, result) {
         super.update(guess, result);
-        Logger.log('strategy', 'debug', `StrategyRefreqy analyzing frequencies of remaining words`);
+        Logger.log('strategy', 'debug', `StrategyDoubleRefreqy analyzing frequencies of remaining words`);
         this.leFreq = StrategyFreqy.frequencyAnalyze(this.remainingWords);
+        super.updateLog();
     }
 }

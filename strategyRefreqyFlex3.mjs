@@ -1,4 +1,3 @@
-import { FrequencyAnalysis } from "./freq.mjs";
 import { Logger } from "./log.mjs";
 import { StrategyRefreqyFlex2 } from "./strategyRefreqyFlex2.mjs";
 import { charOccurrences } from "./util.mjs";
@@ -9,7 +8,7 @@ const NUM_GUESSES = 6; // Game rule, should really be in some other layer
 // On our last guess and beyond, set this flag to only choose real possibilities.
 // This increases our odds of getting it in 6 a bit,
 // at the cost of a larger number of guesses past the last one if we don't guess right.
-const GUESS_POSSIBILITIES_ON_LAST_GUESS = true; 
+const GUESS_POSSIBILITIES_ON_LAST_GUESS = true;
 
 
 export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {

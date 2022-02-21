@@ -30,16 +30,28 @@ export class StrategyFreqy extends StrategyScoringAbstract {
         return new FrequencyAnalysis(words);
     }
 
+    guessLog() {
+        super.guessLog();
+        // TODO: That 5 should be in another layer somewhere
+        Logger.log('strategy', 'info', `Know ${this.letters.knownLetters()} / 5 letters`);
+    }
+
     update(guess, result) {
         this.letters.update(guess, result);
 
         Logger.log('strategy', 'debug', `${this.remainingWords.length} possible words before filtering`);
         this.remainingWords = this.remainingWords.filter(word => this.letters.wordHasLetters(word));
-        Logger.log('strategy', 'info', `${this.remainingWords.length} possibilities left`);
 
         if (this.remainingWords.length === 0) {
             throw new Error('No remaining possibilities, giving up');
         }
+
+        this.updateLog();
+    }
+
+    updateLog() {
+        super.updateLog();
+        Logger.log('strategy', 'info', `${this.remainingWords.length} possibilities left`);
         if (this.remainingWords.length <= this.options.logNRemainingWords) {
             Logger.dynLog('strategy', 'debug', () => this.remainingWords.map(word => JSON.stringify(this.wordWithScore(word))).join("\n"));
         }
