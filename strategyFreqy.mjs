@@ -21,8 +21,8 @@ export class StrategyFreqy extends StrategyScoringAbstract {
             ...options
         });
         this.remainingWords = words;
-        this.letters = new LetterTracker();
         this.leFreq = options.freq ? options.freq : StrategyFreqy.frequencyAnalyze(words);
+        this.letters = options.letters ? options.letters : new LetterTracker();
         Logger.log('freq', 'debug', `FrequencyAnalysis:\n${this.leFreq.debugString()}`);
     }
 
@@ -51,6 +51,7 @@ export class StrategyFreqy extends StrategyScoringAbstract {
 
     updateLog() {
         super.updateLog();
+        Logger.log('strategy', 'debug', this.letters.debugString());
         Logger.log('strategy', 'info', `${this.remainingWords.length} possibilities left`);
         if (this.remainingWords.length <= this.options.logNRemainingWords) {
             Logger.dynLog('strategy', 'debug', () => this.remainingWords.map(word => JSON.stringify(this.wordWithScore(word))).join("\n"));

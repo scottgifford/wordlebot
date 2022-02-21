@@ -36,11 +36,16 @@ export class StrategyRefreqyFlex extends StrategyRefreqy {
      * @returns Word and score for flex word choice
      */
     chooseFlexWordAndScore() {
-        const flexWordSubStrategy = new StrategyFreqy(this.words, {
-            freq: this.reFreq(),
-        });
-
+        const flexWordSubStrategy = this.newSubStrategy(this.words, this.reFreq());
         return flexWordSubStrategy.bestWordWithScore(this.words);
+    }
+
+    newSubStrategy(words, freq) {
+        // Create a new instance of the same class as us
+        return new this.constructor(words, {
+            freq,
+            letters: this.letters.clone(),
+        });
     }
 
     /**
@@ -61,12 +66,17 @@ export class StrategyRefreqyFlex extends StrategyRefreqy {
         return chosenWordAndScore;
     }
 
-    guess() {
+    guess(guessNum) {
         // Choose and score both a word from the set of remaining possibilities, and from the set of words that contain none of the existing letters.
         // Use chooseFlexOrRemainingWord() method to decide which of these to use.
+        Logger.log('score', 'debug', `Finding best flex word`);
+        const flexWordAndScore = this.chooseFlexWordAndScore();
+        Logger.log('score', 'debug', `Finding best remaining word`);
+        const remainingWordAndScore = this.bestWordWithScore(this.remainingWords);
         const wordAndScore = this.chooseFlexOrRemainingWord(
-            this.chooseFlexWordAndScore(),
-            this.bestWordWithScore(this.remainingWords)
+            flexWordAndScore,
+            remainingWordAndScore,
+            guessNum
         );
         super.guessLog();
         return wordAndScore.word;

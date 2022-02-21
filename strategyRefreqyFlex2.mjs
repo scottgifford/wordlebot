@@ -1,13 +1,29 @@
 import { Logger } from "./log.mjs";
-import { StrategyRefreqy } from "./strategyRefreqy.mjs";
+import { StrategyRefreqyFlex } from "./strategyRefreqyFlex.mjs";
 
-const MAX_WRONGNESS = 5;
-const REMAINING_WORDS_THRESHOLD = 1;
+const DEFAULT_MAX_WRONGNESS = 5;
+const DEFAULT_REMAINING_WORDS_THRESHOLD = 1;
 
-export class StrategyRefreqyFlex2 extends StrategyRefreqy /* Note this is not StrategyRefreqyFlex, we are using a different strategy */ {
+// TODO: This is really just a small variant of StrategyRefreqyFlex, probably it should just be some options there.
+
+/**
+ * Another version of RefreqyFlex with a different strategy for choosing flex words.
+ *
+ * For choosing the flex words, it eliminates from the frequency analysis both letters we know are definitely in the word (as in RefreqyFlex)
+ * and also letters we know are definitely not in the word (a change).
+ *
+ * For deciding whether to use the flex word or the remaining word, it checks the remaining words and the known letters against a threshold.
+ * Through experimentation, however, I found the most effective choices for these thresholds are ones which always choose the flex word
+ * (though it may be worth revisiting this as I've gotten better at measuring).
+ */
+export class StrategyRefreqyFlex2 extends StrategyRefreqyFlex {
     constructor(words, options) {
-        console.log('strategy', 'debug', 'Constructor options:', options);
-        super(words, options);
+        Logger.log('strategy', 'debug', 'StrategyRefreqyFlex2 constructor options:', options);
+        super(words, {
+            maxWrongness: DEFAULT_MAX_WRONGNESS,
+            remainingWordsThreshold: DEFAULT_REMAINING_WORDS_THRESHOLD,
+            ...options,
+        });
         this.knownLetters = 0;
     }
 
@@ -16,43 +32,28 @@ export class StrategyRefreqyFlex2 extends StrategyRefreqy /* Note this is not St
         return this.leFreq.clone(([k,v]) => !this.letters.definitelyHasLetter(k) && !this.letters.definitelyDoesNotHaveLetter(k));
     }
 
-    shouldUseBrandNewGuess() {
-        return this.remainingWords.length > REMAINING_WORDS_THRESHOLD && this.letters.knownLetters() < MAX_WRONGNESS;
+    /**
+     * From the given flex word and remaining word, choose one and return it.
+     *
+     * For deciding whether to use the flex word or the remaining word, it checks the remaining words and the known letters against a threshold.
+     * Through experimentation, however, I found the most effective choices for these thresholds are ones which always choose the flex word
+     * (though it may be worth revisiting this as I've gotten better at measuring).
+     *
+     * @param {*} flexWordAndScore Flex word and score to consider
+     * @param {*} remainingWordAndScore Remaining word and score to consider
+     * @returns Either flex word or remaining word
+     */
+    chooseFlexOrRemainingWord(flexWordAndScore, remainingWordAndScore, guessNum) {
+        const shouldUseBrandNewGuess = this.shouldUseBrandNewGuess(guessNum) && flexWordAndScore.score > 0;
+        const chosenWordAndScore = shouldUseBrandNewGuess ? flexWordAndScore : remainingWordAndScore;
+        Logger.log('strategy', 'debug', `Chose ${shouldUseBrandNewGuess ? "flex" : "remaining"} word ${chosenWordAndScore.word}`);
+        return chosenWordAndScore;
     }
 
-    brandNewGuess() {
-        // v1 - Tweak the frequency table to remove (0-score) any letters we already know
-        const freq2 = this.reFreq();
-        Logger.log('freq', 'debug', `Freq2:\n${freq2.debugString()}`);
-        Logger.log('letters', 'debug', "Letters", this.letters.debugString());
-        const word = this.bestWord(this.words, freq2);
-        const score = this.scoreWord(word, freq2);
-        Logger.log('score', 'debug', `Chose ${word} with score ${score}`);
-        if (score === 0) {
-            Logger.log('score', 'debug', `Score too low, returning nothing!`);
-            return undefined;
-        }
-
-        return word;
-    }
-
-    guess(guessNum) {
-        // Choose both a word from the set of remaining possibilities, and from the set of words that contain none of the existing letters
-        // If we know less than MAX_WRONGNESS letters and there are more than REMAINING_WORDS_THRESHOLD possibilities,
-        // use the overall word instead of the possible word.
-        const knownLetters = this.letters.knownLetters();
-        Logger.log('strategy', 'info', `Know ${knownLetters} / 5 letters`);
-        if (this.shouldUseBrandNewGuess(guessNum)) {
-            Logger.log('strategy', 'info', `Picking brand new word`);
-            const guess = this.brandNewGuess();
-            if (guess) {
-                return guess;
-            } else {
-                console.debug('strategy', 'debug', `Could not find brand new word, using remaining word`);
-            }
-        }
-
-        Logger.log('strategy', 'info', `Falling back to possible word`);
-        return super.guess();
+    // TODO: Should not be a method, but is currently used by subclasses
+    shouldUseBrandNewGuess(guessNum) {
+        const shouldUseBrandNewGuess = this.remainingWords.length > this.options.remainingWordsThreshold && this.letters.knownLetters() < this.options.maxWrongness;
+        Logger.log('strategy', 'debug', `Should use ${shouldUseBrandNewGuess ? "flex" : "remaining"} word, based on: (remainingWords=${this.remainingWords.length} > remainingWordsThreshold=${this.options.remainingWordsThreshold} && knownLetters=${this.letters.knownLetters()} < maxWrongness=${this.options.maxWrongness}) = ${shouldUseBrandNewGuess}`);
+        return shouldUseBrandNewGuess;
     }
 }
