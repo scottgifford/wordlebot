@@ -1,12 +1,11 @@
+// TODO: re-do logging.
+// TODO: Turn the v6 optimization in refreqflex3 into an option, and see if we need it
+// TODO: Figure out if DoubleRefreqy should be incorporated into RefreqyFlex etc.
+
 # Recommended Strategy
 Current best version is RefreqyFlex3
 
-
 # Other Strategies
-
-## Double-letter aware frequency
-Extend frequency data to have information on double/triple/etc. letters, and incorporate that into scoring.
-Maybe switch to RefreqyFlex2 v2 but filter out only single-letter choices instead of double-letter choices?
 
 ### v2
 #### Score
