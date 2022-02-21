@@ -253,3 +253,23 @@ Game Histogram:
    9 Guesses |                                                              | 5
   10 Guesses |                                                              | 1
   11 Guesses |                                                              | 1
+
+
+./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreqflex3 |tee tmp/refreqflex3-wordle-2309.out
+-> SUMMARY         [INFO ] ===== Game Statistics
+                      Strategy Name: refreqflex3
+                   Strategy Options: {}
+             Number of games played: 2309
+                     Number of wins: 2307
+                   Number of losses: 2
+                 Winning Percentage: 99.91 %
+            Overall average guesses: 4.28
+  Average guesses for winning games: 4.28
+Game Histogram:
+    1 Guess |                                                              | 0
+  2 Guesses |                                                              | 2
+  3 Guesses | ###############                                              | 299
+  4 Guesses | ############################################################ | 1169
+  5 Guesses | #####################################                        | 723
+  6 Guesses | ######                                                       | 114
+  7 Guesses |                                                              | 2
