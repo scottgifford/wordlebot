@@ -42,6 +42,7 @@ export class StrategyRefreqyFlex extends StrategyRefreqy {
     newSubStrategy(words, freq) {
         // Create a new instance of the same class as us
         return new this.constructor(words, {
+            ...this.options,
             freq,
             letters: this.letters.clone(),
         });
