@@ -255,7 +255,6 @@ Game Histogram:
   11 Guesses |                                                              | 1
 
 
-
 ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreqflex |tee tmp/refreqflex-wordle-2309.out
 -> SUMMARY         [INFO ] ===== Game Statistics
                       Strategy Name: refreqflex
@@ -278,6 +277,54 @@ Game Histogram:
    9 Guesses |                                                              | 7
   10 Guesses |                                                              | 0
   11 Guesses |                                                              | 1
+
+RefreqFlex modified to inherit from StrategyDoubleRefreqy
+./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreqflex |tee tmp/refreqflex-double-wordle-2309.out
+-> SUMMARY         [INFO ] ===== Game Statistics
+                      Strategy Name: refreqflex
+                   Strategy Options: {}
+             Number of games played: 2309
+                     Number of wins: 2251
+                   Number of losses: 58
+                 Winning Percentage: 97.49 %
+            Overall average guesses: 4.16
+  Average guesses for winning games: 4.08
+                       Worst Losses: eater/11 crass/9 class/9 dandy/9 river/9
+Game Histogram:
+     1 Guess |                                                              | 0
+   2 Guesses | ##                                                           | 37
+   3 Guesses | ################################                             | 540
+   4 Guesses | ############################################################ | 1018
+   5 Guesses | ###############################                              | 524
+   6 Guesses | ########                                                     | 132
+   7 Guesses | ##                                                           | 34
+   8 Guesses | #                                                            | 18
+   9 Guesses |                                                              | 5
+  10 Guesses |                                                              | 0
+  11 Guesses |                                                              | 1
+
+
+RefreqFlex2 modified to inherit from StrategyDoubleRefreqy (slightly worse than standard version):
+./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreqflex2 |tee tmp/refreqflex2-double-wordle-2309.out
+  -> SUMMARY         [INFO ] ===== Game Statistics
+                      Strategy Name: refreqflex2
+                   Strategy Options: {}
+             Number of games played: 2309
+                     Number of wins: 2301
+                   Number of losses: 8
+                 Winning Percentage: 99.65 %
+            Overall average guesses: 4.35
+  Average guesses for winning games: 4.34
+                       Worst Losses: jolly/7 inner/7 racer/7 beefy/7 revue/7
+Game Histogram:
+    1 Guess |                                                              | 0
+  2 Guesses |                                                              | 1
+  3 Guesses | #################                                            | 306
+  4 Guesses | ############################################################ | 1072
+  5 Guesses | ###########################################                  | 761
+  6 Guesses | #########                                                    | 161
+  7 Guesses |                                                              | 8
+
 
 ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreqflex2 |tee tmp/refreqflex2-wordle-2309.out
 -> SUMMARY         [INFO ] ===== Game Statistics
