@@ -72,11 +72,12 @@ export class StrategyFreqy extends StrategyScoringAbstract {
         for(let i=0;i<word.length;i++) {
             const letter = word[i];
             const letterPrevCount = prevCount[letter] || 0;
-            if (letterPrevCount === 0 || this.options.scoreDuplicateLetters) {
+            if (letterPrevCount === 0 || this.options.scoreDuplicateLetters || this.options.useDoubleFreq) {
+                // If the above isn't true, score for this letter will effectively be 0.
                 if (this.leFreq.hasLetter(letter)) {
-                    // Score is 0 if we have already picked the letter once
-                    score.addScore(letter, `@${i}`, this.leFreq.letterFrequencyAtPosition(letter, i) * this.options.rightPlaceMultiplier);
-                    score.addScore(letter, '', this.leFreq.letterFrequency(letter));
+                    const effectivePrevCount = this.options.useDoubleFreq ? letterPrevCount : 0;
+                    score.addScore(letter, `@${i}`, this.leFreq.letterFrequencyAtPosition(letter, i, effectivePrevCount) * this.options.rightPlaceMultiplier);
+                    score.addScore(letter, '', this.leFreq.letterFrequency(letter, effectivePrevCount));
                 } else {
                     Logger.log('score', 'trace', `No score for letter #${i} in word ${word}`);
                 }
