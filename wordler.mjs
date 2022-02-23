@@ -74,6 +74,29 @@ const LINE_READER = readline.createInterface({
 const commandLineOptions = commandLineArgs(optionDefinitions);
 if (commandLineOptions.help) {
     console.log(commandLineUsage(help));
+    if (commandLineOptions.strategy) {
+        const strategy = strategyByName(commandLineOptions.strategy, [], {});
+        const makeDescription = (strategyOption) => {
+            let ret = strategyOption.description;
+            if (strategyOption.defaultValue !== undefined) {
+                ret += ` (default ${strategyOption.defaultValue})`;
+            }
+            return ret;
+        }
+        console.log(commandLineUsage([
+            {
+                header: 'Strategy Options',
+                content: strategy.getSupportedOptions()
+                    .filter(strategyOption => !strategyOption.isInternal())
+                    .map(strategyOption => {
+                        return {
+                            name: strategyOption.name,
+                            description: makeDescription(strategyOption),
+                        };
+                }),
+            },
+        ]))
+    }
     process.exit(2);
 }
 

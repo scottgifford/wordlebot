@@ -1,5 +1,5 @@
 import { Logger } from "./log.mjs";
-import { Strategy } from "./strategy.mjs";
+import { Strategy, StrategyOption, StrategyOptionInteger } from "./strategy.mjs";
 
 const DEFAULT_LOG_TOP_N_SCORES = 10; // Log this many top scores
 
@@ -22,10 +22,21 @@ export class WordWithScore {
 
 export class StrategyScoringAbstract extends Strategy {
     constructor(words, options) {
-        super(words, {
-            logTopNScores: DEFAULT_LOG_TOP_N_SCORES,
-            ...options
-        });
+        super(words, options);
+    }
+
+    getSupportedOptions() {
+        return [
+            new StrategyOptionInteger(
+                'logTopNScores', DEFAULT_LOG_TOP_N_SCORES,
+                'Number of top-scoring words to log at strategy/debug'),
+            new StrategyOption(
+                'extraScoreWords', undefined,
+                'Additional words to score for debugging, at score/debug',
+                (v) => { if (!Array.isArray(v)) { throw new Error(`Value must be an array of words`)} }
+            ),
+            ...super.getSupportedOptions()
+        ];
     }
 
     guess(guessNum) {
@@ -61,7 +72,7 @@ export class StrategyScoringAbstract extends Strategy {
         const scores = this.scoreAndSortWords(words);
         Logger.log('score', 'debug', `Top ${this.options.logTopNScores} Scores:\n`, scores.slice(0,this.options.logTopNScores).map((s) => JSON.stringify(s)).join(",\n"));
         if (this.options.extraScoreWords) {
-            Logger.log('score', 'debug', 'Extra word scores:',this.scoreAndSortWords(this.options.extraScoreWords, freq).map((s) => JSON.stringify(s)).join(",\n"));
+            Logger.log('score', 'debug', 'Extra word scores:',this.scoreAndSortWords(this.options.extraScoreWords).map((s) => JSON.stringify(s)).join(",\n"));
         }
         return scores[0];
     }

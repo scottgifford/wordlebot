@@ -24,8 +24,8 @@ const SIMULATE_SAMPLE_RATE = 0.001;
 // Then pick word with best score
 
 export class StrategySimGuess extends Strategy {
-    constructor(words) {
-        super(words);
+    constructor(words, options) {
+        super(words, options);
         this.remainingWords = words;
         this.letters = new LetterTracker();
     }

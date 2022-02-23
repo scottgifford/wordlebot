@@ -2,6 +2,7 @@ import { LetterTracker } from "./letterTracker.mjs";
 import { FrequencyAnalysis } from "./freq.mjs";
 import { Logger } from "./log.mjs";
 import { StrategyScoringAbstract, WordWithScore } from "./strategyScoringAbstract.mjs";
+import { StrategyOption, StrategyOptionInteger, StrategyOptionInternal } from "./strategy.mjs";
 
 const DEFAULT_RIGHT_PLACE_MULTIPLIER = 3; // Determined experimentally, though doesn't seem to matter much
 const DEFAULT_LOG_N_REMAINING_WORDS = 20; // When this many or fewer words or left, log the list of possibilties
@@ -14,16 +15,39 @@ const DEFAULT_LOG_TOP_N_SCORES = 10; // Log this many top scores
  */
 export class StrategyFreqy extends StrategyScoringAbstract {
     constructor(words, options) {
-        super(words, {
-            rightPlaceMultiplier: DEFAULT_RIGHT_PLACE_MULTIPLIER,
-            logTopNScores: DEFAULT_LOG_TOP_N_SCORES,
-            logNRemainingWords: DEFAULT_LOG_N_REMAINING_WORDS,
-            ...options
-        });
+        super(words, options);
         this.remainingWords = words;
-        this.leFreq = options.freq ? options.freq : StrategyFreqy.frequencyAnalyze(words);
-        this.letters = options.letters ? options.letters : new LetterTracker();
+        this.leFreq = this.options.freq ? this.options.freq : StrategyFreqy.frequencyAnalyze(words);
+        this.letters = this.options.letters ? this.options.letters : new LetterTracker();
         Logger.log('freq', 'debug', `FrequencyAnalysis:\n${this.leFreq.debugString()}`);
+    }
+
+    getSupportedOptions() {
+        return [
+            new StrategyOptionInteger(
+                'rightPlaceMultiplier', DEFAULT_RIGHT_PLACE_MULTIPLIER,
+                'Score multiplier for a letter in the right place'),
+            new StrategyOptionInteger(
+                'logTopNScores', DEFAULT_LOG_TOP_N_SCORES,
+                'Number of top-scoring words to log at strategy/debug'),
+            new StrategyOptionInteger(
+                'logNRemainingWords', DEFAULT_LOG_N_REMAINING_WORDS,
+                'When this many or fewer possibilities are remaining, log them at strategy/debug'),
+            new StrategyOptionInternal(
+                'freq', undefined,
+                'Pre-defined frequency table object for this strategy (instead of generating our own)'),
+            new StrategyOption(
+                'useDoubleFreq', undefined,
+                'Use frequency table features that understand multiple occurrences of the same letter'),
+            new StrategyOption(
+                'scoreDuplicateLetters', undefined,
+                'Score additional occurrences of letters after the first one the same way as the original letter'),
+            new StrategyOptionInternal(
+                'letters', undefined,
+                'Initial letter tracker object for this strategy (instead of creating a new one)'
+            ),
+            ...super.getSupportedOptions()
+        ];
     }
 
     static frequencyAnalyze(words) {

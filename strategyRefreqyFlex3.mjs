@@ -4,7 +4,6 @@ import { WordWithScore } from "./strategyScoringAbstract.mjs";
 import { charOccurrences } from "./util.mjs";
 
 // TODO: Turn these into options
-const RIGHT_PLACE_MULTIPLIER = 1; // Determined experimentally, though doesn't seem to matter much
 const NUM_GUESSES = 6; // Game rule, should really be in some other layer
 
 // On our last guess and beyond, set this flag to only choose real possibilities.
@@ -31,7 +30,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
                     if (!this.letters.definitelyHasLetterAtPosition('letter', i)) {
                         if (letterPrevCount == (this.letters.minLetters(letter) || 0)) {
                             // This is the first new occurence of a letter we don't know about.
-                            const addScore = this.leFreq.letterFrequencyAtPosition(letter, i, letterPrevCount) * RIGHT_PLACE_MULTIPLIER +
+                            const addScore = this.leFreq.letterFrequencyAtPosition(letter, i, letterPrevCount) * this.options.rightPlaceMultiplier +
                                 this.leFreq.letterFrequency(letter, letterPrevCount) - letterPrevCount /* subtract for the letters we already know about */;
                             score.addScore(letter, `/${letterPrevCount}@${i}`, addScore);
                             score.newLetters++;

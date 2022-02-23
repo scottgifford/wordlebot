@@ -1,4 +1,5 @@
 import { Logger } from "./log.mjs";
+import { StrategyOption } from "./strategy.mjs";
 import { StrategyRefreqy } from "./strategyRefreqy.mjs";
 
 const DEFAULT_SCORE_RATIO = 0.30;
@@ -9,10 +10,18 @@ const DEFAULT_SCORE_RATIO = 0.30;
  */
 export class StrategyRefreqyFlex extends StrategyRefreqy {
     constructor(words, options) {
-        super(words, {
-            scoreRatio: DEFAULT_SCORE_RATIO,
-            ...options,
-        });
+        super(words, options);
+    }
+
+
+    getSupportedOptions() {
+        return [
+            new StrategyOption(
+                'scoreRatio', DEFAULT_SCORE_RATIO,
+                'If the flex word has a score this multiple of the possible word, choose the flex word'
+            ),
+            ...super.getSupportedOptions()
+        ];
     }
 
     /**

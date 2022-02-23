@@ -1,4 +1,5 @@
 import { Logger } from "./log.mjs";
+import { StrategyOption, StrategyOptionInteger } from "./strategy.mjs";
 import { StrategyRefreqyFlex } from "./strategyRefreqyFlex.mjs";
 
 const DEFAULT_MAX_WRONGNESS = 5;
@@ -18,12 +19,20 @@ const DEFAULT_REMAINING_WORDS_THRESHOLD = 1;
  */
 export class StrategyRefreqyFlex2 extends StrategyRefreqyFlex {
     constructor(words, options) {
-        super(words, {
-            maxWrongness: DEFAULT_MAX_WRONGNESS,
-            remainingWordsThreshold: DEFAULT_REMAINING_WORDS_THRESHOLD,
-            ...options,
-        });
+        super(words, options);
         this.knownLetters = 0;
+    }
+
+    getSupportedOptions() {
+        return [
+            new StrategyOptionInteger(
+                'maxWrongness', DEFAULT_MAX_WRONGNESS,
+                'Maximum number of wrong letters before switching from flex word to possible word'),
+             new StrategyOptionInteger(
+                'remainingWordsThreshold', DEFAULT_REMAINING_WORDS_THRESHOLD,
+                'Maximum number of remaining possibilities before switching from flex word to possible word'),
+            ...(super.getSupportedOptions().filter(option => option.name !== 'scoreRatio')) // Filter out options from parent class that no longer work
+        ];
     }
 
     reFreq() {
