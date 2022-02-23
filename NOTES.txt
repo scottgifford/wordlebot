@@ -1,6 +1,7 @@
 // TODO: re-do logging.
-// TODO: Turn the v6 optimization in refreqflex3 into an option, and see if we need it
 // TODO: Figure out if DoubleRefreqy should be incorporated into RefreqyFlex etc.
+// TODO: Consider some simple caching to optimize performance, in particular for first word guess
+// TODO: Consider resetting strategy objects instead of creating new ones all the time (perf)
 
 # Recommended Strategy
 Current best version is RefreqyFlex3

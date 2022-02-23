@@ -109,6 +109,12 @@ export class LetterTracker {
 
     }
 
+    /**
+     * Check the given word against the information in the letter tracker, to see if it is a possible solution or not.
+     *
+     * @param {string} word Word to check
+     * @returns True if the word is a possible solution, false if it is not.
+     */
     wordHasLetters(word) {
         for (const letter of ALL_LETTERS) {
             const letterInfo = this.letters[letter];
