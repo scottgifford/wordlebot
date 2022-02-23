@@ -12,14 +12,9 @@ export class StrategyRefreqyFlex4 extends StrategyRefreqyFlex3 {
 
     getSupportedOptions() {
         return [
-            new StrategyOption(
+            new StrategyOptionRate(
                 'highScorePercentile', DEFAULT_HIGH_SCORE_PERCENTILE,
-                'Percentile rank of word to pick, as a ratio from 0-1 (e.g. 0.0 is the lowest-scoring word, 1.0 is the highest-scoring',
-                (value) => {
-                    if (value < 0 || value > 1) {
-                        throw new Error(`Must be between 0 and 1 (not ${value})`);
-                    }
-                }),
+                'Percentile rank of word to pick, as a ratio from 0-1 (e.g. 0.0 is the lowest-scoring word, 1.0 is the highest-scoring'),
             ...super.getSupportedOptions()
         ];
     }

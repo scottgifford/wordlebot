@@ -1,11 +1,11 @@
-import { Strategy } from "./strategy.mjs";
+import { Strategy, StrategyOptionRate } from "./strategy.mjs";
 import { randWord } from "./util.mjs";
 import { LetterTracker } from "./letterTracker.mjs";
 import { takeGuess } from "./util.mjs";
 import { Logger } from "./log.mjs";
 
-const GUESS_SAMPLE_RATE = 0.001;
-const SIMULATE_SAMPLE_RATE = 0.001;
+const DEFAULT_ANSWER_SAMPLE_RATE = 0.001;
+const DEFAULT_GUESS_SAMPLE_RATE = 0.001;
 
 // Simulated guess strategy.
 // For each word "g"
@@ -30,6 +30,18 @@ export class StrategySimGuess extends Strategy {
         this.letters = new LetterTracker();
     }
 
+    getSupportedOptions() {
+        return [
+            new StrategyOptionRate(
+                'solutionSampleRate', DEFAULT_ANSWER_SAMPLE_RATE,
+                'Instead of all possible solution words, randomly sample this percentage of possible solutions'),
+            new StrategyOptionRate(
+                'guessSampleRate', DEFAULT_GUESS_SAMPLE_RATE,
+                'Instead of simulating all possible guesses, randomly sample this percentage of possible guesses'),
+            ...super.getSupportedOptions()
+        ];
+    }
+
     // TODO: As rate gets closer to 1, we are more likely to introduce duplicates
     // To avoid we could do a shuffle instead
     sample(arr, rate) {
@@ -43,7 +55,7 @@ export class StrategySimGuess extends Strategy {
     }
 
     guess() {
-        const possibleGuesses = this.sample(this.remainingWords, GUESS_SAMPLE_RATE);
+        const possibleGuesses = this.sample(this.remainingWords, this.options.solutionSampleRate);
         Logger.log('strategy', 'debug', "Possible Guesses: ", possibleGuesses);
         const sortedGuesses = possibleGuesses.map(word => ({ word, score: this.scoreWord(word)})).sort((a, b) => /* low to high */ a.score - b.score);
         Logger.log('strategy', 'debug', "Sorted Guesses: ", sortedGuesses);
@@ -62,7 +74,7 @@ export class StrategySimGuess extends Strategy {
 
     scoreWord(word) {
         let totalScore = 0;
-        const simulatedAnswers = this.sample(this.remainingWords, SIMULATE_SAMPLE_RATE);
+        const simulatedAnswers = this.sample(this.remainingWords, this.options.guessSampleRate);
         for(let i=0;i<simulatedAnswers.length;i++) {
             //   For each word "a" is too slow, instead sample.
             const ans = simulatedAnswers[i];

@@ -31,6 +31,16 @@ export class StrategyOptionInteger extends StrategyOption {
     }
 }
 
+export class StrategyOptionRate extends StrategyOption {
+    constructor(name, defaultValue, description) {
+        super(name, defaultValue, description, (value) => {
+            if (value < 0 || value > 1) {
+                throw new Error(`Must be between 0 and 1 (not ${value})`);
+            }
+        });
+    }
+}
+
 export class StrategyOptionInternal extends StrategyOption {
     constructor(name, defaultValue, description, validator = () => { }) {
         super(name, defaultValue, description, validator);

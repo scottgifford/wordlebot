@@ -13,7 +13,6 @@ export class StrategyRefreqyFlex extends StrategyRefreqy {
         super(words, options);
     }
 
-
     getSupportedOptions() {
         return [
             new StrategyOption(
