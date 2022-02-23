@@ -14,7 +14,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
                 'lastTurnGuess', true,
                 'If we are on (or past) the last turn, always guess a real possibility instead of a flex word'),
             new StrategyOption(
-                'updateLettersFromRemaining', true,
+                'updateLettersFromRemaining', false,
                 'Add remaining word list to the letter tracker (experimental)'),
             ...super.getSupportedOptions()
         ];

@@ -359,14 +359,14 @@ sys	0m12.113s
                      Number of wins: 2307
                    Number of losses: 2
                  Winning Percentage: 99.91 %
-            Overall average guesses: 4.28
-  Average guesses for winning games: 4.28
-                       Worst Losses: hover/7 golly/7
+            Overall average guesses: 4.26
+  Average guesses for winning games: 4.26
+                       Worst Losses: poppy/7 rarer/7
 Game Histogram:
     1 Guess |                                                              | 0
-  2 Guesses |                                                              | 2
-  3 Guesses | ###############                                              | 299
-  4 Guesses | ############################################################ | 1169
-  5 Guesses | #####################################                        | 723
-  6 Guesses | ######                                                       | 114
+  2 Guesses |                                                              | 3
+  3 Guesses | ###################                                          | 348
+  4 Guesses | ############################################################ | 1118
+  5 Guesses | #######################################                      | 721
+  6 Guesses | ######                                                       | 117
   7 Guesses |                                                              | 2
