@@ -13,6 +13,9 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
             new StrategyOption(
                 'lastTurnGuess', true,
                 'If we are on (or past) the last turn, always guess a real possibility instead of a flex word'),
+            new StrategyOption(
+                'updateLettersFromRemaining', true,
+                'Add remaining word list to the letter tracker (experimental)'),
             ...super.getSupportedOptions()
         ];
     }
@@ -74,8 +77,12 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
     reFreq() {
         Logger.log('strategy', 'debug', `RefreqyFlex3 reFreq`);
 
-        // v6+: Update letter info based on remaining possibilities (does this actually help?!  Try it as an option)
-        this.letters.updateFromRemaining(this.remainingWords);
+        if (this.options.updateLettersFromRemaining) {
+            // Possible improvement to update letter info based on remaining possibilities
+            // In experimentation, this does not make this strategy more accurate,
+            // but it does change the words we can't solve for a bit.
+            this.letters.updateFromRemaining(this.remainingWords);
+        }
 
         // Our goal here is to eliminate letter guesses that will not give us any new information.
         // We definitely want to eliminate letters that we know for sure are not in the word, they will teach us nothing.
