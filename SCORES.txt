@@ -349,7 +349,52 @@ Game Histogram:
 
 real	36m52.839s
 user	14m52.203s
-sys	0m12.113s
+ sys   0m12.113s
+
+time ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreqflex2 -o '{"lastTurnGuess":true}' |tee tmp/refreqflex2-lastTurnGuessTrue-wordle-2309.out
+-> SUMMARY         [INFO ] ===== Game Statistics
+                      Strategy Name: refreqflex2
+                   Strategy Options: {"lastTurnGuess":true}
+             Number of games played: 2309
+                     Number of wins: 2304
+                   Number of losses: 5
+                 Winning Percentage: 99.78 %
+            Overall average guesses: 4.34
+  Average guesses for winning games: 4.34
+                       Worst Losses: bobby/7 inner/7 racer/7 femme/7 golly/7
+Game Histogram:
+    1 Guess |                                                              | 0
+  2 Guesses |                                                              | 1
+  3 Guesses | #################                                            | 307
+  4 Guesses | ############################################################ | 1066
+  5 Guesses | ############################################                 | 779
+  6 Guesses | ########                                                     | 151
+  7 Guesses |                                                              | 5
+
+
+real	16m29.324s
+user	17m20.441s
+sys	  0m37.382s
+
+-> SUMMARY         [INFO ] ===== Game Statistics
+                      Strategy Name: refreqflex2
+                   Strategy Options: {"lastTurnGuess":true,"useDoubleFreq":true}
+             Number of games played: 2309
+                     Number of wins: 2303
+                   Number of losses: 6
+                 Winning Percentage: 99.74 %
+            Overall average guesses: 4.35
+  Average guesses for winning games: 4.34
+                       Worst Losses: inner/7 racer/7 beefy/7 dizzy/7 froze/7
+Game Histogram:
+    1 Guess |                                                              | 0
+  2 Guesses |                                                              | 1
+  3 Guesses | #################                                            | 306
+  4 Guesses | ############################################################ | 1072
+  5 Guesses | ###########################################                  | 761
+  6 Guesses | #########                                                    | 163
+  7 Guesses |                                                              | 6
+
 
 ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreqflex3 |tee tmp/refreqflex3-wordle-2309.out
 -> SUMMARY         [INFO ] ===== Game Statistics

@@ -5,6 +5,8 @@ import { StrategyRefreqyFlex } from "./strategyRefreqyFlex.mjs";
 const DEFAULT_MAX_WRONGNESS = 5;
 const DEFAULT_REMAINING_WORDS_THRESHOLD = 1;
 
+const NUM_GUESSES = 6; // Game rule, should really be in some other layer
+
 // TODO: This is really just a small variant of StrategyRefreqyFlex, probably it should just be some options there.
 
 /**
@@ -40,8 +42,12 @@ export class StrategyRefreqyFlex2 extends StrategyRefreqyFlex {
         return this.leFreq.clone(([k,v]) => !this.letters.definitelyHasLetter(k) && !this.letters.definitelyDoesNotHaveLetter(k));
     }
 
-    // TODO: Should not be a method, but is currently used by subclasses
     shouldUseBrandNewGuess(guessNum) {
+        if (this.options.lastTurnGuess && this.isLastGuess(guessNum)) {
+            Logger.log('strategy', 'debug', `Should use flex word, last turn #${guessNum}`);
+            return false;
+        }
+
         const shouldUseBrandNewGuess = this.remainingWords.length > this.options.remainingWordsThreshold && this.letters.knownLetters() < this.options.maxWrongness;
         Logger.log('strategy', 'debug', `Should use ${shouldUseBrandNewGuess ? "flex" : "remaining"} word, based on: (remainingWords=${this.remainingWords.length} > remainingWordsThreshold=${this.options.remainingWordsThreshold} && knownLetters=${this.letters.knownLetters()} < maxWrongness=${this.options.maxWrongness}) = ${shouldUseBrandNewGuess}`);
         return shouldUseBrandNewGuess;

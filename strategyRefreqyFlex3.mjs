@@ -4,15 +4,16 @@ import { StrategyRefreqyFlex2 } from "./strategyRefreqyFlex2.mjs";
 import { WordWithScore } from "./strategyScoringAbstract.mjs";
 import { charOccurrences } from "./util.mjs";
 
-// TODO: Turn these into options
-const NUM_GUESSES = 6; // Game rule, should really be in some other layer
-
 export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
+    constructor(words, options) {
+        super(words, {
+            lastTurnGuess: true, // This has been the default for this strategy, consider making it the overall default
+            ...options
+        })
+    }
+
     getSupportedOptions() {
         return [
-            new StrategyOption(
-                'lastTurnGuess', true,
-                'If we are on (or past) the last turn, always guess a real possibility instead of a flex word'),
             new StrategyOption(
                 'updateLettersFromRemaining', false,
                 'Add remaining word list to the letter tracker (experimental)'),
@@ -64,14 +65,6 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
         return super.wordScoreCompare(a, b) || // Reverse sort, highest to lowest
             b.newLetters - a.newLetters || // Reverse sort, highest to lowest
             b.possible - a.possible; // Reverse sort, highest to lowest
-    }
-
-    shouldUseBrandNewGuess(guessNum) {
-        if (this.options.lastTurnGuess && guessNum >= NUM_GUESSES) {
-            Logger.log('score', 'info', `Last guess ${guessNum} / ${NUM_GUESSES}, considering only possible words`);
-            return false;
-        }
-        return super.shouldUseBrandNewGuess(guessNum);
     }
 
     reFreq() {

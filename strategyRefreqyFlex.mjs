@@ -4,6 +4,8 @@ import { StrategyRefreqy } from "./strategyRefreqy.mjs";
 
 const DEFAULT_SCORE_RATIO = 0.30;
 
+const NUM_GUESSES = 6; // Game rule, should really be in some other layer
+
 /**
  * Frequency-analyzer based strategy, with the flexibility to choose words that are not remaining possible
  * solutions if the strategy decides they will reveal more information.
@@ -15,6 +17,9 @@ export class StrategyRefreqyFlex extends StrategyRefreqy {
 
     getSupportedOptions() {
         return [
+            new StrategyOption(
+                'lastTurnGuess', true,
+                'If we are on (or past) the last turn, always guess a real possibility instead of a flex word'),
             new StrategyOption(
                 'scoreRatio', DEFAULT_SCORE_RATIO,
                 'If the flex word has a score this multiple of the possible word, choose the flex word'
@@ -56,10 +61,20 @@ export class StrategyRefreqyFlex extends StrategyRefreqy {
         });
     }
 
+    isLastGuess(guessNum) {
+        return guessNum >= NUM_GUESSES;
+    }
+
     guess(guessNum) {
         // Choose and score both a word from the set of remaining possibilities, and from the set of words that contain none of the existing letters.
         Logger.log('score', 'debug', `Finding best flex word`);
         const flexWordAndScore = this.chooseFlexWordAndScore();
+
+        if (this.options.lastTurnGuess && this.isLastGuess(guessNum)) {
+            Logger.log('strategy', 'debug', `Should use flex word, based on: (guessNum=${guessNum} >= ${NUM_GUESSES}`);
+            return flexWordAndScore.words;
+        }
+
         Logger.log('score', 'debug', `Finding best remaining word`);
         const remainingWordAndScore = this.bestWordWithScore(this.remainingWords);
 
