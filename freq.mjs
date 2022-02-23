@@ -3,6 +3,24 @@ import { sum } from "./util.mjs";
 
 const log = new Logger('freq');
 
+const EMPTY_LETTER_ENTRY = [
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+];
+
+const cloneLetterEntry = (letterEntry) => {
+    return [
+        [...letterEntry[0]],
+        [...letterEntry[1]],
+        [...letterEntry[2]],
+        [...letterEntry[3]],
+        [...letterEntry[4]],
+    ]
+}
+
 /**
  * Frequency analyzer class.
  *
@@ -14,8 +32,15 @@ export class FrequencyAnalysis {
      * @param {Array[string]} words Words to enter in to the frequency table
      * @param {Object} initialFreq Initial frequency analysis to start with (not commonly used)
      */
-    constructor(words, initialFreq = { }) {
-        this.freq = initialFreq;
+    constructor(words, initialFreq = undefined) {
+        if (initialFreq) {
+            if (words.length > 0) {
+                throw new Error('In FrequencyAnalysis constructor, passing in an initial frequency table as well as new words may modify the passed in frequency table, so is disallowed.')
+            }
+            this.freq = initialFreq;
+        } else {
+            this.freq = { };
+        }
         for(let wordNum=0;wordNum<words.length;wordNum++) {
             const word = words[wordNum];
             const letters = word.split('').reduce((result, letter, index) => {
@@ -29,14 +54,8 @@ export class FrequencyAnalysis {
                 const letterEntry = letters[letter];
                 const charCount = sum(letterEntry);
                 if (!this.freq[letter]) {
-                    this.freq[letter] = [
-                        [0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0],
-                    ]
+                    this.freq[letter] = cloneLetterEntry(EMPTY_LETTER_ENTRY);
+
                 }
                 for(let charOccurrence=0; charOccurrence<charCount; charOccurrence++) {
                     for(const letterPos in letterEntry) {
@@ -135,7 +154,7 @@ export class FrequencyAnalysis {
      * @returns Modified entry
      */
     getEntryAdjustedLetterCount(letter, prevCount) {
-        const entry = JSON.parse(JSON.stringify(this.freq[letter]));
+        const entry = cloneLetterEntry(this.freq[letter]);
         for(let i=0; i<prevCount; i++) {
             entry[i] = [0,0,0,0,0];
         }
