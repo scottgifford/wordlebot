@@ -158,7 +158,7 @@ export class LetterTracker {
         if (!letterInfo) {
             return false;
         }
-        return letterInfo.min >= min;
+        return !!letterInfo.min && letterInfo.min >= min;
     }
 
     definitelyDoesNotHaveLetter(letter) {
@@ -166,7 +166,7 @@ export class LetterTracker {
         if (!letterInfo) {
             return false;
         }
-        return !letterInfo.max;
+        return letterInfo.max === 0;
     }
 
     definitelyHasLetterAtPosition(letter, position) {
