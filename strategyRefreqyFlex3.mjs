@@ -103,7 +103,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
                 `Top ${TOP_N_LETTERS} letters`,
                 newFreq.getAllLetters()
                 .flatMap((letter) => {
-                    return [0, 1, 2, 3, 4, 5].map((prevCount) => {
+                    return [0, 1, 2, 3, 4].map((prevCount) => {
                         return [`${letter}${prevCount}`, newFreq.letterFrequency(letter, prevCount) - prevCount]
                     })
                 })
