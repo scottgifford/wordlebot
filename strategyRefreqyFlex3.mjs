@@ -1,4 +1,5 @@
 import { Logger } from "./log.mjs";
+import { StrategyOption } from "./strategy.mjs";
 import { StrategyRefreqyFlex2 } from "./strategyRefreqyFlex2.mjs";
 import { WordWithScore } from "./strategyScoringAbstract.mjs";
 import { charOccurrences } from "./util.mjs";
@@ -6,12 +7,15 @@ import { charOccurrences } from "./util.mjs";
 // TODO: Turn these into options
 const NUM_GUESSES = 6; // Game rule, should really be in some other layer
 
-// On our last guess and beyond, set this flag to only choose real possibilities.
-// This increases our odds of getting it in 6 a bit,
-// at the cost of a larger number of guesses past the last one if we don't guess right.
-const GUESS_POSSIBILITIES_ON_LAST_GUESS = true;
-
 export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
+    getSupportedOptions() {
+        return [
+            new StrategyOption(
+                'lastTurnGuess', true,
+                'If we are on (or past) the last turn, always guess a real possibility instead of a flex word'),
+            ...super.getSupportedOptions()
+        ];
+    }
 
     wordWithScore(word) {
         let score = new WordWithScore(word);
@@ -60,7 +64,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
     }
 
     shouldUseBrandNewGuess(guessNum) {
-        if (GUESS_POSSIBILITIES_ON_LAST_GUESS && guessNum >= NUM_GUESSES) {
+        if (this.options.lastTurnGuess && guessNum >= NUM_GUESSES) {
             Logger.log('score', 'info', `Last guess ${guessNum} / ${NUM_GUESSES}, considering only possible words`);
             return false;
         }
