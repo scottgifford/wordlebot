@@ -56,37 +56,17 @@ export class StrategyRefreqyFlex extends StrategyRefreqy {
         });
     }
 
-    /**
-     * From the given flex word and remaining word, choose one and return it.
-     *
-     * In the base class, we compute the ratio betweeen the flex word and the remaining word, and if it is above a threshold,
-     * choose the flex word.
-     *
-     * @param {*} flexWordAndScore Flex word and score to consider
-     * @param {*} remainingWordAndScore Remaining word and score to consider
-     * @returns Either flex word or remaining word
-     */
-    chooseFlexOrRemainingWord(flexWordAndScore, remainingWordAndScore) {
-        const scoreRatio = flexWordAndScore.score / remainingWordAndScore.score;
-
-        const chosenWordAndScore = scoreRatio > this.options.scoreRatio ? flexWordAndScore : remainingWordAndScore;
-        Logger.log('strategy', 'debug', `Chose ${chosenWordAndScore.word} with score ratio ${scoreRatio} (vs. ${this.options.scoreRatio}); Flex word ${chosenWordAndScore.word} score ${chosenWordAndScore.score}; Best remaining word ${remainingWordAndScore.word} score ${remainingWordAndScore.score}`);
-        return chosenWordAndScore;
-    }
-
     guess(guessNum) {
         // Choose and score both a word from the set of remaining possibilities, and from the set of words that contain none of the existing letters.
-        // Use chooseFlexOrRemainingWord() method to decide which of these to use.
         Logger.log('score', 'debug', `Finding best flex word`);
         const flexWordAndScore = this.chooseFlexWordAndScore();
         Logger.log('score', 'debug', `Finding best remaining word`);
         const remainingWordAndScore = this.bestWordWithScore(this.remainingWords);
-        const wordAndScore = this.chooseFlexOrRemainingWord(
-            flexWordAndScore,
-            remainingWordAndScore,
-            guessNum
-        );
+
+        const scoreRatio = flexWordAndScore.score / remainingWordAndScore.score;
+        const chosenWordAndScore = scoreRatio > this.options.scoreRatio ? flexWordAndScore : remainingWordAndScore;
+
         super.guessLog();
-        return wordAndScore.word;
+        return chosenWordAndScore.word;
     }
 }
