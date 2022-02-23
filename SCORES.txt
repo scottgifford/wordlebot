@@ -361,6 +361,7 @@ sys	0m12.113s
                  Winning Percentage: 99.91 %
             Overall average guesses: 4.28
   Average guesses for winning games: 4.28
+                       Worst Losses: hover/7 golly/7
 Game Histogram:
     1 Guess |                                                              | 0
   2 Guesses |                                                              | 2
