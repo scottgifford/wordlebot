@@ -89,11 +89,13 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
         // Flex2 also filters out letters we know for sure are in the word at least once, but that doesn't account for double letters.
         // Here, if we know a letter is in the word at least once, we only want to consider possibilities where it is there more than once
         // Or more generally, if we know a letter is in the word at least n times, we only want to consider possibilities where it is there more than n times.
-
         const newFreq = this.leFreq.cloneMap(([k,v]) => {
             if (this.letters.definitelyDoesNotHaveLetter(k)) {
+                Logger.log('freq','trace',`Removing entry for '${k}' since it it definitely not in the word`);
                 return [k, undefined];
             }
+            Logger.log('freq','trace',`Adjusting letter count for '${k}' based on prevCount=${this.letters.minLetters(k)}`);
+
             return [k, this.leFreq.getEntryAdjustedLetterCount(k, this.letters.minLetters(k))];
         });
         // TODO: This is useful for other strategies too, is there somewhere we can put it to use across strategies?

@@ -55,7 +55,7 @@ export class Strategy {
     constructor(words, options) {
         this.words = words;
         this.processOptions(options);
-        Logger.log('strategy', 'debug', 'Options:', this.options);
+        Logger.log('strategy', 'trace', 'Options:', this.options);
     }
 
     getSupportedOptions() {
