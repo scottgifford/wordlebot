@@ -24,6 +24,7 @@
   "homepage": "https://github.com/scottgifford/wordlebot#readme",
   "dependencies": {
     "bars": "git+https://github.com/jstrace/bars.git",
+    "chalk": "^4.1.2",
     "command-line-args": "^5.2.1",
     "command-line-usage": "^6.1.1"
   }

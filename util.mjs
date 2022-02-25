@@ -54,3 +54,5 @@ export function takeGuess(guess, answer) {
     }
     return resultArr.join("");
 }
+
+export const zip = (a, b) => a.map((k, i) => [k, b[i]]);

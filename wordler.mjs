@@ -1,6 +1,6 @@
 #!/usr/bin/env node --experimental-modules
 
-import { randWord, sum, takeGuess } from "./util.mjs";
+import { randWord, sum, takeGuess, zip } from "./util.mjs";
 import { strategyByName, STRATEGIES } from "./strategyByName.mjs";
 import { Logger } from "./log.mjs";
 
@@ -8,6 +8,7 @@ import * as readline from 'readline';
 import commandLineArgs from "command-line-args";
 import commandLineUsage from "command-line-usage";
 import asciiHistogram from "bars";
+import chalk from "chalk";
 
 const optionDefinitions = [
     { name: 'help', alias: 'h', type: Boolean, description: "Show usage instructions"},
@@ -195,6 +196,31 @@ async function promptForAnswer() {
     }
 }
 
+function resultToColorizeFunc(ch) {
+    switch(ch) {
+        case 'Y':
+            return chalk.bgYellow;
+        case 'G':
+            return chalk.bgGreen;
+        case '-':
+            return chalk.bgGray;
+        default:
+            throw new Error(`Don't know how to color '${ch}'`);
+    }
+}
+
+function colorizeGuess(guess, resultStr) {
+    return zip(guess.split(""), resultStr.split("")).map(([ch, res]) => {
+        return resultToColorizeFunc(res).whiteBright(ch.toUpperCase());
+    }).join("");
+}
+
+function colorizeGame(guesses, results) {
+    return zip(guesses, results).map(([guess, resultStr]) => {
+        return colorizeGuess(guess, resultStr);
+    }).join("\n");
+}
+
 async function playGame(strategyName, solutionWords, allwords, solutionPicker, strategyOptions) {
     const strategy = strategyByName(strategyName, allwords, strategyOptions);
 
@@ -204,14 +230,17 @@ async function playGame(strategyName, solutionWords, allwords, solutionPicker, s
         Logger.log('game', 'info', `Picked solution word '${solution}', solving with strategy ${strategy.constructor.name}`);
     }
 
-    let guesses = 0;
+    let guessCount = 0;
+    let guesses = [ ];
+    let results = [ ];
     while(1) {
-        Logger.log('game', 'info', `Guess #${guesses+1}`);
-        const guess = chooseGuess(strategy, guesses);
+        Logger.log('game', 'info', `Guess #${guessCount+1}`);
+        const guess = chooseGuess(strategy, guessCount);
         if (!guess) {
             throw new Error(`Ran out of guesses!`);
         }
-        guesses++;
+        guesses.push(guess);
+        guessCount++;
         Logger.log('game', 'info', `Guessed word '${guess}'`);
 
         let resultStr;
@@ -220,18 +249,22 @@ async function playGame(strategyName, solutionWords, allwords, solutionPicker, s
         } else {
             resultStr = takeGuess(guess, solution);
         }
+        results.push(resultStr);
 
         Logger.log('game', 'info', `Result: ${resultStr}`);
         if (resultStr === "GGGGG") {
-            Logger.log('game', 'info', `You guessed '${guess}' in ${guesses} guesses!`);
+            Logger.log('game', 'info', `You guessed '${guess}' in ${guessCount} guesses!`);
             break;
         }
         strategy.update(guess, resultStr.split(""));
     }
 
+
+    Logger.log('gameresult', 'info', "Full game:\n" + colorizeGame(guesses, results));
+    Logger.log('gameresultblank', 'debug', "Anonymous game:\n" + colorizeGame(guesses.map(guess => guess.replace(/./g," ")), results));
     return {
         solution,
-        guesses,
+        guesses: guessCount,
     };
 }
 
