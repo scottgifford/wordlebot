@@ -70,13 +70,13 @@ export class StrategyRefreqyFlex extends StrategyRefreqy {
         Logger.log('score', 'debug', `Finding best flex word`);
         const flexWordAndScore = this.chooseFlexWordAndScore();
 
-        if (this.options.lastTurnGuess && this.isLastGuess(guessNum)) {
-            Logger.log('strategy', 'debug', `Should use flex word, based on: (guessNum=${guessNum} >= ${NUM_GUESSES}`);
-            return flexWordAndScore.words;
-        }
-
         Logger.log('score', 'debug', `Finding best remaining word`);
         const remainingWordAndScore = this.bestWordWithScore(this.remainingWords);
+
+        if (this.options.lastTurnGuess && this.isLastGuess(guessNum)) {
+            Logger.log('strategy', 'debug', `Should use remaining word, based on: (guessNum=${guessNum} >= ${NUM_GUESSES})`);
+            return remainingWordAndScore.word;
+        }
 
         const scoreRatio = flexWordAndScore.score / remainingWordAndScore.score;
         const chosenWordAndScore = scoreRatio > this.options.scoreRatio ? flexWordAndScore : remainingWordAndScore;
