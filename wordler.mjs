@@ -126,6 +126,7 @@ const statDescriptions = {
     numGames: ["Number of games played", simpleFormatter],
     wins: ["Number of wins", simpleFormatter],
     losses: ["Number of losses", simpleFormatter],
+    failures: ["Number of game crashes", simpleFormatter],
     winPercent: ["Winning Percentage", percentFormatter],
     averageGuesses: ["Overall average guesses", averageFormatter],
     averageGuessesForWins: ["Average guesses for winning games", averageFormatter],
