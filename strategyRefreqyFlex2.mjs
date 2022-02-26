@@ -20,9 +20,10 @@ const NUM_GUESSES = 6; // Game rule, should really be in some other layer
  * (though it may be worth revisiting this as I've gotten better at measuring).
  */
 export class StrategyRefreqyFlex2 extends StrategyRefreqyFlex {
-    constructor(words, options) {
-        super(words, options);
+    reset() {
+        super.reset();
         this.knownLetters = 0;
+        return true;
     }
 
     getSupportedOptions() {

@@ -54,6 +54,7 @@ export class StrategyRefreqyFlex extends StrategyRefreqy {
 
     newSubStrategy(words, freq) {
         // Create a new instance of the same class as us
+        Logger.log('strategy','debug','Creating new sub-strategy object');
         return new this.constructor(words, {
             ...this.options,
             freq,

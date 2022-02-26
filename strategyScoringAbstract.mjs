@@ -1,5 +1,6 @@
 import { Logger } from "./log.mjs";
 import { Strategy, StrategyOption, StrategyOptionInteger } from "./strategy.mjs";
+import { StrategyLetterTrackerRemainingAbstract } from "./StrategyLetterTrackerRemainingAbstract.mjs";
 
 const DEFAULT_LOG_TOP_N_SCORES = 10; // Log this many top scores
 
@@ -20,11 +21,7 @@ export class WordWithScore {
     }
 }
 
-export class StrategyScoringAbstract extends Strategy {
-    constructor(words, options) {
-        super(words, options);
-    }
-
+export class StrategyScoringAbstract extends StrategyLetterTrackerRemainingAbstract {
     getSupportedOptions() {
         return [
             new StrategyOptionInteger(

@@ -3,6 +3,7 @@ import { randWord } from "./util.mjs";
 import { LetterTracker } from "./letterTracker.mjs";
 import { takeGuess } from "./util.mjs";
 import { Logger } from "./log.mjs";
+import { StrategyLetterTrackerRemainingAbstract } from "./StrategyLetterTrackerRemainingAbstract.mjs";
 
 const DEFAULT_ANSWER_SAMPLE_RATE = 0.001;
 const DEFAULT_GUESS_SAMPLE_RATE = 0.001;
@@ -23,13 +24,7 @@ const DEFAULT_GUESS_SAMPLE_RATE = 0.001;
 //  Then average score over all "a""
 // Then pick word with best score
 
-export class StrategySimGuess extends Strategy {
-    constructor(words, options) {
-        super(words, options);
-        this.remainingWords = words;
-        this.letters = new LetterTracker();
-    }
-
+export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
     getSupportedOptions() {
         return [
             new StrategyOptionRate(

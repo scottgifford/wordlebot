@@ -1,15 +1,10 @@
 import { Logger } from "./log.mjs";
-import { StrategyOption } from "./strategy.mjs";
+import { StrategyOptionRate } from "./strategy.mjs";
 import { StrategyRefreqyFlex3 } from "./strategyRefreqyFlex3.mjs";
 
 const DEFAULT_HIGH_SCORE_PERCENTILE = 0.95;
 
 export class StrategyRefreqyFlex4 extends StrategyRefreqyFlex3 {
-    constructor(words, options) {
-        super(words, options);
-        this.id = Math.floor(Math.random() * 1000000);
-    }
-
     getSupportedOptions() {
         return [
             new StrategyOptionRate(
@@ -22,7 +17,7 @@ export class StrategyRefreqyFlex4 extends StrategyRefreqyFlex3 {
     bestWordWithScore(words) {
         const scores = this.scoreAndSortWords(words);
         const scoreIndex = Math.floor((words.length - 1) * (1.00 - this.options.highScorePercentile));
-        Logger.log('strategy', 'debug', `StrategyRefreqyFlex4 #${this.id} choosing item ${scoreIndex + 1 /* correct for 0-based array indexing */} of ${scores.length} based on percentile ${this.options.highScorePercentile}.`)
+        Logger.log('strategy', 'debug', `StrategyRefreqyFlex4 choosing item ${scoreIndex + 1 /* correct for 0-based array indexing */} of ${scores.length} based on percentile ${this.options.highScorePercentile}.`)
         return scores[scoreIndex];
     }
 }

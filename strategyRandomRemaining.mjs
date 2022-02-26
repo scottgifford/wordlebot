@@ -2,14 +2,9 @@ import { Strategy } from "./strategy.mjs";
 import { randWord } from "./util.mjs";
 import { LetterTracker } from "./letterTracker.mjs";
 import { Logger } from "./log.mjs";
+import { StrategyLetterTrackerRemainingAbstract } from "./StrategyLetterTrackerRemainingAbstract.mjs";
 
-export class StrategyRandomRemaining extends Strategy {
-    constructor(words, options) {
-        super(words, options);
-        this.remainingWords = words;
-        this.letters = new LetterTracker();
-    }
-
+export class StrategyRandomRemaining extends StrategyLetterTrackerRemainingAbstract {
     guess() {
         const guess = randWord(this.remainingWords);
         super.guessLog();

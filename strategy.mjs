@@ -55,11 +55,39 @@ export class Strategy {
     constructor(words, options) {
         this.words = words;
         this.processOptions(options);
+        this.reset();
         Logger.log('strategy', 'trace', 'Options:', this.options);
     }
 
+    /**
+     * Reset this strategy to start a new game, if possible.
+     *
+     * If this strategy cannot be reset, return a falsy value instead.
+     */
+    reset() {
+        return false;
+    }
+
+    /**
+     * If this object supports resetting, reset and return itself.
+     * Otherwise, construct a new instance with the same constructor arguments.
+     */
+    resetOrNew() {
+        if (this.reset()) {
+            Logger.log('strategy','debug','resetOrNew reset and reused strategy');
+            return this;
+        } else {
+            Logger.log('strategy','debug','resetOrNew created new strategy');
+            return new this.constructor(this.words, this.options);
+        }
+    }
+
     getSupportedOptions() {
-        return [ ];
+        return [
+            new StrategyOptionInternal(
+                'resettable', undefined,
+                'Set to true to cache initial values for a faster reset)'),
+        ];
     }
 
     processOptions(options) {

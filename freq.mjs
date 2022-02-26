@@ -24,13 +24,15 @@ const cloneLetterEntry = (letterEntry) => {
 /**
  * Frequency analyzer class.
  *
+ * Immutable after construction.
+ *
  * https://en.wikipedia.org/wiki/Frequency_analysis
  */
 export class FrequencyAnalysis {
     /**
      *
      * @param {Array[string]} words Words to enter in to the frequency table
-     * @param {Object} initialFreq Initial frequency analysis to start with (not commonly used)
+     * @param {Object} initialFreq Initial frequency analysis to start with (not commonly used, used destructively)
      */
     constructor(words, initialFreq = undefined) {
         if (initialFreq) {
@@ -64,6 +66,7 @@ export class FrequencyAnalysis {
                 }
             }
         }
+        log.debug(`Created new frequency table from ${initialFreq?'initial table':'scratch'} with ${words.length} new words`);
     }
 
     /**
@@ -73,6 +76,7 @@ export class FrequencyAnalysis {
      * @returns Cloned copy of this list, with filter applied if given
      */
     clone(filt = () => true) {
+        log.debug(`Cloning frequency table with filter`);
         return new FrequencyAnalysis([], Object.fromEntries(Object.entries(this.freq)
             .filter(filt)));
     }
@@ -84,6 +88,7 @@ export class FrequencyAnalysis {
      * @returns Cloned copy of this list, with map applied if given
      */
      cloneMap(mapper = () => true) {
+        log.debug(`Cloning frequency table with map`);
         return new FrequencyAnalysis([], Object.fromEntries(Object.entries(this.freq)
             .map(mapper)
             .filter(([k, v]) => v !== undefined)));

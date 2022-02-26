@@ -16,10 +16,9 @@ const DEFAULT_LOG_TOP_N_SCORES = 10; // Log this many top scores
 export class StrategyFreqy extends StrategyScoringAbstract {
     constructor(words, options) {
         super(words, options);
-        this.remainingWords = words;
         this.leFreq = this.options.freq ? this.options.freq : StrategyFreqy.frequencyAnalyze(words);
-        this.letters = this.options.letters ? this.options.letters : new LetterTracker();
         Logger.log('freq', 'debug', `FrequencyAnalysis:\n${this.leFreq.debugString()}`);
+        // Remaining work done in reset(), called by superclass
     }
 
     getSupportedOptions() {
@@ -44,8 +43,7 @@ export class StrategyFreqy extends StrategyScoringAbstract {
                 'Score additional occurrences of letters after the first one the same way as the original letter'),
             new StrategyOptionInternal(
                 'letters', undefined,
-                'Initial letter tracker object for this strategy (instead of creating a new one)'
-            ),
+                'Initial letter tracker object for this strategy (instead of creating a new one)'),
             ...super.getSupportedOptions()
         ];
     }

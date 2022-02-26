@@ -222,11 +222,9 @@ function colorizeGame(guesses, results) {
     }).join("\n");
 }
 
-async function playGame(strategyName, solutionWords, allwords, solutionPicker, strategyOptions) {
-    const strategy = strategyByName(strategyName, allwords, strategyOptions);
-
+async function playGame(strategy, solutionWords, allwords, solutionPicker, strategyOptions) {
     const solution = solutionPicker(solutionWords);
-    // !options.interactive ? options.answer || randWord(solutionWords) : undefined;
+
     if (solution) {
         Logger.log('game', 'info', `Picked solution word '${solution}', solving with strategy ${strategy.constructor.name}`);
     }
@@ -284,6 +282,10 @@ async function playGame(strategyName, solutionWords, allwords, solutionPicker, s
         
         const strategyName = options.strategyName;
         const strategyOptions = JSON.parse(options.strategyOptionsString);
+        if (options.numGames > 1) {
+            strategyOptions['resettable'] = true;
+        }
+        const strategy = strategyByName(strategyName, allWords, strategyOptions);
 
         Logger.log('init', 'info', `Found ${solutionWords.length} possible solutions, ${allWords.length} total words`);
         Logger.log('init', 'debug', `Using solution picker ${options.solutionPicker}`);
@@ -292,7 +294,7 @@ async function playGame(strategyName, solutionWords, allwords, solutionPicker, s
             Logger.log('game', 'info', `===== Game ${i} Started`);
 
             try {
-                const gameResult = await playGame(strategyName, solutionWords, allWords, options.solutionPicker, strategyOptions);
+                const gameResult = await playGame(strategy.resetOrNew(), solutionWords, allWords, options.solutionPicker, strategyOptions);
                 gameStats.guesses[gameResult.guesses] = (gameStats.guesses[gameResult.guesses] || 0) + 1;
 
                 // Track losing guesses for logging
