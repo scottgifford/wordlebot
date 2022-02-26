@@ -415,6 +415,6 @@ Game Histogram:
   5 Guesses | #######################################                      | 721
   6 Guesses | ######                                                       | 117
   7 Guesses |                                                              | 2
-real  7m43.033s
-user  8m29.183s
-sys   0m5.383s
+real  4m58.717s
+user  5m20.364s
+sys   0m3.607s

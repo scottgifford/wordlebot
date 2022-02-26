@@ -67,6 +67,10 @@ export class StrategyRefreqyFlex extends StrategyRefreqy {
     }
 
     guess(guessNum) {
+        // Use cached first guess, it will always be the same
+        if (this.resetCache && this.resetCache.guess) {
+            return this.resetCache.guess;
+        }
         // Choose and score both a word from the set of remaining possibilities, and from the set of words that contain none of the existing letters.
         Logger.log('score', 'debug', `Finding best flex word`);
         const flexWordAndScore = this.chooseFlexWordAndScore();
@@ -81,6 +85,11 @@ export class StrategyRefreqyFlex extends StrategyRefreqy {
 
         const scoreRatio = flexWordAndScore.score / remainingWordAndScore.score;
         const chosenWordAndScore = scoreRatio > this.options.scoreRatio ? flexWordAndScore : remainingWordAndScore;
+
+        // Cache first guess, it will always be the same
+        if (guessNum == 1 && this.options['resettable']) {
+            this.resetCache.guess = remainingWordAndScore.word;
+        }
 
         super.guessLog();
         return chosenWordAndScore.word;

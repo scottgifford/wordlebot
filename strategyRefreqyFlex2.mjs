@@ -56,18 +56,32 @@ export class StrategyRefreqyFlex2 extends StrategyRefreqyFlex {
 
     guess(guessNum) {
         try {
+            // Use cached first guess, it will always be the same
+            if (guessNum === 1 && this.resetCache && this.resetCache.guess) {
+                Logger.log('strategy', 'debug', `Using cached guess ${this.resetCache.guess}`);
+                return this.resetCache.guess;
+            }
+
+            let chosenWordAndScore;
             if (this.shouldUseBrandNewGuess(guessNum)) {
                 Logger.log('score', 'debug', `Finding best flex word`);
                 const flexWordAndScore = this.chooseFlexWordAndScore();
                 if (flexWordAndScore.score > 0) {
-                    return flexWordAndScore.word;
+                    chosenWordAndScore = flexWordAndScore;
                 }
+            } 
+            if (!chosenWordAndScore) {
+                Logger.log('score', 'debug', `Finding best remaining word`);
+                const remainingWordAndScore = this.bestWordWithScore(this.remainingWords);
+                chosenWordAndScore = remainingWordAndScore;
             }
 
-            Logger.log('score', 'debug', `Finding best remaining word`);
-            const remainingWordAndScore = this.bestWordWithScore(this.remainingWords);
+            // Cache first guess, it will always be the same
+            if (guessNum === 1 && this.options['resettable']) {
+                this.resetCache.guess = chosenWordAndScore.word;
+            }
 
-            return remainingWordAndScore.word;
+            return chosenWordAndScore.word;
         } finally {
             this.guessLog();
         }
