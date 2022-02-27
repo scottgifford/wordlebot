@@ -9,6 +9,7 @@ import commandLineArgs from "command-line-args";
 import commandLineUsage from "command-line-usage";
 import asciiHistogram from "bars";
 import chalk from "chalk";
+import { LetterTracker } from "./letterTracker.mjs";
 
 const optionDefinitions = [
     { name: 'help', alias: 'h', type: Boolean, description: "Show usage instructions"},
@@ -312,6 +313,9 @@ async function playGame(strategy, solutionWords, allwords, solutionPicker, strat
             }
             Logger.log('game', 'info', `===== Game ${i} Ended`);
         }
+
+        // TODO: Remove
+        LetterTracker.dumpStats();
 
         // Clean up stats
         for(let i=0;i<gameStats.guesses.length;i++) {
