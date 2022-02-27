@@ -1,8 +1,4 @@
-// TODO: re-do logging.
 // TODO: Figure out if DoubleRefreqy should be incorporated into RefreqyFlex etc.
-// TODO: Consider some simple caching to optimize performance, in particular for first word guess
-// TODO: Consider resetting strategy objects instead of creating new ones all the time (perf)
-// TODO: Consider speeding up wordWithScore (profiler shows ~ 20% of CPU time)
 // TODO: Consider adjusting defaults and re-scoring
 
 # Recommended Strategy
