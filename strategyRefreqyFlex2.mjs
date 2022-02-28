@@ -1,6 +1,7 @@
 import { Logger } from "./log.mjs";
 import { StrategyOption, StrategyOptionInteger } from "./strategy.mjs";
 import { StrategyRefreqyFlex } from "./strategyRefreqyFlex.mjs";
+import { StrategyRefreqyFlexQuickDeciderAbstract } from "./strategyRefreqyFlexQuickDeciderAbstract.mjs";
 
 const DEFAULT_MAX_WRONGNESS = 5;
 const DEFAULT_REMAINING_WORDS_THRESHOLD = 1;
@@ -19,7 +20,7 @@ const NUM_GUESSES = 6; // Game rule, should really be in some other layer
  * Through experimentation, however, I found the most effective choices for these thresholds are ones which always choose the flex word
  * (though it may be worth revisiting this as I've gotten better at measuring).
  */
-export class StrategyRefreqyFlex2 extends StrategyRefreqyFlex {
+export class StrategyRefreqyFlex2 extends StrategyRefreqyFlexQuickDeciderAbstract {
     reset() {
         super.reset();
         this.knownLetters = 0;
@@ -34,7 +35,7 @@ export class StrategyRefreqyFlex2 extends StrategyRefreqyFlex {
              new StrategyOptionInteger(
                 'remainingWordsThreshold', DEFAULT_REMAINING_WORDS_THRESHOLD,
                 'Maximum number of remaining possibilities before switching from flex word to possible word'),
-            ...(super.getSupportedOptions().filter(option => option.name !== 'scoreRatio')) // Filter out options from parent class that no longer work
+            ...(super.getSupportedOptions().filter(option => option.name !== 'scoreRatio')) // Filter out options from parent class that no longer work - TODO get rid of this
         ];
     }
 
@@ -43,47 +44,22 @@ export class StrategyRefreqyFlex2 extends StrategyRefreqyFlex {
         return this.leFreq.clone(([k,v]) => !this.letters.definitelyHasLetter(k) && !this.letters.definitelyDoesNotHaveLetter(k));
     }
 
-    shouldUseBrandNewGuess(guessNum) {
+    shouldUseFlexWord(flexWordAndScore, guessNum) {
         if (this.options.lastTurnGuess && this.isLastGuess(guessNum)) {
             Logger.log('strategy', 'debug', `Should use flex word, last turn #${guessNum}`);
             return false;
         }
 
-        const shouldUseBrandNewGuess = this.remainingWords.length > this.options.remainingWordsThreshold && this.letters.knownLetters() < this.options.maxWrongness;
-        Logger.log('strategy', 'debug', `Should use ${shouldUseBrandNewGuess ? "flex" : "remaining"} word, based on: (remainingWords=${this.remainingWords.length} > remainingWordsThreshold=${this.options.remainingWordsThreshold} && knownLetters=${this.letters.knownLetters()} < maxWrongness=${this.options.maxWrongness}) = ${shouldUseBrandNewGuess}`);
+        const shouldUseBrandNewGuess = 
+            this.remainingWords.length > this.options.remainingWordsThreshold && 
+            this.letters.knownLetters() < this.options.maxWrongness &&
+            flexWordAndScore.score > 0;
+        Logger.dynLog('strategy', 'debug', () => `Should use ${shouldUseBrandNewGuess ? "flex" : "remaining"} word, based on: ` +
+            `(remainingWords=${this.remainingWords.length} > remainingWordsThreshold=${this.options.remainingWordsThreshold} && ` +
+            `knownLetters=${this.letters.knownLetters()} < maxWrongness=${this.options.maxWrongness}) && ` +
+            `(score=${flexWordAndScore.score} > 0) = ${shouldUseBrandNewGuess}`
+        );
+
         return shouldUseBrandNewGuess;
-    }
-
-    guess(guessNum) {
-        try {
-            // Use cached first guess, it will always be the same
-            if (guessNum === 1 && this.resetCache && this.resetCache.guess) {
-                Logger.log('strategy', 'debug', `Using cached guess ${this.resetCache.guess}`);
-                return this.resetCache.guess;
-            }
-
-            let chosenWordAndScore;
-            if (this.shouldUseBrandNewGuess(guessNum)) {
-                Logger.log('score', 'debug', `Finding best flex word`);
-                const flexWordAndScore = this.chooseFlexWordAndScore();
-                if (flexWordAndScore.score > 0) {
-                    chosenWordAndScore = flexWordAndScore;
-                }
-            } 
-            if (!chosenWordAndScore) {
-                Logger.log('score', 'debug', `Finding best remaining word`);
-                const remainingWordAndScore = this.bestWordWithScore(this.remainingWords);
-                chosenWordAndScore = remainingWordAndScore;
-            }
-
-            // Cache first guess, it will always be the same
-            if (guessNum === 1 && this.options['resettable']) {
-                this.resetCache.guess = chosenWordAndScore.word;
-            }
-
-            return chosenWordAndScore.word;
-        } finally {
-            this.guessLog();
-        }
     }
 }
