@@ -29,8 +29,8 @@ export class StrategyRefreqyFlexAbstract extends StrategyRefreqy {
      * @returns Updated frequency analysis
      */
     // TODO: Does this really need to be a method?
-    reFreq() {
-        Logger.log('strategy', 'debug', `RefreqyFlex reFreq`);
+    flexFreq() {
+        Logger.log('strategy', 'debug', `StrategyRefreqyFlexAbstract reFreq`);
         return this.leFreq.clone(([k, v]) => !this.letters.definitelyHasLetter(k));
     }
 
@@ -40,7 +40,7 @@ export class StrategyRefreqyFlexAbstract extends StrategyRefreqy {
      * @returns Word and score for flex word choice
      */
     chooseFlexWordAndScore() {
-        const flexWordSubStrategy = this.newSubStrategy(this.words, this.reFreq());
+        const flexWordSubStrategy = this.newSubStrategy(this.words, this.flexFreq());
         return flexWordSubStrategy.bestWordWithScore(this.words);
     }
 

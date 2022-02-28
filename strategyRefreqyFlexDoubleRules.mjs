@@ -69,8 +69,8 @@ export class StrategyRefreqyFlexDoubleRules extends StrategyRefreqyFlexSimpleRul
             b.possible - a.possible; // Reverse sort, highest to lowest
     }
 
-    reFreq() {
-        Logger.log('strategy', 'debug', `StrategyRefreqyFlexTweakScoring reFreq`);
+    flexFreq() {
+        Logger.log('strategy', 'debug', `StrategyRefreqyFlexDoubleRules reFreq`);
 
         if (this.options.updateLettersFromRemaining) {
             // Possible improvement to update letter info based on remaining possibilities

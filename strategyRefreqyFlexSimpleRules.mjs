@@ -36,8 +36,8 @@ export class StrategyRefreqyFlexSimpleRules extends StrategyRefreqyFlexQuickDeci
         ];
     }
 
-    reFreq() {
-        Logger.log('strategy', 'debug', `RefreqyFlex2 reFreq`);
+    flexFreq() {
+        Logger.log('strategy', 'debug', `StrategyRefreqyFlexSimpleRules reFreq`);
         return this.leFreq.clone(([k,v]) => !this.letters.definitelyHasLetter(k) && !this.letters.definitelyDoesNotHaveLetter(k));
     }
 
