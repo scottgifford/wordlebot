@@ -20,6 +20,7 @@ const DEFAULT_REMAINING_WORDS_THRESHOLD = 1;
 export class StrategyRefreqyFlexSimpleRules extends StrategyRefreqyFlexQuickDeciderAbstract {
     reset() {
         super.reset();
+        // TODO: Can this be hoisted up anywhere?
         this.knownLetters = 0;
         return true;
     }
