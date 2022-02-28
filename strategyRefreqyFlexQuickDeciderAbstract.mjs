@@ -1,6 +1,4 @@
 import { Logger } from "./log.mjs";
-import { StrategyOption, StrategyOptionInteger } from "./strategy.mjs";
-import { StrategyRefreqyFlex } from "./strategyRefreqyFlex.mjs";
 import { StrategyRefreqyFlexAbstract } from "./strategyRefreqyFlexAbstract.mjs";
 
 const DEFAULT_MAX_WRONGNESS = 5;

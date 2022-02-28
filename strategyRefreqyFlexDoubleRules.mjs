@@ -1,10 +1,10 @@
 import { Logger } from "./log.mjs";
 import { StrategyOption } from "./strategy.mjs";
-import { StrategyRefreqyFlex2 } from "./strategyRefreqyFlex2.mjs";
+import { StrategyRefreqyFlexSimpleRules } from "./strategyRefreqyFlexSimpleRules.mjs";
 import { WordWithScore } from "./strategyScoringAbstract.mjs";
 import { charOccurrences } from "./util.mjs";
 
-export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
+export class StrategyRefreqyFlexDoubleRules extends StrategyRefreqyFlexSimpleRules {
     constructor(words, options) {
         super(words, {
             lastTurnGuess: true, // This has been the default for this strategy, consider making it the overall default
@@ -23,6 +23,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
 
     wordWithScore(word) {
         let score = new WordWithScore(word);
+        // TODO: Can these two be hoisted up as common options?
         score.newLetters = 0;
         score.possible = this.letters.wordHasLetters(word) ? 1 : 0;
 
@@ -38,6 +39,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
                     if (!this.letters.definitelyHasLetterAtPosition('letter', i)) {
                         if (letterPrevCount == (this.letters.minLetters(letter) || 0)) {
                             // This is the first new occurence of a letter we don't know about.
+                            // TODO: This score calculation seems suspect, I don't understand the substraction
                             const addScore = this.leFreq.letterFrequencyAtPosition(letter, i, letterPrevCount) * this.options.rightPlaceMultiplier +
                                 this.leFreq.letterFrequency(letter, letterPrevCount) - letterPrevCount /* subtract for the letters we already know about */;
                             score.addScore(letter, `/${letterPrevCount}@${i}`, addScore);
@@ -46,7 +48,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
                             // This is an additional new occurrence of a letter when we don't yet know if the previous occurrence is here!
                             // The value of this is lower, but it is not 0; it is better to guess an extra occurrence early than to guess
                             // a letter we already know is or isn't in the word.
-                            // So just give this a very low score, instead of the 0 score in v4-
+                            // So just give this a very low score, instead of a 0
                             score.addScore(letter, `/${letterPrevCount}@${i}`, 0.5);
                         }
                     }
@@ -68,7 +70,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
     }
 
     reFreq() {
-        Logger.log('strategy', 'debug', `RefreqyFlex3 reFreq`);
+        Logger.log('strategy', 'debug', `StrategyRefreqyFlexTweakScoring reFreq`);
 
         if (this.options.updateLettersFromRemaining) {
             // Possible improvement to update letter info based on remaining possibilities
@@ -82,7 +84,9 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
         // Flex2 also filters out letters we know for sure are in the word at least once, but that doesn't account for double letters.
         // Here, if we know a letter is in the word at least once, we only want to consider possibilities where it is there more than once
         // Or more generally, if we know a letter is in the word at least n times, we only want to consider possibilities where it is there more than n times.
+        // TODO: Are we really doing the above?  Is that what getEntryAdjustedLetterCount does?
         const newFreq = this.leFreq.cloneMap(([k,v]) => {
+            // TODO: Should this also look at definitelyHasLetter?
             if (this.letters.definitelyDoesNotHaveLetter(k)) {
                 Logger.log('freq','trace',`Removing entry for '${k}' since it it definitely not in the word`);
                 return [k, undefined];
@@ -91,7 +95,7 @@ export class StrategyRefreqyFlex3 extends StrategyRefreqyFlex2 {
 
             return [k, this.leFreq.getEntryAdjustedLetterCount(k, this.letters.minLetters(k))];
         });
-        // TODO: This is useful for other strategies too, is there somewhere we can put it to use across strategies?
+        // TODO: This is useful for other scoring strategies too, is there somewhere we can put it to use across strategies?
         Logger.dynLog('strategy', 'debug', () => {
             const TOP_N_LETTERS = 10;
             return [

@@ -1,12 +1,9 @@
 import { Logger } from "./log.mjs";
-import { StrategyOption, StrategyOptionInteger } from "./strategy.mjs";
-import { StrategyRefreqyFlex } from "./strategyRefreqyFlex.mjs";
+import { StrategyOptionInteger } from "./strategy.mjs";
 import { StrategyRefreqyFlexQuickDeciderAbstract } from "./strategyRefreqyFlexQuickDeciderAbstract.mjs";
 
 const DEFAULT_MAX_WRONGNESS = 5;
 const DEFAULT_REMAINING_WORDS_THRESHOLD = 1;
-
-const NUM_GUESSES = 6; // Game rule, should really be in some other layer
 
 // TODO: This is really just a small variant of StrategyRefreqyFlex, probably it should just be some options there.
 
@@ -20,7 +17,7 @@ const NUM_GUESSES = 6; // Game rule, should really be in some other layer
  * Through experimentation, however, I found the most effective choices for these thresholds are ones which always choose the flex word
  * (though it may be worth revisiting this as I've gotten better at measuring).
  */
-export class StrategyRefreqyFlex2 extends StrategyRefreqyFlexQuickDeciderAbstract {
+export class StrategyRefreqyFlexSimpleRules extends StrategyRefreqyFlexQuickDeciderAbstract {
     reset() {
         super.reset();
         this.knownLetters = 0;

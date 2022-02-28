@@ -2,7 +2,7 @@
 // TODO: Consider adjusting defaults and re-scoring
 
 # Recommended Strategy
-Current best version is RefreqyFlex3
+Current best version is refreqflexdouble
 
 # Other Strategies
 

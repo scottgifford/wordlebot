@@ -1,6 +1,5 @@
 import { Logger } from "./log.mjs";
 import { StrategyOption } from "./strategy.mjs";
-import { StrategyRefreqy } from "./strategyRefreqy.mjs";
 import { StrategyRefreqyFlexAbstract } from "./strategyRefreqyFlexAbstract.mjs";
 
 const DEFAULT_SCORE_RATIO = 0.30;
@@ -11,7 +10,7 @@ const NUM_GUESSES = 6; // Game rule, should really be in some other layer
  * Frequency-analyzer based strategy, with the flexibility to choose words that are not remaining possible
  * solutions if the strategy decides they will reveal more information.
  */
-export class StrategyRefreqyFlex extends StrategyRefreqyFlexAbstract {
+export class StrategyRefreqyFlexRatio extends StrategyRefreqyFlexAbstract {
     getSupportedOptions() {
         return [
             new StrategyOption(

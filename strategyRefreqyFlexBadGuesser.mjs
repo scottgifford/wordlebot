@@ -1,10 +1,10 @@
 import { Logger } from "./log.mjs";
 import { StrategyOptionRate } from "./strategy.mjs";
-import { StrategyRefreqyFlex3 } from "./strategyRefreqyFlex3.mjs";
+import { StrategyRefreqyFlexDoubleRules } from "./strategyRefreqyFlexDoubleRules.mjs";
 
 const DEFAULT_HIGH_SCORE_PERCENTILE = 0.95;
 
-export class StrategyRefreqyFlex4 extends StrategyRefreqyFlex3 {
+export class StrategyRefreqyFlex4 extends StrategyRefreqyFlexDoubleRules {
     getSupportedOptions() {
         return [
             new StrategyOptionRate(

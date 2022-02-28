@@ -3,10 +3,10 @@ import { StrategyDoubleRefreqy } from "./strategyDoubleRefreqy.mjs";
 import { StrategyFreqy } from "./strategyFreqy.mjs";
 import { StrategyRandomRemaining } from "./strategyRandomRemaining.mjs";
 import { StrategyRefreqy } from "./strategyRefreqy.mjs";
-import { StrategyRefreqyFlex } from "./strategyRefreqyFlex.mjs";
-import { StrategyRefreqyFlex2 } from "./strategyRefreqyFlex2.mjs";
-import { StrategyRefreqyFlex3 } from "./strategyRefreqyFlex3.mjs";
-import { StrategyRefreqyFlex4 } from "./strategyRefreqyFlex4.mjs";
+import { StrategyRefreqyFlexRatio } from "./strategyRefreqyFlexRatio.mjs";
+import { StrategyRefreqyFlexSimpleRules } from "./strategyRefreqyFlexSimpleRules.mjs";
+import { StrategyRefreqyFlexDoubleRules } from "./strategyRefreqyFlexDoubleRules.mjs";
+import { StrategyRefreqyFlex4 as StrategyRefreqyFlexBadGuesser } from "./strategyRefreqyFlexBadGuesser.mjs";
 import { StrategySimGuess } from "./strategySimGuess.mjs";
 
 export function strategyByName(name, words, strategyOptions = { }) {
@@ -21,14 +21,14 @@ export function strategyByName(name, words, strategyOptions = { }) {
             return new StrategyRefreqy(words, strategyOptions);
         case 'doublerefreq':
             return new StrategyDoubleRefreqy(words, strategyOptions);
-        case 'refreqflex':
-            return new StrategyRefreqyFlex(words, strategyOptions);
-        case 'refreqflex2':
-            return new StrategyRefreqyFlex2(words, strategyOptions);
-        case 'refreqflex3':
-            return new StrategyRefreqyFlex3(words, strategyOptions);
-        case 'refreqflex4':
-            return new StrategyRefreqyFlex4(words, strategyOptions);
+        case 'refreqflexratio':
+            return new StrategyRefreqyFlexRatio(words, strategyOptions);
+        case 'refreqflexsimplerules':
+            return new StrategyRefreqyFlexSimpleRules(words, strategyOptions);
+        case 'refreqflexdouble':
+            return new StrategyRefreqyFlexDoubleRules(words, strategyOptions);
+        case 'refreqflexbadguess':
+            return new StrategyRefreqyFlexBadGuesser(words, strategyOptions);
         case 'simguess':
             return new StrategySimGuess(words, strategyOptions);
     
@@ -43,9 +43,9 @@ export const STRATEGIES = {
     doublefreq: 'Choose valid word with most frequently occuring letters, but score additional instances of the same letter according to the frequency of that letter appearing that many times',
     refreq: 'Choose the valid word with the most frequently occuring letters among the remaining options',
     doublerefreq: 'Choose valid word based on frequency of remaining letters (as in refreq), with the smarter scoring strategy from doublefreq',
-    refreqflex: 'Choose the word with the most frequently occuring letters among the remaining options, whether or not it is valid',
-    refreqflex2: 'Like the `refreqflex` strategy, but keep guessing words which may not be possible until we have some threshold of found letters',
-    refreqflex3: 'Like the `refreqflex` strategy, but with lots of additional optimizations',
-    refreqflex4: 'Like the `refreqflex3` strategy, but choose lower-scoring words',
+    refreqflexratio: 'Choose the word with the most frequently occuring letters among the remaining options, whether or not it is valid',
+    refreqflexsimplerules: 'Like the `refreqflexratio` strategy, but keep guessing words which may not be possible until we have some threshold of found letters',
+    refreqflexdouble: 'Like the `refreqflexsimplerules` strategy, but with lots of additional optimizations',
+    refreqflexbadguess: 'Like the `refreqflextweak` strategy, but choose lower-scoring words',
     simguess: 'Try to find a guess that will eliminate about half of the words',    
 }
