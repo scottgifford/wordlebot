@@ -42,10 +42,10 @@ export class StrategyFreqy extends StrategyScoringAbstract {
                 'scoreDuplicateLetters', undefined,
                 'Score additional occurrences of letters after the first one the same way as the original letter'),
             new StrategyOption(
-                'scoreNewLetters', false,
+                'scoreNewLetters', true,
                 'Count the number of new letters in a word, and prefer words with more new letters as a secondary score sort'),
             new StrategyOption(
-                'scorePossible', false,
+                'scorePossible', true,
                 'Check if a word is possible, and if so prefer possible words as a tertiary score sort'),
             new StrategyOptionInternal(
                 'letters', undefined,

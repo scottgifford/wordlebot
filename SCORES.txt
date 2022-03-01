@@ -144,6 +144,7 @@ RefreqyFlex3 v5 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 2
                  Winning Percentage: 92.81 %
             Overall average guesses: 4.54
   Average guesses for winning games: 4.31
+                       Worst Losses: eater/12 river/12 crass/10 class/10 rover/10
 Game Histogram:
      1 Guess |                                                              | 0
    2 Guesses | ##                                                           | 32
@@ -157,6 +158,10 @@ Game Histogram:
   10 Guesses | #                                                            | 8
   11 Guesses |                                                              | 0
   12 Guesses |                                                              | 2
+
+real  0m20.091s
+user  0m19.798s
+sys   0m0.350s
 
 
   ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s freq -o '{"scoreDuplicateLetters":true}' |tee tmp/freq-scoredup--wordle-2309.out
@@ -183,32 +188,37 @@ Game Histogram:
   11 Guesses |                                                              | 3
   12 Guesses |                                                              | 2
 
-  ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreq |tee tmp/refreq-wordle-2309.out
-  -> SUMMARY         [INFO ] ===== Game Statistics
+time ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreq |tee tmp/refreq-wordle-2309.out
+-> SUMMARY         [INFO ] ===== Game Statistics
                       Strategy Name: refreq
-                   Strategy Options: {}
+                   Strategy Options: {"resettable":true}
              Number of games played: 2309
-                     Number of wins: 2238
-                   Number of losses: 71
-                 Winning Percentage: 96.93 %
+                     Number of wins: 2237
+                   Number of losses: 72
+             Number of game crashes: 0
+                 Winning Percentage: 96.88 %
             Overall average guesses: 4.12
-  Average guesses for winning games: 4.01
+  Average guesses for winning games: 4.02
+                       Worst Losses: eater/11 crass/9 class/9 dandy/9 catch/9
 Game Histogram:
      1 Guess |                                                              | 0
    2 Guesses | ###                                                          | 49
    3 Guesses | #####################################                        | 605
-   4 Guesses | ############################################################ | 983
-   5 Guesses | #############################                                | 468
-   6 Guesses | ########                                                     | 133
+   4 Guesses | ############################################################ | 981
+   5 Guesses | #############################                                | 467
+   6 Guesses | ########                                                     | 135
    7 Guesses | ###                                                          | 47
-   8 Guesses | #                                                            | 13
+   8 Guesses | #                                                            | 14
    9 Guesses | #                                                            | 10
   10 Guesses |                                                              | 0
   11 Guesses |                                                              | 1
 
+real  0m22.378s
+user  0m22.301s
+sys   0m0.398s
 
 
-  ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s doublefreq |tee tmp/doublefreq-wordle-2309.out
+  time ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s doublefreq |tee tmp/doublefreq-wordle-2309.out
   -> SUMMARY         [INFO ] ===== Game Statistics
                       Strategy Name: doublefreq
                    Strategy Options: {}
@@ -218,6 +228,7 @@ Game Histogram:
                  Winning Percentage: 92.72 %
             Overall average guesses: 4.55
   Average guesses for winning games: 4.31
+                       Worst Losses: eater/12 river/11 crass/10 class/10 rover/10
 Game Histogram:
      1 Guess |                                                              | 0
    2 Guesses | ##                                                           | 33
@@ -232,27 +243,39 @@ Game Histogram:
   11 Guesses |                                                              | 1
   12 Guesses |                                                              | 1
 
+real  0m19.810s
+user  0m19.736s
+sys   0m0.350s
+
+
 ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s doublerefreq |tee tmp/doublerefreq-wordle-2309.out
+-> SUMMARY         [INFO ] ===== Game Statistics
                       Strategy Name: doublerefreq
-                   Strategy Options: {}
+                   Strategy Options: {"resettable":true}
              Number of games played: 2309
                      Number of wins: 2258
                    Number of losses: 51
+             Number of game crashes: 0
                  Winning Percentage: 97.79 %
             Overall average guesses: 4.09
   Average guesses for winning games: 4.01
+                       Worst Losses: eater/11 crass/9 class/9 catch/9 aging/9
 Game Histogram:
      1 Guess |                                                              | 0
    2 Guesses | ###                                                          | 50
-   3 Guesses | #################################                            | 577
-   4 Guesses | ############################################################ | 1048
-   5 Guesses | ###########################                                  | 466
-   6 Guesses | #######                                                      | 117
+   3 Guesses | ################################                             | 569
+   4 Guesses | ############################################################ | 1056
+   5 Guesses | ###########################                                  | 468
+   6 Guesses | #######                                                      | 115
    7 Guesses | ##                                                           | 29
    8 Guesses | #                                                            | 15
-   9 Guesses |                                                              | 5
-  10 Guesses |                                                              | 1
+   9 Guesses |                                                              | 6
+  10 Guesses |                                                              | 0
   11 Guesses |                                                              | 1
+
+real  0m22.325s
+user  0m22.329s
+sys   0m0.401s
 
 
 time caffeinate  ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreqflexratio
@@ -323,22 +346,21 @@ time caffeinate ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreqf
                    Number of losses: 5
              Number of game crashes: 0
                  Winning Percentage: 99.78 %
-            Overall average guesses: 4.34
-  Average guesses for winning games: 4.34
+            Overall average guesses: 4.28
+  Average guesses for winning games: 4.27
                        Worst Losses: bobby/7 inner/7 racer/7 femme/7 golly/7
 Game Histogram:
     1 Guess |                                                              | 0
-  2 Guesses |                                                              | 1
-  3 Guesses | #################                                            | 307
-  4 Guesses | ############################################################ | 1066
-  5 Guesses | ############################################                 | 779
-  6 Guesses | ########                                                     | 151
+  2 Guesses |                                                              | 2
+  3 Guesses | ###################                                          | 352
+  4 Guesses | ############################################################ | 1098
+  5 Guesses | #######################################                      | 719
+  6 Guesses | #######                                                      | 133
   7 Guesses |                                                              | 5
 
-
-real  3m54.843s
-user  4m7.754s
-sys   0m3.184s
+real  5m16.565s
+user  5m41.883s
+sys   0m4.051s
 
 
 time caffeinate  ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreqflexsimplerules -o '{"lastTurnGuess":true,"useDoubleFreq":true}'
