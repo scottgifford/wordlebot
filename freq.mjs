@@ -151,8 +151,8 @@ export class FrequencyAnalysis {
     }
 
     /**
-     * Look up a raw entry in the frequency table, then modify it to "zero out" entries
-     * for occurrences less than prevCount.  Not commonly used.
+     * Look up a raw entry in the frequency table, return a copy modified to "zero out" entries
+     * for occurrences less than prevCount.  Useful with cloneMap method for certain strategies.
      *
      * @param {char} letter Letter to look up
      * @param {number} prevCount Number of already known occurrences of this letter

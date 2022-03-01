@@ -6,8 +6,6 @@ const DEFAULT_REMAINING_WORDS_THRESHOLD = 1;
 
 const NUM_GUESSES = 6; // Game rule, should really be in some other layer
 
-// TODO: This is really just a small variant of StrategyRefreqyFlex, probably it should just be some options there.
-
 /**
  * Another version of RefreqyFlex with a different strategy for choosing flex words.
  *

@@ -84,13 +84,13 @@ export class StrategyRefreqyFlexDoubleRules extends StrategyRefreqyFlexSimpleRul
         // Flex2 also filters out letters we know for sure are in the word at least once, but that doesn't account for double letters.
         // Here, if we know a letter is in the word at least once, we only want to consider possibilities where it is there more than once
         // Or more generally, if we know a letter is in the word at least n times, we only want to consider possibilities where it is there more than n times.
-        // TODO: Are we really doing the above?  Is that what getEntryAdjustedLetterCount does?
+        // The getEntryAdjustedLetterCount method will adjust the score to do that.
         const newFreq = this.leFreq.cloneMap(([k,v]) => {
-            // TODO: Should this also look at definitelyHasLetter?
             if (this.letters.definitelyDoesNotHaveLetter(k)) {
                 Logger.log('freq','trace',`Removing entry for '${k}' since it it definitely not in the word`);
                 return [k, undefined];
             }
+            // We don't filter for definitelyHasLetter because the below will zero out the score in a way that better handles double/triple letters
             Logger.log('freq','trace',`Adjusting letter count for '${k}' based on prevCount=${this.letters.minLetters(k)}`);
 
             return [k, this.leFreq.getEntryAdjustedLetterCount(k, this.letters.minLetters(k))];

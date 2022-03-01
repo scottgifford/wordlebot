@@ -35,7 +35,6 @@ export class StrategyRefreqyFlexAbstract extends StrategyRefreqy {
      *
      * @returns Updated frequency analysis
      */
-    // TODO: Does this really need to be a method?
     flexFreq() {
         Logger.log('strategy', 'debug', `StrategyRefreqyFlexAbstract reFreq`);
         const newFreq = this.leFreq.clone(([k, v]) => !this.letters.definitelyHasLetter(k) &&
