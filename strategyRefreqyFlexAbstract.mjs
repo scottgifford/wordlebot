@@ -17,7 +17,7 @@ export class StrategyRefreqyFlexAbstract extends StrategyRefreqy {
                 'lastTurnGuess', true,
                 'If we are on (or past) the last turn, always guess a real possibility instead of a flex word'),
             new StrategyOption(
-                'flexFreqNoLetter', false,
+                'flexFreqNoLetter', true,
                 'When calculating the frequency table for the flex word, rule out any letters that are definitely not in the word'),
             new StrategyOption(
                 'logTopLetters', 10,
