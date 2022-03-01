@@ -262,5 +262,8 @@ For example, if our possible words are: glare, blare, flare and we have xLARE, o
 the words serially, but to try a word with "g", "b", and "f" in it, e.g. "befog"
 This is different from using frequency tables (I think).
 
+## Surrogate Pairs
+Are some letters only common in pairs?  So e.g. "q" isn't as valuable a guess because it will never occur without "u"?
+
 # Things to look into
 

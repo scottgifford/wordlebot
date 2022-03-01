@@ -386,3 +386,114 @@ Game Histogram:
 real  6m13.011s
 user  6m36.930s
 sys   0m4.305s
+
+
+time caffeinate  ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreqflexdouble -o '{"rightPlaceMultiplier":0}'
+-> SUMMARY         [INFO ] ===== Game Statistics
+                      Strategy Name: refreqflexdouble
+                   Strategy Options: {"rightPlaceMultiplier":0,"resettable":true}
+             Number of games played: 2309
+                     Number of wins: 2305
+                   Number of losses: 4
+             Number of game crashes: 0
+                 Winning Percentage: 99.83 %
+            Overall average guesses: 4.39
+  Average guesses for winning games: 4.38
+                       Worst Losses: tight/8 sneer/7 koala/7 fight/7
+Game Histogram:
+    1 Guess |                                                              | 1
+  2 Guesses |                                                              | 6
+  3 Guesses | #############                                                | 237
+  4 Guesses | ############################################################ | 1113
+  5 Guesses | #########################################                    | 768
+  6 Guesses | ##########                                                   | 180
+  7 Guesses |                                                              | 3
+  8 Guesses |                                                              | 1
+
+
+real  6m29.229s
+user  6m53.057s
+sys   0m5.042s
+
+
+# Required a hack to allow a double for rightPlaceModifier
+time caffeinate  ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreqflexdouble -o '{"rightPlaceMultiplier":0.3}'
+-> SUMMARY         [INFO ] ===== Game Statistics
+                      Strategy Name: refreqflexdouble
+                   Strategy Options: {"rightPlaceMultiplier":0.3,"resettable":true}
+             Number of games played: 2309
+                     Number of wins: 2304
+                   Number of losses: 5
+             Number of game crashes: 0
+                 Winning Percentage: 99.78 %
+            Overall average guesses: 4.35
+  Average guesses for winning games: 4.35
+                       Worst Losses: tight/8 bobby/7 dread/7 kinky/7 riser/7
+Game Histogram:
+    1 Guess |                                                              | 0
+  2 Guesses |                                                              | 6
+  3 Guesses | ###############                                              | 270
+  4 Guesses | ############################################################ | 1109
+  5 Guesses | #########################################                    | 760
+  6 Guesses | #########                                                    | 159
+  7 Guesses |                                                              | 4
+  8 Guesses |                                                              | 1
+
+
+real  8m6.039s
+user  8m41.273s
+sys   0m6.683s
+
+
+time caffeinate  ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreqflexdouble -o '{"rightPlaceMultiplier":1}'
+-> SUMMARY         [INFO ] ===== Game Statistics
+                      Strategy Name: refreqflexdouble
+                   Strategy Options: {"rightPlaceMultiplier":1,"resettable":true}
+             Number of games played: 2309
+                     Number of wins: 2307
+                   Number of losses: 2
+             Number of game crashes: 0
+                 Winning Percentage: 99.91 %
+            Overall average guesses: 4.27
+  Average guesses for winning games: 4.27
+                       Worst Losses: hover/7 golly/7
+Game Histogram:
+    1 Guess |                                                              | 0
+  2 Guesses |                                                              | 3
+  3 Guesses | ################                                             | 307
+  4 Guesses | ############################################################ | 1179
+  5 Guesses | ####################################                         | 698
+  6 Guesses | ######                                                       | 120
+  7 Guesses |                                                              | 2
+
+
+real  7m5.903s
+user  7m32.285s
+sys   0m5.152s
+
+
+time caffeinate  ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreqflexdouble -o '{"rightPlaceMultiplier":0.45}'
+-> SUMMARY         [INFO ] ===== Game Statistics
+                      Strategy Name: refreqflexdouble
+                   Strategy Options: {"rightPlaceMultiplier":0.45,"resettable":true}
+             Number of games played: 2309
+                     Number of wins: 2308
+                   Number of losses: 1
+             Number of game crashes: 0
+                 Winning Percentage: 99.96 %
+            Overall average guesses: 4.35
+  Average guesses for winning games: 4.35
+                       Worst Losses: hobby/7
+Game Histogram:
+    1 Guess |                                                              | 0
+  2 Guesses |                                                              | 5
+  3 Guesses | ###############                                              | 277
+  4 Guesses | ############################################################ | 1105
+  5 Guesses | #########################################                    | 748
+  6 Guesses | #########                                                    | 173
+  7 Guesses |                                                              | 1
+
+
+real  7m18.400s
+user  7m44.480s
+sys   0m7.059s
