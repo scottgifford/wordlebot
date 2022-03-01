@@ -38,12 +38,12 @@ export class StrategyScoringAbstract extends StrategyLetterTrackerRemainingAbstr
 
     guess(guessNum) {
         // Use cached first guess, it will always be the same
-        if (this.resetCache && this.resetCache.guess) {
+        if (guessNum === 1 && this.resetCache && this.resetCache.guess) {
             return this.resetCache.guess;
         }
         const guess = this.bestWord(this.remainingWords, this.leFreq);
         // Cache first guess, it will always be the same
-        if (guessNum == 1 && this.options['resettable']) {
+        if (guessNum == 1 && this.resetCache) {
             this.resetCache.guess = guess;
         }
 

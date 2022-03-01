@@ -53,9 +53,13 @@ export class StrategyOptionInternal extends StrategyOption {
 }
 export class Strategy {
     constructor(words, options) {
+        if (options['resettable']) {
+            this.resetCache = { };
+        }
         this.words = words;
         this.processOptions(options);
         this.reset();
+
         Logger.log('strategy', 'trace', 'Options:', this.options);
     }
 

@@ -8,10 +8,8 @@ import { StrategyFreqy } from "./strategyFreqy.mjs";
 export class StrategyRefreqy extends StrategyFreqy {
     constructor(words, options) {
         super(words, options);
-        if (options['resettable']) {
-            this.resetCache = {
-                leFreq: this.leFreq,
-            }
+        if (this.resetCache) {
+            this.resetCache.leFreq = this.leFreq;
         }
     }
 
