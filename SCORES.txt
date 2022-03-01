@@ -519,3 +519,84 @@ Game Histogram:
 real  7m18.400s
 user  7m44.480s
 sys   0m7.059s
+
+
+time caffeinate  ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreqflexdouble -o '{"duplicateLetterPenalty":"2"}'
+-> SUMMARY         [INFO ] ===== Game Statistics
+                      Strategy Name: refreqflexdouble
+                   Strategy Options: {"duplicateLetterPenalty":"2","resettable":true}
+             Number of games played: 2309
+                     Number of wins: 2305
+                   Number of losses: 4
+             Number of game crashes: 0
+                 Winning Percentage: 99.83 %
+            Overall average guesses: 4.31
+  Average guesses for winning games: 4.31
+                       Worst Losses: daddy/7 rover/7 golly/7 rower/7
+Game Histogram:
+    1 Guess |                                                              | 0
+  2 Guesses |                                                              | 4
+  3 Guesses | ################                                             | 299
+  4 Guesses | ############################################################ | 1119
+  5 Guesses | ########################################                     | 744
+  6 Guesses | #######                                                      | 139
+  7 Guesses |                                                              | 4
+
+real  5m58.118s
+user  6m22.830s
+sys   0m4.346s
+
+
+time caffeinate  ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreqflexdouble -o '{"duplicateLetterPenalty":"1.5"}'
+-> SUMMARY         [INFO ] ===== Game Statistics
+                      Strategy Name: refreqflexdouble
+                   Strategy Options: {"duplicateLetterPenalty":"1.5","resettable":true}
+             Number of games played: 2309
+                     Number of wins: 2305
+                   Number of losses: 4
+             Number of game crashes: 0
+                 Winning Percentage: 99.83 %
+            Overall average guesses: 4.32
+  Average guesses for winning games: 4.31
+                       Worst Losses: daddy/7 rover/7 golly/7 rower/7
+Game Histogram:
+    1 Guess |                                                              | 0
+  2 Guesses |                                                              | 4
+  3 Guesses | ################                                             | 299
+  4 Guesses | ############################################################ | 1114
+  5 Guesses | ########################################                     | 749
+  6 Guesses | #######                                                      | 139
+  7 Guesses |                                                              | 4
+
+
+real  5m54.535s
+user  6m21.291s
+sys   0m4.290s
+
+
+time caffeinate  ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreqflexdouble -o '{"duplicateLetterPenalty":"0"}'
+-> SUMMARY         [INFO ] ===== Game Statistics
+                      Strategy Name: refreqflexdouble
+                   Strategy Options: {"duplicateLetterPenalty":"0","resettable":true}
+             Number of games played: 2309
+                     Number of wins: 2306
+                   Number of losses: 3
+             Number of game crashes: 0
+                 Winning Percentage: 99.87 %
+            Overall average guesses: 4.32
+  Average guesses for winning games: 4.31
+                       Worst Losses: golly/8 jolly/7 hover/7
+Game Histogram:
+    1 Guess |                                                              | 0
+  2 Guesses |                                                              | 4
+  3 Guesses | ################                                             | 302
+  4 Guesses | ############################################################ | 1106
+  5 Guesses | #########################################                    | 757
+  6 Guesses | #######                                                      | 137
+  7 Guesses |                                                              | 2
+  8 Guesses |                                                              | 1
+
+
+real  7m41.019s
+user  8m7.721s
+sys   0m7.351s

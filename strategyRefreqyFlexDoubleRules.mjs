@@ -19,6 +19,10 @@ export class StrategyRefreqyFlexDoubleRules extends StrategyRefreqyFlexSimpleRul
             new StrategyOption(
                 'updateLettersFromRemaining', false,
                 'Add remaining word list to the letter tracker (experimental)'),
+            new StrategyOption(
+                'duplicateLetterPenalty', 1.0,
+                'Penalty for duplicate letters (negative for bonus)'),
+
             ...super.getSupportedOptions()
         ];
     }
@@ -30,10 +34,9 @@ export class StrategyRefreqyFlexDoubleRules extends StrategyRefreqyFlexSimpleRul
                 if (!this.letters.definitelyHasLetterAtPosition('letter', wordPos)) {
                     if (letterPrevCount === (this.letters.minLetters(letter) || 0)) {
                         // This is the first new occurence of a letter we don't know about.
-                        // TODO: This score calculation seems suspect, I don't understand the substraction, do we really mean:
-                        // - this.leFreq.letterFrequency(letter, letterPrevCount-1)
-                        const addScore = this.leFreq.letterFrequencyAtPosition(letter, wordPos, letterPrevCount) * this.options.rightPlaceMultiplier +
-                            this.leFreq.letterFrequency(letter, letterPrevCount) - letterPrevCount /* subtract for the letters we already know about */;
+                        const addScore = this.leFreq.letterFrequencyAtPosition(letter, wordPos, letterPrevCount) * this.options.rightPlaceMultiplier
+                            + this.leFreq.letterFrequency(letter, letterPrevCount)
+                            - letterPrevCount * this.options.duplicateLetterPenalty; // Kind of an arbitrary penalty, but a score of 1 is better than a score of 0.
                         score.addScore(letter, `/${letterPrevCount}@${wordPos}`, addScore);
                         score.newLetters++;
                     } else if (letterPrevCount > (this.letters.minLetters(letter) || 0)) {
