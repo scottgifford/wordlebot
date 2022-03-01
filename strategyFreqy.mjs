@@ -41,6 +41,12 @@ export class StrategyFreqy extends StrategyScoringAbstract {
             new StrategyOption(
                 'scoreDuplicateLetters', undefined,
                 'Score additional occurrences of letters after the first one the same way as the original letter'),
+            new StrategyOption(
+                'scoreNewLetters', false,
+                'Count the number of new letters in a word, and prefer words with more new letters as a secondary score sort'),
+            new StrategyOption(
+                'scorePossible', false,
+                'Check if a word is possible, and if so prefer possible words as a tertiary score sort'),
             new StrategyOptionInternal(
                 'letters', undefined,
                 'Initial letter tracker object for this strategy (instead of creating a new one)'),
@@ -90,23 +96,33 @@ export class StrategyFreqy extends StrategyScoringAbstract {
      */
     wordWithScore(word) {
         let score = new WordWithScore(word);
+        if (this.options.scorePossible) {
+            score.possible = this.letters.wordHasLetters(word) ? 1 : 0;
+        }
         let prevCount = { };
         for(let i=0;i<word.length;i++) {
             const letter = word[i];
             const letterPrevCount = prevCount[letter] || 0;
-            if (letterPrevCount === 0 || this.options.scoreDuplicateLetters || this.options.useDoubleFreq) {
-                // If the above isn't true, score for this letter will effectively be 0.
-                if (this.leFreq.hasLetter(letter)) {
-                    const effectivePrevCount = this.options.useDoubleFreq ? letterPrevCount : 0;
-                    score.addScore(letter, `@${i}`, this.leFreq.letterFrequencyAtPosition(letter, i, effectivePrevCount) * this.options.rightPlaceMultiplier);
-                    score.addScore(letter, '', this.leFreq.letterFrequency(letter, effectivePrevCount));
-                } else {
-                    Logger.log('score', 'trace', `No score for letter #${i} in word ${word}`);
-                }
-            }
+            this.scoreLetter(letter, score, letterPrevCount, i, word);
             prevCount[letter] = letterPrevCount + 1;
         }
         Logger.log('score', 'trace', `Score for ${word} is ${score.score}: ${score.debug}`);
         return score;
+    }
+
+    scoreLetter(letter, score, letterPrevCount, wordPos, word) {
+        if (letterPrevCount === 0 || this.options.scoreDuplicateLetters || this.options.useDoubleFreq) {
+            // If the above isn't true, score for this letter will effectively be 0.
+            if (this.leFreq.hasLetter(letter)) {
+                const effectivePrevCount = this.options.useDoubleFreq ? letterPrevCount : 0;
+                score.addScore(letter, `@${wordPos}`, this.leFreq.letterFrequencyAtPosition(letter, wordPos, effectivePrevCount) * this.options.rightPlaceMultiplier);
+                score.addScore(letter, '', this.leFreq.letterFrequency(letter, effectivePrevCount));
+            } else {
+                Logger.log('score', 'trace', `No score for letter #${wordPos} in word ${word}`);
+            }
+            if (letterPrevCount == 0 && this.options.scoreNewLetters) {
+                    score.newLetters++;
+            }
+        }
     }
 }

@@ -9,6 +9,8 @@ export class WordWithScore {
         this.word = word;
         this.debug = "";
         this.score = 0;
+        this.newLetters = 0;    // Number of new letters in this word, used as first tiebreaker
+        this.possible = false;  // Whether this is a possible word, used as second tiebreaker
     }
 
     addDebugString(string) {
@@ -67,7 +69,9 @@ export class StrategyScoringAbstract extends StrategyLetterTrackerRemainingAbstr
     }
 
     wordScoreCompare(a, b) {
-        return b.score - a.score; // Reverse sort, highest to lowest
+        return b.score - a.score || // Reverse sort, highest to lowest
+            b.newLetters - a.newLetters || // Reverse sort, highest to lowest
+            b.possible - a.possible; // Reverse sort, highest to lowest
     }
 
     scoreAndSortWords(words) {
