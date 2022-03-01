@@ -5,8 +5,6 @@ import { StrategyRefreqyFlexQuickDeciderAbstract } from "./strategyRefreqyFlexQu
 const DEFAULT_MAX_WRONGNESS = 5;
 const DEFAULT_REMAINING_WORDS_THRESHOLD = 1;
 
-// TODO: This is really just a small variant of StrategyRefreqyFlex, probably it should just be some options there.
-
 /**
  * Another version of RefreqyFlex with a different strategy for choosing flex words.
  *
@@ -18,9 +16,15 @@ const DEFAULT_REMAINING_WORDS_THRESHOLD = 1;
  * (though it may be worth revisiting this as I've gotten better at measuring).
  */
 export class StrategyRefreqyFlexSimpleRules extends StrategyRefreqyFlexQuickDeciderAbstract {
+    constructor(words, options) {
+        super(words, {
+            flexFreqNoLetter: true, // This has been the default for this strategy, consider making it the overall default
+            ...options
+        })
+    }
+
     reset() {
         super.reset();
-        // TODO: Can this be hoisted up anywhere?
         this.knownLetters = 0;
         return true;
     }
@@ -35,11 +39,6 @@ export class StrategyRefreqyFlexSimpleRules extends StrategyRefreqyFlexQuickDeci
                 'Maximum number of remaining possibilities before switching from flex word to possible word'),
             ...(super.getSupportedOptions().filter(option => option.name !== 'scoreRatio')) // Filter out options from parent class that no longer work - TODO get rid of this
         ];
-    }
-
-    flexFreq() {
-        Logger.log('strategy', 'debug', `StrategyRefreqyFlexSimpleRules reFreq`);
-        return this.leFreq.clone(([k,v]) => !this.letters.definitelyHasLetter(k) && !this.letters.definitelyDoesNotHaveLetter(k));
     }
 
     shouldUseFlexWord(flexWordAndScore, guessNum) {

@@ -12,10 +12,17 @@ const NUM_GUESSES = 6; // Game rule, should really be in some other layer
  */
 export class StrategyRefreqyFlexAbstract extends StrategyRefreqy {
     getSupportedOptions() {
-    return [
-        new StrategyOption(
+        return [
+            new StrategyOption(
                 'lastTurnGuess', true,
                 'If we are on (or past) the last turn, always guess a real possibility instead of a flex word'),
+            new StrategyOption(
+                'flexFreqNoLetter', false,
+                'When calculating the frequency table for the flex word, rule out any letters that are definitely not in the word'),
+            new StrategyOption(
+                'logTopLetters', 10,
+                'Log this many top letters when strategy debug is enabled'),
+
             ...super.getSupportedOptions(),
         ];
     }
@@ -31,8 +38,28 @@ export class StrategyRefreqyFlexAbstract extends StrategyRefreqy {
     // TODO: Does this really need to be a method?
     flexFreq() {
         Logger.log('strategy', 'debug', `StrategyRefreqyFlexAbstract reFreq`);
-        return this.leFreq.clone(([k, v]) => !this.letters.definitelyHasLetter(k));
+        const newFreq = this.leFreq.clone(([k, v]) => !this.letters.definitelyHasLetter(k) &&
+            (!this.options.flexFreqNoLetter || !this.letters.definitelyDoesNotHaveLetter(k)));
+        this.logTopLetters(newFreq);
+        return newFreq;
     }
+
+    logTopLetters(newFreq) {
+        Logger.dynLog('strategy', 'debug', () => {
+            return [
+                `Top ${this.options.logTopLetters} letters`,
+                newFreq.getAllLetters()
+                .flatMap((letter) => {
+                    return [0, 1, 2, 3, 4].map((prevCount) => {
+                        return [`${letter}${prevCount}`, newFreq.letterFrequency(letter, prevCount) - prevCount]
+                    })
+                })
+                .sort((a, b) => b[1]-a[1])
+                .filter((val, index) => index < this.options.logTopLetters),
+            ]
+        });
+    }
+
 
     /**
      * Chose the flex word for this strategy.

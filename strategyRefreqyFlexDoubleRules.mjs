@@ -95,21 +95,7 @@ export class StrategyRefreqyFlexDoubleRules extends StrategyRefreqyFlexSimpleRul
 
             return [k, this.leFreq.getEntryAdjustedLetterCount(k, this.letters.minLetters(k))];
         });
-        // TODO: This is useful for other scoring strategies too, is there somewhere we can put it to use across strategies?
-        Logger.dynLog('strategy', 'debug', () => {
-            const TOP_N_LETTERS = 10;
-            return [
-                `Top ${TOP_N_LETTERS} letters`,
-                newFreq.getAllLetters()
-                .flatMap((letter) => {
-                    return [0, 1, 2, 3, 4].map((prevCount) => {
-                        return [`${letter}${prevCount}`, newFreq.letterFrequency(letter, prevCount) - prevCount]
-                    })
-                })
-                .sort((a, b) => b[1]-a[1])
-                .filter((val, index) => index < TOP_N_LETTERS),
-            ]
-        })
+        this.logTopLetters(newFreq);
         return newFreq;
     }
 }
