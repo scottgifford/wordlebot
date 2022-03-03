@@ -600,3 +600,27 @@ Game Histogram:
 real  7m41.019s
 user  8m7.721s
 sys   0m7.351s
+
+-> SUMMARY         [INFO ] ===== Game Statistics
+                      Strategy Name: refreqflexdoubletourn
+                   Strategy Options: {"resettable":true}
+             Number of games played: 2309
+                     Number of wins: 2309
+                   Number of losses: 0
+             Number of game crashes: 0
+                 Winning Percentage: 100.00 %
+            Overall average guesses: 4.23
+  Average guesses for winning games: 4.23
+                       Worst Losses:
+Game Histogram:
+    1 Guess |                                                              | 0
+  2 Guesses |                                                              | 4
+  3 Guesses | ##############                                               | 301
+  4 Guesses | ############################################################ | 1257
+  5 Guesses | ###############################                              | 659
+  6 Guesses | ####                                                         | 88
+
+
+real  75m35.782s
+user  76m9.028s
+sys    0m26.158s

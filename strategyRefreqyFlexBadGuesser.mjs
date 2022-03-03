@@ -4,6 +4,7 @@ import { StrategyRefreqyFlexDoubleRules } from "./strategyRefreqyFlexDoubleRules
 
 const DEFAULT_HIGH_SCORE_PERCENTILE = 0.95;
 
+// TODO: Rename class
 export class StrategyRefreqyFlex4 extends StrategyRefreqyFlexDoubleRules {
     getSupportedOptions() {
         return [

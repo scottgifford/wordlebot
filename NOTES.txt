@@ -256,14 +256,29 @@ RefreqyFlex4 v1 MAX_WRONGNESS = 5 RIGHT_PLACE_MULTIPLIER = 1 GUESS_POSSIBILITIES
 
 ### Possible Enhancements
 
-## Maximum Discernment
+#### Surrogate Pairs
+Are some letters only common in pairs?  So e.g. "q" isn't as valuable a guess because it will never occur without "u"?
+If so we can de-score q.
+
+But maybe this happens naturally from frequency tables?
+
+Maybe this is a new strategy and is more complex.
+
+#### Statistical Adjustments
+Is the frequency table different between solution words and all words?
+
+#### SimGuess Tuning
+Instead of trying to get 50/50, aim for a low average of remaining words in the next step, or a low
+maximum words in the next step.
+
+### New Strategies
+#### Maximum Discernment
 When we have the list of words narrowed down, which letters would most help us discern from the remaining ones?
 For example, if our possible words are: glare, blare, flare and we have xLARE, our best approach is not to try
 the words serially, but to try a word with "g", "b", and "f" in it, e.g. "befog"
-This is different from using frequency tables (I think).
+This is different from using frequency tables (I think).  Is this what we are doing now actually?  Need to
+think through.
 
-## Surrogate Pairs
-Are some letters only common in pairs?  So e.g. "q" isn't as valuable a guess because it will never occur without "u"?
 
 # Things to look into
 
