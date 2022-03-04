@@ -7,7 +7,7 @@ import { StrategyRefreqyFlexRatio } from "./strategyRefreqyFlexRatio.mjs";
 import { StrategyRefreqyFlexSimpleRules } from "./strategyRefreqyFlexSimpleRules.mjs";
 import { StrategyRefreqyFlexDoubleRules } from "./strategyRefreqyFlexDoubleRules.mjs";
 import { StrategyRefreqyFlexDoubleRulesTournament } from "./strategyRefreqyFlexDoubleRulesTournament.mjs";
-import { StrategyRefreqyFlex4 as StrategyRefreqyFlexBadGuesser } from "./strategyRefreqyFlexBadGuesser.mjs";
+import { StrategyRefreqyFlexBadGuesser } from "./strategyRefreqyFlexBadGuesser.mjs";
 import { StrategySimGuess } from "./strategySimGuess.mjs";
 import { StrategySimGuessMinList } from "./strategySimGuessMinList.mjs";
 

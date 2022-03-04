@@ -4,7 +4,7 @@ import { StrategyRefreqyFlexDoubleRules } from "./strategyRefreqyFlexDoubleRules
 
 const DEFAULT_HIGH_SCORE_PERCENTILE = 0.95;
 
-export class StrategyRefreqyFlex4 extends StrategyRefreqyFlexDoubleRules {
+export class StrategyRefreqyFlexBadGuesser extends StrategyRefreqyFlexDoubleRules {
     getSupportedOptions() {
         return [
             new StrategyOptionRate(
@@ -17,7 +17,7 @@ export class StrategyRefreqyFlex4 extends StrategyRefreqyFlexDoubleRules {
     bestWordWithScore(words) {
         const scores = this.scoreAndSortWords(words);
         const scoreIndex = Math.floor((words.length - 1) * (1.00 - this.options.highScorePercentile));
-        Logger.log('strategy', 'debug', `StrategyRefreqyFlex4 choosing item ${scoreIndex + 1 /* correct for 0-based array indexing */} of ${scores.length} based on percentile ${this.options.highScorePercentile}.`)
+        Logger.log('strategy', 'debug', `StrategyRefreqyFlexBadGuesser choosing item ${scoreIndex + 1 /* correct for 0-based array indexing */} of ${scores.length} based on percentile ${this.options.highScorePercentile}.`)
         return scores[scoreIndex];
     }
 }
