@@ -47,9 +47,6 @@ export class StrategyFreqy extends StrategyScoringAbstract {
             new StrategyOption(
                 'scorePossible', true,
                 'Check if a word is possible, and if so prefer possible words as a tertiary score sort'),
-            new StrategyOptionInternal(
-                'letters', undefined,
-                'Initial letter tracker object for this strategy (instead of creating a new one)'),
             ...super.getSupportedOptions()
         ];
     }
