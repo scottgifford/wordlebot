@@ -8,6 +8,7 @@ import { StrategyRefreqyFlexSimpleRules } from "./strategyRefreqyFlexSimpleRules
 import { StrategyRefreqyFlexDoubleRules } from "./strategyRefreqyFlexDoubleRules.mjs";
 import { StrategyRefreqyFlex4 as StrategyRefreqyFlexBadGuesser } from "./strategyRefreqyFlexBadGuesser.mjs";
 import { StrategySimGuess } from "./strategySimGuess.mjs";
+import { StrategySimGuessMinList } from "./strategySimGuessMinList.mjs";
 
 export function strategyByName(name, words, strategyOptions = { }) {
     switch(name) {
@@ -31,7 +32,8 @@ export function strategyByName(name, words, strategyOptions = { }) {
             return new StrategyRefreqyFlexBadGuesser(words, strategyOptions);
         case 'simguess':
             return new StrategySimGuess(words, strategyOptions);
-    
+        case 'simguessmin':
+            return new StrategySimGuessMinList(words, strategyOptions);
         default:
             throw new Error(`Unknown strategy '${name}'`);
     }
