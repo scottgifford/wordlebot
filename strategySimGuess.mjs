@@ -51,6 +51,9 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
             new StrategyOption(
                 'initialGuess', DEFAULT_INITIAL_GUESS,
                 'Use a pre-calculated word for our first guess instead of simulating'),
+            new StrategyOption(
+                'samplingRandom', true,
+                'Use a pre-calculated word for our first guess instead of simulating'),
 
             ...super.getSupportedOptions()
         ];
@@ -72,14 +75,33 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
         }
 
     }
+
+    sample(arr, count) {
+        if (this.options.samplingRandom) {
+            return this.randomSample(arr, count);
+        } else {
+            return this.deterministicSample(arr, count);
+        }
+    }
+
     // TODO: As rate gets closer to 1, we are more likely to introduce duplicates
     // To avoid we could do a shuffle instead
-    sample(arr, count) {
+    randomSample(arr, count) {
         let ret = [];
         for(let i=0;i<count;i++) {
             ret.push(randWord(arr));
         }
 
+        return ret;
+    }
+
+    deterministicSample(arr, count) {
+        let ret = [ ];
+        const incr = arr.length / count;
+
+        for(let i=0;i<arr.length;i += incr) {
+            ret.push(arr[Math.floor(i)]);
+        }
         return ret;
     }
 
