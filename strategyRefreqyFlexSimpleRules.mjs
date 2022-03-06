@@ -43,7 +43,7 @@ export class StrategyRefreqyFlexSimpleRules extends StrategyRefreqyFlexQuickDeci
 
     shouldUseFlexWord(flexWordAndScore, guessNum) {
         if (this.options.lastTurnGuess && this.isLastGuess(guessNum)) {
-            Logger.log('strategy', 'debug', `Should use flex word, last turn #${guessNum}`);
+            Logger.log('strategy', 'debug', `Should use remaining word, last turn #${guessNum}`);
             return false;
         }
 
