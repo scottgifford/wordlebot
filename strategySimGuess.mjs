@@ -11,7 +11,7 @@ const DEFAULT_GUESS_SAMPLE_RATE = 0.001;
 // ./wordler.mjs -l '{"strategy":"debug"}' -w ./wordleWords.mjs -s simguessmin -o '{"maxSolutionSims":1500, "maxGuessSims":1500}' -a rogue
 const DEFAULT_INITIAL_GUESS = 'raise';
 
-const FLAG_UNUSED = 0;
+const NUM_GUESSES = 6; // Game rule, should really be in some other layer
 
 // Simulated guess strategy.
 // For each word "g"
@@ -38,12 +38,15 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
             new StrategyOptionRate(
                 'guessSampleRate', DEFAULT_GUESS_SAMPLE_RATE,
                 'Instead of simulating all possible guesses, randomly sample this percentage of possible guesses'),
+            new StrategyOptionRate(
+                'guessSampleAllWords', undefined,
+                'Choose possible guesses from all words instead of only remaining words, if truthy'),
             new StrategyOptionInteger(
-                'maxSolutionSims', FLAG_UNUSED,
-                'Chose at most this many solution simulations (-1 to ignore and use ratio)'),
+                'maxSolutionSims', undefined,
+                'Chose at most this many solution simulations (0 to ignore and use ratio)'),
             new StrategyOptionInteger(
-                'maxGuessSims', FLAG_UNUSED,
-                'Chose at most this many guess simulations (-1 to ignore and use ratio)'),
+                'maxGuessSims', undefined,
+                'Chose at most this many guess simulations (0 to ignore and use ratio)'),
             new StrategyOption(
                 'useInitialGuess', undefined,
                 'Use a pre-calculated word for our first guess instead of simulating'),
@@ -53,9 +56,42 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
             new StrategyOption(
                 'samplingRandom', true,
                 'Use a pre-calculated word for our first guess instead of simulating'),
+            // TODO: This is duplicated from elsewhere, can we refactor?
+            new StrategyOption(
+                'lastTurnGuess', true,
+                'If we are on (or past) the last turn, always guess a real possibility instead of a flex word'),
+            // TODO: This is duplicated from elsewhere, can we refactor?
+            new StrategyOptionInteger(
+                'remainingWordsThreshold', 2,
+                'Maximum number of remaining possibilities before switching from flex word to possible word'),
 
             ...super.getSupportedOptions()
         ];
+    }
+
+
+    shouldUseFullGuessWordList(guessNum) {
+        if (!this.options.guessSampleAllWords) {
+            Logger.log('strategy', 'debug', `Sampling remaining words for guesses, becasue guessSampleAllWords=${this.options.guessSampleAllWords} (falsy)`);
+            return false;
+        } else if (this.remainingWords.length <= this.options.remainingWordsThreshold) {
+            Logger.log('strategy', 'debug', `Sampling remaining words for guesses, because remainingWords ${this.remainingWords} < remainingWordsThreshold ${this.options.remainingWordsThreshold}`);
+            return false;
+        } else if (this.options.lastTurnGuess && this.isLastGuess(guessNum)) {
+            Logger.log('strategy', 'debug', `Sampling remaining words for guesses, because ${this.options.lastTurnGuess} is truthy and guessNum ${guessNum} is our last guess`);
+            return false;
+        }
+
+        Logger.log('strategy', 'debug', `Sampling all words for guesses, because guessSampleAllWords ${this.options.guessSampleAllWords} is truthy and no exceptions apply`);
+        return true
+    }
+
+    guessWordList(guessNum) {
+        if (this.shouldUseFullGuessWordList(guessNum)) {
+            return this.words;
+        } else {
+            return this.remainingWords;
+        }
     }
 
     numSolutionSims(numPossible) {
@@ -104,8 +140,12 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
         return ret;
     }
 
-    guess(guessNum) {
+    // TODO: Move up to Strategy class
+    isLastGuess(guessNum) {
+        return guessNum >= NUM_GUESSES;
+    }
 
+    guess(guessNum) {
         if (guessNum === 1 && this.options.useInitialGuess) {
             Logger.log('strategy', 'debug', `Using pre-chosen initial guess '${this.options.initialGuess}'`);
             return this.options.initialGuess;
@@ -113,9 +153,10 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
 
         // Clear score cache
         this.scoreCache = { };
-        const sampleSize = this.numSolutionSims(this.remainingWords.length);
-        Logger.log('strategy', 'debug', `Sampling ${sampleSize} of ${this.remainingWords.length} remaining words`);
-        const possibleGuesses = this.sample(this.remainingWords, sampleSize);
+        const samplePool = this.guessWordList(guessNum);
+        const sampleSize = this.numGuessSims(samplePool.length);
+        Logger.log('strategy', 'debug', `Sampling ${sampleSize} guesses of ${samplePool.length} possible`);
+        const possibleGuesses = this.sample(samplePool, sampleSize);
         Logger.log('strategy', 'debug', "Possible Guesses: ", possibleGuesses);
         const sortedGuesses = possibleGuesses.map(word => ( this.wordWithScore(word))).sort((a, b) => /* low to high */ a.score - b.score);
         Logger.log('strategy', 'debug', "Sorted Guesses: ", sortedGuesses);
@@ -163,7 +204,10 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
         // We clear the cache at the start of every new guess.
         if (!this.scoreCache[word]) {
             let totalScore = 0;
-            const simulatedAnswers = this.sample(this.remainingWords, this.numGuessSims(this.remainingWords.length));
+
+            const numAnswersToSimulate = this.numSolutionSims(this.remainingWords.length);
+            const simulatedAnswers = this.sample(this.remainingWords, numAnswersToSimulate);
+            Logger.log('strategy', 'debug', `Simulating ${simulatedAnswers.length} (${numAnswersToSimulate}) answers of ${this.remainingWords.length} remaining words`);
             for(let i=0;i<simulatedAnswers.length;i++) {
                 //   For each word "a" is too slow, instead sample.
                 const ans = simulatedAnswers[i];
