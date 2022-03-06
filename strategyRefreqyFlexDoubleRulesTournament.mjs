@@ -12,10 +12,7 @@ export class StrategyRefreqyFlexDoubleRulesTournament extends StrategyRefreqyFle
                 'topWords', 100,
                 'Choose this many top words to send to simulation'),
             new StrategyOptionInteger(
-                'maxSolutionSims', 50,
-                'Chose at most this many solution simulations (-1 to ignore and use ratio)'),
-            new StrategyOptionInteger(
-                'maxGuessSims', 50,
+                'maxGuessSims', 100,
                 'Chose at most this many guess simulations (-1 to ignore and use ratio)'),
             new StrategyOption(
                 'useInitialGuess', true,
@@ -38,7 +35,7 @@ export class StrategyRefreqyFlexDoubleRulesTournament extends StrategyRefreqyFle
 
         Logger.log('strategy','debug','Starting tournament strategy with words', topWords);
         const tournamentStrategy = new StrategySimGuessMinList(this.remainingWords, {
-            maxSolutionSims: this.options.maxSolutionSims,
+            maxSolutionSims: this.options.topWords,
             maxGuessSims: this.options.maxGuessSims,
             letters: this.letters.clone(),
             useInitialGuess: false,
