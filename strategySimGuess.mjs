@@ -41,6 +41,9 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
             new StrategyOptionRate(
                 'guessSampleAllWords', undefined,
                 'Choose possible guesses from all words instead of only remaining words, if truthy'),
+            new StrategyOptionRate(
+                'guessSamplePossibleRatio', undefined,
+                'Maximum number of remaining possibilities before switching from flex word to possible word'),
             new StrategyOptionInteger(
                 'maxSolutionSims', undefined,
                 'Chose at most this many solution simulations (0 to ignore and use ratio)'),
@@ -56,6 +59,9 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
             new StrategyOption(
                 'samplingRandom', true,
                 'Use a pre-calculated word for our first guess instead of simulating'),
+            new StrategyOption(
+                'samplingOffset', false,
+                'If samplingRandom is off, offset the sampled words by turn number, to avoid having the same list every time'),
             // TODO: This is duplicated from elsewhere, can we refactor?
             new StrategyOption(
                 'lastTurnGuess', true,
@@ -85,6 +91,28 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
         Logger.log('strategy', 'debug', `Sampling all words for guesses, because guessSampleAllWords ${this.options.guessSampleAllWords} is truthy and no exceptions apply`);
         return true
     }
+
+    generateGuesses(guessNum) {
+        if (this.options.guessSamplePossibleRatio === undefined) {
+            const samplePool = this.guessWordList(guessNum);
+            const sampleSize = this.numGuessSims(samplePool.length);
+            Logger.log('strategy', 'debug', `Sampling ${sampleSize} guesses of ${samplePool.length} possible`);
+            const ret = this.sample(samplePool, sampleSize, guessNum);
+            return ret;
+        } else {
+            const sampleSize = this.numGuessSims(this.words.length);
+            const possibleWordsSampleCount = Math.min(Math.ceil(sampleSize * this.options.guessSamplePossibleRatio), this.remainingWords.length);
+            const possibleWordsSample = this.sample(this.remainingWords, possibleWordsSampleCount);
+            Logger.log('strategy', 'trace', `sampleSize=${sampleSize}, possibleWordsSampleCount=${possibleWordsSampleCount}, possibleWordsSample.length=${possibleWordsSample.length}`);
+            const allWordSampleCount = sampleSize - possibleWordsSampleCount;
+            const allWordSample = this.sample(this.words, allWordSampleCount);
+            Logger.log('strategy', 'trace', `sampleSize=${sampleSize}, allWordSampleCount=${allWordSampleCount}, allWordSample.length=${allWordSample.length}`);
+            const ret = [...possibleWordsSample, ...allWordSample];
+            Logger.log('strategy', 'trace', `guessSamplePossibleRatio=${this.options.guessSamplePossibleRatio}, returning ${ret.length} total, ${possibleWordsSample.length} possible + ${allWordSample.length} other`);
+            return ret;
+        }
+    }
+
 
     guessWordList(guessNum) {
         if (this.shouldUseFullGuessWordList(guessNum)) {
@@ -132,10 +160,19 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
 
     deterministicSample(arr, count) {
         let ret = [ ];
+        // Start list at guessNum-1 so it's not the same list every time
+        const start = Math.min(this.guessNum-1, arr.length);
         const incr = arr.length / count;
 
-        for(let i=0;i<arr.length;i += incr) {
-            ret.push(arr[Math.floor(i)]);
+
+        Logger.log('strategy', 'trace', `Choosing a deterministic sample of ${count}/${arr.length} words, with start=${start} and incr=${incr}`);
+
+
+        for(let i=start;ret.length < count;i += incr) {
+            const wordNum = Math.floor(i) % arr.length;
+            const word = arr[wordNum];
+            Logger.log('strategy', 'trace', `Sample word #${wordNum}: '${word}'`);
+            ret.push(word);
         }
         return ret;
     }
@@ -146,6 +183,7 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
     }
 
     guess(guessNum) {
+        this.guessNum = guessNum;
         if (guessNum === 1 && this.options.useInitialGuess) {
             Logger.log('strategy', 'debug', `Using pre-chosen initial guess '${this.options.initialGuess}'`);
             return this.options.initialGuess;
@@ -153,10 +191,7 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
 
         // Clear score cache
         this.scoreCache = { };
-        const samplePool = this.guessWordList(guessNum);
-        const sampleSize = this.numGuessSims(samplePool.length);
-        Logger.log('strategy', 'debug', `Sampling ${sampleSize} guesses of ${samplePool.length} possible`);
-        const possibleGuesses = this.sample(samplePool, sampleSize);
+        const possibleGuesses = this.generateGuesses(guessNum);
         Logger.log('strategy', 'debug', "Possible Guesses: ", possibleGuesses);
         const sortedGuesses = possibleGuesses.map(word => ( this.wordWithScore(word))).sort((a, b) => /* low to high */ a.score - b.score);
         Logger.log('strategy', 'debug', "Sorted Guesses: ", sortedGuesses);
@@ -196,6 +231,7 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
     // TODO: Use this in the main methods (right now used when called as sub-strategy)
     // TODO: Simplify by subclassing StrategyScoringAbstract
     scoreAndSortWords(words) {
+        // TODO: Add option to prefer possible words (or get from superclass)
         return words.map(word => this.wordWithScore(word)).sort((a, b) => this.wordScoreCompare(a, b));
     }
 
@@ -211,6 +247,8 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
             for(let i=0;i<simulatedAnswers.length;i++) {
                 //   For each word "a" is too slow, instead sample.
                 const ans = simulatedAnswers[i];
+                Logger.log('strategy', 'trace', `Word #${i} is '${word}'`);
+
                 //     Get results for takeGuess(g, a)
                 const result = takeGuess(word, ans)
                 //     Plug results into (copy of) LetterTracker
