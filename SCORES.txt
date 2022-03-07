@@ -625,3 +625,56 @@ Game Histogram:
 real  234m55.777s
 user  234m0.579s
 sys    1m32.264s
+
+
+time caffeinate ./wordler.mjs -w ./wordleWords.mjs -s 'simguessmin' -o '{"maxSolutionSims":100, "maxGuessSims":100, "useInitialGuess":true, "guessSampleAllWords":true, "samplingRandom":false}' -p inorder -r 2309 |tee tmp/simguessmin-100-2309.out
+-> SUMMARY         [INFO ] ===== Game Statistics
+                      Strategy Name: simguessmin
+                   Strategy Options: {"maxSolutionSims":100,"maxGuessSims":100,"useInitialGuess":true,"guessSampleAllWords":true,"samplingRandom":false,"resettable":true}
+             Number of games played: 2309
+                     Number of wins: 2303
+                   Number of losses: 6
+             Number of game crashes: 0
+                 Winning Percentage: 99.74 %
+            Overall average guesses: 4.28
+  Average guesses for winning games: 4.27
+                       Worst Losses: boozy/7 joker/7 hover/7 heave/7 vaunt/7
+Game Histogram:
+    1 Guess |                                                              | 1
+  2 Guesses |                                                              | 5
+  3 Guesses | #################                                            | 321
+  4 Guesses | ############################################################ | 1156
+  5 Guesses | ####################################                         | 688
+  6 Guesses | #######                                                      | 132
+  7 Guesses |                                                              | 6
+
+
+real  260m25.321s
+user  258m46.437s
+sys     1m18.497s
+
+time caffeinate ./wordler.mjs -w ./wordleWords.mjs -s 'simguessmin' -o '{"maxSolutionSims":50, "maxGuessSims":50, "useInitialGuess":true, "guessSampleAllWords":true, "samplingRandom":false, "samplingOffset":true, "guessSamplePossibleRatio":0.20}' -p inorder -r 2309 |tee tmp/simguessmin-50-v2.out
+-> SUMMARY         [INFO ] ===== Game Statistics
+                      Strategy Name: simguessmin
+                   Strategy Options: {"maxSolutionSims":50,"maxGuessSims":50,"useInitialGuess":true,"guessSampleAllWords":true,"samplingRandom":false,"samplingOffset":true,"guessSamplePossibleRatio":0.2,"resettable":true}
+             Number of games played: 2309
+                     Number of wins: 2295
+                   Number of losses: 14
+             Number of game crashes: 0
+                 Winning Percentage: 99.39 %
+            Overall average guesses: 4.13
+  Average guesses for winning games: 4.11
+                       Worst Losses: jolly/7 cover/7 brave/7 finch/7 gaunt/7
+Game Histogram:
+    1 Guess |                                                              | 1
+  2 Guesses | #                                                            | 29
+  3 Guesses | #####################                                        | 422
+  4 Guesses | ############################################################ | 1203
+  5 Guesses | ###########################                                  | 541
+  6 Guesses | #####                                                        | 99
+  7 Guesses | #                                                            | 14
+
+
+real  438m55.109s
+user  436m42.856s
+sys     1m54.316s
