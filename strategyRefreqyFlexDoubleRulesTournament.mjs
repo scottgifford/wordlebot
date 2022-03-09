@@ -43,6 +43,7 @@ export class StrategyRefreqyFlexDoubleRulesTournament extends StrategyRefreqyFle
         });
 
         tournamentStrategy.scoreCache = { }; // TODO: Move to method or something
+        tournamentStrategy.guessNum = 1;  // TODO: Move to method or something
         const tournamentWords = tournamentStrategy.scoreAndSortWords(topWords);
         return tournamentWords[0];
     }
