@@ -13,20 +13,22 @@ const DEFAULT_GUESS_SAMPLE_RATE = 0.001;
 const DEFAULT_INITIAL_GUESS = 'raise';
 
 // Simulated guess strategy.
+// (note this is a bad strategy, see SimGuessMinList for a better alternative)
 // For each word "g"
 //   For each word "a"
 //     Get results for takeGuess(g, a)
 //     Plug results into (copy of) LetterTracker
 //     See how many words are left
 //     See how many words were eliminated
-//     TODO Score this somehow?
-//          We want a score that eliminates roughly half the words
+//     Score this
+//          For this class, we want a score that eliminates roughly half the words
 //          (i.e. splits the set into two pieces with as many words as possible)
 //          Kind of like a binary search
+//          We get this by comparing how close the new word list is to half of the existing word list
 //          Maybe we can just look at square of the difference?
 //          
 //  Then average score over all "a""
-// Then pick word with best score
+// Then pick word with lowest score
 
 export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
 
@@ -172,9 +174,7 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
         const start = Math.min(this.guessNum-1, arr.length);
         const incr = arr.length / count;
 
-
         Logger.log('strategy', 'trace', `Choosing a deterministic sample of ${count}/${arr.length} words, with start=${start} and incr=${incr}`);
-
 
         for(let i=start;ret.length < count;i += incr) {
             const wordNum = Math.floor(i) % arr.length;
