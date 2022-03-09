@@ -72,11 +72,9 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
             new StrategyOption(
                 'samplingOffset', false,
                 'If samplingRandom is off, offset the sampled words by turn number, to avoid having the same list every time'),
-            // TODO: This is duplicated from elsewhere, can we refactor?
             new StrategyOption(
                 'lastTurnGuess', true,
                 'If we are on (or past) the last turn, always guess a real possibility instead of a flex word'),
-            // TODO: This is duplicated from elsewhere, can we refactor?
             new StrategyOptionInteger(
                 'remainingWordsThreshold', 2,
                 'Maximum number of remaining possibilities before switching from flex word to possible word'),
@@ -84,7 +82,6 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
             ...super.getSupportedOptions()
         ];
     }
-
 
     shouldUseFullGuessWordList(guessNum) {
         if (!this.options.guessSampleAllWords) {
@@ -196,7 +193,7 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
         this.scoreCache = { };
         const possibleGuesses = this.generateGuesses(guessNum);
         Logger.log('strategy', 'debug', "Possible Guesses: ", possibleGuesses);
-        const sortedGuesses = possibleGuesses.map(word => ( this.wordWithScore(word))).sort((a, b) => /* low to high */ a.score - b.score);
+        const sortedGuesses = this.scoreAndSortWords(possibleGuesses);
         Logger.log('strategy', 'debug', "Sorted Guesses: ", sortedGuesses);
         const bestGuess = sortedGuesses[0];
         Logger.log('strategy', 'info', "Best guess:", bestGuess);
@@ -231,7 +228,6 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
         return a.score - b.score;
     }
 
-    // TODO: Use this in the main methods (right now used when called as sub-strategy)
     // TODO: Simplify by subclassing StrategyScoringAbstract
     scoreAndSortWords(words) {
         // TODO: Add option to prefer possible words (or get from superclass)
