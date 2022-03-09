@@ -2,8 +2,7 @@ import { StrategyOption, StrategyOptionInteger, StrategyOptionRate } from "./str
 import { randWord } from "./util.mjs";
 import { takeGuess } from "./util.mjs";
 import { Logger } from "./log.mjs";
-import { StrategyLetterTrackerRemainingAbstract } from "./strategyLetterTrackerRemainingAbstract.mjs";
-import { NUM_GUESSES } from "./gameRules.mjs";
+import { StrategyScoringAbstract } from "./strategyScoringAbstract.mjs";
 
 const DEFAULT_ANSWER_SAMPLE_RATE = 0.001;
 const DEFAULT_GUESS_SAMPLE_RATE = 0.001;
@@ -30,7 +29,7 @@ const DEFAULT_INITIAL_GUESS = 'raise';
 //  Then average score over all "a""
 // Then pick word with lowest score
 
-export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
+export class StrategySimGuess extends StrategyScoringAbstract {
 
     reset() {
         super.reset();
@@ -190,15 +189,7 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
         this.guessNum = guessNum;
         // Clear score cache
         this.scoreCache = { };
-
-        const possibleGuesses = this.wordsToScore();
-        Logger.log('strategy', 'debug', "Possible Guesses: ", possibleGuesses);
-        const sortedGuesses = this.scoreAndSortWords(possibleGuesses);
-        Logger.log('strategy', 'debug', "Sorted Guesses: ", sortedGuesses);
-        const bestGuess = sortedGuesses[0];
-        Logger.log('strategy', 'info', "Best guess:", bestGuess);
-        super.guessLog();
-        return bestGuess.word;
+        return super.guess();
     }
 
     /**
@@ -218,13 +209,12 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
     }
 
     // Highest-to-lowest instead of default lowest-to-highest
+    // TODO: Add option to prefer possible words in case of tie
     wordScoreCompare(a, b) {
         return a.score - b.score;
     }
 
-    // TODO: Simplify by subclassing StrategyScoringAbstract
     scoreAndSortWords(words) {
-        // TODO: Add option to prefer possible words (or get from superclass)
         return words.map(word => this.wordWithScore(word)).sort((a, b) => this.wordScoreCompare(a, b));
     }
 
