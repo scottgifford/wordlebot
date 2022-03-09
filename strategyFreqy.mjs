@@ -3,6 +3,7 @@ import { FrequencyAnalysis } from "./freq.mjs";
 import { Logger } from "./log.mjs";
 import { StrategyScoringAbstract, WordWithScore } from "./strategyScoringAbstract.mjs";
 import { StrategyOption, StrategyOptionInteger, StrategyOptionInternal } from "./strategy.mjs";
+import { NUM_LETTERS } from "./gameRules.mjs";
 
 const DEFAULT_RIGHT_PLACE_MULTIPLIER = 3; // Determined experimentally, though doesn't seem to matter much
 const DEFAULT_LOG_N_REMAINING_WORDS = 20; // When this many or fewer words or left, log the list of possibilties
@@ -57,8 +58,7 @@ export class StrategyFreqy extends StrategyScoringAbstract {
 
     guessLog() {
         super.guessLog();
-        // TODO: That 5 should be in another layer somewhere
-        Logger.log('strategy', 'info', `Know ${this.letters.knownLetters()} / 5 letters`);
+        Logger.log('strategy', 'info', `Know ${this.letters.knownLetters()} / ${NUM_LETTERS} letters`);
     }
 
     update(guess, result) {

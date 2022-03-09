@@ -3,6 +3,7 @@ import { randWord } from "./util.mjs";
 import { takeGuess } from "./util.mjs";
 import { Logger } from "./log.mjs";
 import { StrategyLetterTrackerRemainingAbstract } from "./StrategyLetterTrackerRemainingAbstract.mjs";
+import { NUM_GUESSES } from "./gameRules.mjs";
 
 const DEFAULT_ANSWER_SAMPLE_RATE = 0.001;
 const DEFAULT_GUESS_SAMPLE_RATE = 0.001;
@@ -10,8 +11,6 @@ const DEFAULT_GUESS_SAMPLE_RATE = 0.001;
 // First word choice of:
 // ./wordler.mjs -l '{"strategy":"debug"}' -w ./wordleWords.mjs -s simguessmin -o '{"maxSolutionSims":1500, "maxGuessSims":1500}' -a rogue
 const DEFAULT_INITIAL_GUESS = 'raise';
-
-const NUM_GUESSES = 6; // Game rule, should really be in some other layer
 
 // Simulated guess strategy.
 // For each word "g"

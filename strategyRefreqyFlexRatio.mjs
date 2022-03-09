@@ -1,10 +1,9 @@
+import { NUM_GUESSES } from "./gameRules.mjs";
 import { Logger } from "./log.mjs";
 import { StrategyOption } from "./strategy.mjs";
 import { StrategyRefreqyFlexAbstract } from "./strategyRefreqyFlexAbstract.mjs";
 
 const DEFAULT_SCORE_RATIO = 0.30;
-
-const NUM_GUESSES = 6; // Game rule, should really be in some other layer
 
 /**
  * Frequency-analyzer based strategy, with the flexibility to choose words that are not remaining possible

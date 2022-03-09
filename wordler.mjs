@@ -9,6 +9,7 @@ import commandLineArgs from "command-line-args";
 import commandLineUsage from "command-line-usage";
 import asciiHistogram from "bars";
 import chalk from "chalk";
+import { NUM_GUESSES, NUM_LETTERS } from "./gameRules.mjs";
 
 const optionDefinitions = [
     { name: 'help', alias: 'h', type: Boolean, description: "Show usage instructions"},
@@ -64,7 +65,6 @@ const help = [
 const DEFAULT_STRATEGY_NAME = 'random';
 const DEFAULT_NUM_GAMES = 1;
 const DEFAULT_WORD_LIST = './allWords.mjs';
-const MAX_GUESSES = 6;
 const STATS_DESCRIPTION_COL_WIDTH = 35;
 const STATS_FORMAT_SIG_DIG = 2;
 const LINE_READER = readline.createInterface({
@@ -298,11 +298,10 @@ async function playGame(strategy, solutionWords, allwords, solutionPicker, strat
                 gameStats.guesses[gameResult.guesses] = (gameStats.guesses[gameResult.guesses] || 0) + 1;
 
                 // Track losing guesses for logging
-                if (gameResult.guesses > MAX_GUESSES) {
+                if (gameResult.guesses > NUM_GUESSES) {
                     gameStats.losingGuesses.push(gameResult);
                     gameStats.losingGuesses.sort((a, b) => b.guesses - a.guesses);
-                    // TODO: 5 should be a constant
-                    while (gameStats.losingGuesses.length > 5) {
+                    while (gameStats.losingGuesses.length > NUM_LETTERS) {
                         gameStats.losingGuesses.pop();
                     }
                 }
@@ -320,7 +319,7 @@ async function playGame(strategy, solutionWords, allwords, solutionPicker, strat
             }
         }
 
-        const isWinningGuess = (count, numGuesses) => numGuesses <= MAX_GUESSES;
+        const isWinningGuess = (count, numGuesses) => numGuesses <= NUM_GUESSES;
         const averageGuesses = (sum, val, i) => sum + i * val;
 
         gameStats.numGames = gameStats.guesses.reduce((sum, val) => sum + val, 0);

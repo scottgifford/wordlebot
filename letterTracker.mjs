@@ -12,7 +12,6 @@ const ALL_LETTERS = (() => {
 
 const makeDefaultLetter = () => { return { pos: [-1, -1, -1, -1, -1], min: undefined, max: undefined } };
 
-const MAX_LETTERS = 5;
 export class LetterTracker {
     constructor(letters = { }) {
         this.letters = letters;

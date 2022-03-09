@@ -4,8 +4,6 @@ import { StrategyRefreqyFlexAbstract } from "./strategyRefreqyFlexAbstract.mjs";
 const DEFAULT_MAX_WRONGNESS = 5;
 const DEFAULT_REMAINING_WORDS_THRESHOLD = 1;
 
-const NUM_GUESSES = 6; // Game rule, should really be in some other layer
-
 /**
  * Another version of RefreqyFlex with a different strategy for choosing flex words.
  *
