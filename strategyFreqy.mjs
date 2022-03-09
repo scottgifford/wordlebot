@@ -61,28 +61,6 @@ export class StrategyFreqy extends StrategyScoringAbstract {
         Logger.log('strategy', 'info', `Know ${this.letters.knownLetters()} / ${NUM_LETTERS} letters`);
     }
 
-    update(guess, result) {
-        this.letters.update(guess, result);
-
-        Logger.log('strategy', 'debug', `${this.remainingWords.length} possible words before filtering`);
-        this.remainingWords = this.remainingWords.filter(word => this.letters.wordHasLetters(word));
-
-        if (this.remainingWords.length === 0) {
-            throw new Error('No remaining possibilities, giving up');
-        }
-
-        this.updateLog();
-    }
-
-    updateLog() {
-        super.updateLog();
-        Logger.log('strategy', 'debug', this.letters.debugString());
-        Logger.log('strategy', 'info', `${this.remainingWords.length} possibilities left`);
-        if (this.remainingWords.length <= this.options.logNRemainingWords) {
-            Logger.dynLog('strategy', 'debug', () => "Remaining possibilities:\n" + this.remainingWords.map(word => JSON.stringify(this.wordWithScore(word))).join("\n"));
-        }
-    }
-
     /** Score a word with the given frequency table.
      *
      * For each letter in the given word, award one point for every time it occurs anywhere in the frequency table,

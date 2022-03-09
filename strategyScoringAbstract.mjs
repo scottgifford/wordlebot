@@ -1,6 +1,6 @@
 import { Logger } from "./log.mjs";
 import { Strategy, StrategyOption, StrategyOptionInteger } from "./strategy.mjs";
-import { StrategyLetterTrackerRemainingAbstract } from "./StrategyLetterTrackerRemainingAbstract.mjs";
+import { StrategyLetterTrackerRemainingAbstract } from "./strategyLetterTrackerRemainingAbstract.mjs";
 
 const DEFAULT_LOG_TOP_N_SCORES = 10; // Log this many top scores
 

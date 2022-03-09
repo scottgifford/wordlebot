@@ -2,7 +2,7 @@ import { StrategyOption, StrategyOptionInteger, StrategyOptionRate } from "./str
 import { randWord } from "./util.mjs";
 import { takeGuess } from "./util.mjs";
 import { Logger } from "./log.mjs";
-import { StrategyLetterTrackerRemainingAbstract } from "./StrategyLetterTrackerRemainingAbstract.mjs";
+import { StrategyLetterTrackerRemainingAbstract } from "./strategyLetterTrackerRemainingAbstract.mjs";
 import { NUM_GUESSES } from "./gameRules.mjs";
 
 const DEFAULT_ANSWER_SAMPLE_RATE = 0.001;
@@ -143,7 +143,6 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
         } else {
             return Math.ceil(numPossible * this.options.guessSampleRate);
         }
-
     }
 
     sample(arr, count) {
@@ -201,13 +200,6 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
         return bestGuess.word;
     }
 
-    update(guess, result) {
-        this.letters.update(guess, result);
-
-        this.remainingWords = this.remainingWords.filter(word => this.letters.wordHasLetters(word));
-        super.updateLog();
-    }
-
     /**
      * Assign a comparative score to the generated word list, given the current word list as context.
      *
@@ -224,6 +216,7 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
         return score;
     }
 
+    // Highest-to-lowest instead of default lowest-to-highest
     wordScoreCompare(a, b) {
         return a.score - b.score;
     }
