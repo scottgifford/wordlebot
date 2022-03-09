@@ -11,8 +11,7 @@ export class StrategyLetterTrackerRemainingAbstract extends Strategy {
 
     reset() {
         this.remainingWords = this.words;
-        // TODO: I think we are also cloning in the caller (strategyRefreqyFlexAbstract#79)
-        this.letters = this.options.letters ? this.options.letters.clone() : new LetterTracker();
+        this.letters = this.options.letters ? this.options.letters : new LetterTracker();
         return true;
     }
 
@@ -20,7 +19,7 @@ export class StrategyLetterTrackerRemainingAbstract extends Strategy {
         return [
             new StrategyOptionInternal(
                 'letters', undefined,
-                'Initial letter tracker object for this strategy (instead of creating a new one)'),
+                'Initial letter tracker object for this strategy (instead of creating a new one).  Note this will be used destructively unless you provide a .clone()'),
             ...super.getSupportedOptions()
         ];
     }
