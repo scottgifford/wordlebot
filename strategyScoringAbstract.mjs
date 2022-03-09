@@ -43,7 +43,7 @@ export class StrategyScoringAbstract extends StrategyLetterTrackerRemainingAbstr
         if (guessNum === 1 && this.resetCache && this.resetCache.guess) {
             return this.resetCache.guess;
         }
-        const guess = this.bestWord(this.remainingWords, this.leFreq);
+        const guess = this.bestWord(this.remainingWords);
         // Cache first guess, it will always be the same
         if (guessNum == 1 && this.resetCache) {
             this.resetCache.guess = guess;
