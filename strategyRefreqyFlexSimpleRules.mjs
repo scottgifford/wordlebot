@@ -37,7 +37,7 @@ export class StrategyRefreqyFlexSimpleRules extends StrategyRefreqyFlexQuickDeci
              new StrategyOptionInteger(
                 'remainingWordsThreshold', DEFAULT_REMAINING_WORDS_THRESHOLD,
                 'Maximum number of remaining possibilities before switching from flex word to possible word'),
-            ...(super.getSupportedOptions().filter(option => option.name !== 'scoreRatio')) // Filter out options from parent class that no longer work - TODO get rid of this
+            ...super.getSupportedOptions()
         ];
     }
 
