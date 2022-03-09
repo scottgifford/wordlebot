@@ -1,4 +1,3 @@
-import { NUM_GUESSES } from "./gameRules.mjs";
 import { Logger } from "./log.mjs";
 import { StrategyOption } from "./strategy.mjs";
 import { StrategyRefreqyFlexAbstract } from "./strategyRefreqyFlexAbstract.mjs";
@@ -22,7 +21,7 @@ export class StrategyRefreqyFlexRatio extends StrategyRefreqyFlexAbstract {
 
     shouldUseFlexWord(flexWordAndScore, remainingWordAndScore, guessNum) {
         if (this.options.lastTurnGuess && this.isLastGuess(guessNum)) {
-            Logger.log('strategy', 'debug', `Should use remaining word, based on: (guessNum=${guessNum} >= ${NUM_GUESSES})`);
+            Logger.log('strategy', 'debug', 'Should use remaining word, since this is our last turn');
             return false;
         }
 

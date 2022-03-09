@@ -1,3 +1,4 @@
+import { NUM_GUESSES } from "./gameRules.mjs";
 import { Logger } from "./log.mjs";
 
 export class StrategyOption {
@@ -129,5 +130,15 @@ export class Strategy {
 
     updateLog() {
         // Do nothing
+    }
+
+    /**
+     * Check if the given guess number is the last one (or beyond)
+     *
+     * @param {number} guessNum Current guess number
+     * @returns Whether this is the last guess before losing (or beyond)
+     */
+    isLastGuess(guessNum) {
+        return guessNum >= NUM_GUESSES;
     }
 }

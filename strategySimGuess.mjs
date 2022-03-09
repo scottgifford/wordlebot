@@ -185,11 +185,6 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
         return ret;
     }
 
-    // TODO: Move up to Strategy class
-    isLastGuess(guessNum) {
-        return guessNum >= NUM_GUESSES;
-    }
-
     guess(guessNum) {
         this.guessNum = guessNum;
         if (guessNum === 1 && this.options.useInitialGuess) {

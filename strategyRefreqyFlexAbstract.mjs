@@ -1,4 +1,3 @@
-import { NUM_GUESSES } from "./gameRules.mjs";
 import { Logger } from "./log.mjs";
 import { StrategyOption } from "./strategy.mjs";
 import { StrategyRefreqy } from "./strategyRefreqy.mjs";
@@ -77,10 +76,6 @@ export class StrategyRefreqyFlexAbstract extends StrategyRefreqy {
             freq,
             letters: this.letters.clone(),
         });
-    }
-
-    isLastGuess(guessNum) {
-        return guessNum >= NUM_GUESSES;
     }
 
     shouldUseFlexWord(flexWordAndScore, remainingWordAndScore) {
