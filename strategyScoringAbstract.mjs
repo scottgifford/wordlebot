@@ -53,11 +53,6 @@ export class StrategyScoringAbstract extends StrategyLetterTrackerRemainingAbstr
         return guess;
     }
 
-    // TODO: Deprecate (still used by StrategySimGuess)
-    scoreWord(word, freq) {
-        return this.wordWithScore(word, freq).score;
-    }
-
     /**
      * Score the given word.
      *
