@@ -30,6 +30,15 @@ const NUM_GUESSES = 6; // Game rule, should really be in some other layer
 // Then pick word with best score
 
 export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
+
+    reset() {
+        super.reset();
+        // These are set on each guess(), but initialize here in case that method is not used
+        this.scoreCache = { };
+        this.guessNum = 1;
+        return true;
+    }
+
     getSupportedOptions() {
         return [
             new StrategyOptionRate(
