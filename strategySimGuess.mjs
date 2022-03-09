@@ -83,15 +83,15 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
         ];
     }
 
-    shouldUseFullGuessWordList(guessNum) {
+    shouldUseFullGuessWordList() {
         if (!this.options.guessSampleAllWords) {
             Logger.log('strategy', 'debug', `Sampling remaining words for guesses, becasue guessSampleAllWords=${this.options.guessSampleAllWords} (falsy)`);
             return false;
         } else if (this.remainingWords.length <= this.options.remainingWordsThreshold) {
             Logger.log('strategy', 'debug', `Sampling remaining words for guesses, because remainingWords ${this.remainingWords} < remainingWordsThreshold ${this.options.remainingWordsThreshold}`);
             return false;
-        } else if (this.options.lastTurnGuess && this.isLastGuess(guessNum)) {
-            Logger.log('strategy', 'debug', `Sampling remaining words for guesses, because ${this.options.lastTurnGuess} is truthy and guessNum ${guessNum} is our last guess`);
+        } else if (this.options.lastTurnGuess && this.isLastGuess(this.guessNum)) {
+            Logger.log('strategy', 'debug', `Sampling remaining words for guesses, because ${this.options.lastTurnGuess} is truthy and guessNum ${this.guessNum} is our last guess`);
             return false;
         }
 
@@ -99,12 +99,12 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
         return true
     }
 
-    generateGuesses(guessNum) {
+    wordsToScore() {
         if (this.options.guessSamplePossibleRatio === undefined) {
-            const samplePool = this.guessWordList(guessNum);
+            const samplePool = this.guessWordList(this.guessNum);
             const sampleSize = this.numGuessSims(samplePool.length);
             Logger.log('strategy', 'debug', `Sampling ${sampleSize} guesses of ${samplePool.length} possible`);
-            const ret = this.sample(samplePool, sampleSize, guessNum);
+            const ret = this.sample(samplePool, sampleSize);
             return ret;
         } else {
             const sampleSize = this.numGuessSims(this.words.length);
@@ -120,9 +120,8 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
         }
     }
 
-
-    guessWordList(guessNum) {
-        if (this.shouldUseFullGuessWordList(guessNum)) {
+    guessWordList() {
+        if (this.shouldUseFullGuessWordList()) {
             return this.words;
         } else {
             return this.remainingWords;
@@ -182,15 +181,17 @@ export class StrategySimGuess extends StrategyLetterTrackerRemainingAbstract {
     }
 
     guess(guessNum) {
-        this.guessNum = guessNum;
         if (guessNum === 1 && this.options.useInitialGuess) {
             Logger.log('strategy', 'debug', `Using pre-chosen initial guess '${this.options.initialGuess}'`);
             return this.options.initialGuess;
         }
 
+        // Cache guess number to use throughout the strategy
+        this.guessNum = guessNum;
         // Clear score cache
         this.scoreCache = { };
-        const possibleGuesses = this.generateGuesses(guessNum);
+
+        const possibleGuesses = this.wordsToScore();
         Logger.log('strategy', 'debug', "Possible Guesses: ", possibleGuesses);
         const sortedGuesses = this.scoreAndSortWords(possibleGuesses);
         Logger.log('strategy', 'debug', "Sorted Guesses: ", sortedGuesses);
