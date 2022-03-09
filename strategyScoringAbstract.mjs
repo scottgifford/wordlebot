@@ -38,12 +38,16 @@ export class StrategyScoringAbstract extends StrategyLetterTrackerRemainingAbstr
         ];
     }
 
+    wordsToScore() {
+        return this.remainingWords;
+    }
+
     guess(guessNum) {
         // Use cached first guess, it will always be the same
         if (guessNum === 1 && this.resetCache && this.resetCache.guess) {
             return this.resetCache.guess;
         }
-        const guess = this.bestWord(this.remainingWords);
+        const guess = this.bestWord(this.wordsToScore());
         // Cache first guess, it will always be the same
         if (guessNum == 1 && this.resetCache) {
             this.resetCache.guess = guess;
