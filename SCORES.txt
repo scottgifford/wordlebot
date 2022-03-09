@@ -601,9 +601,9 @@ real  7m41.019s
 user  8m7.721s
 sys   0m7.351s
 
-time caffeinate  ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s refreqflexdoubletourn  |tee tmp/refreqflexdoubletourn-wordle-2309c.out
+time caffeinate  ./wordler.mjs -w ./wordleWords.mjs -p inorder -r 2309 -s hybrid  |tee tmp/refreqflexdoublehybrid-wordle-2309c.out
 -> SUMMARY         [INFO ] ===== Game Statistics
-                      Strategy Name: refreqflexdoubletourn
+                      Strategy Name: hybrid
                    Strategy Options: {"resettable":true}
              Number of games played: 2309
                      Number of wins: 2309

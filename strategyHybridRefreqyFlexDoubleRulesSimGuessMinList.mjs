@@ -5,7 +5,7 @@ import { StrategySimGuessMinList } from "./strategySimGuessMinList.mjs";
 
 const DEFAULT_INITIAL_GUESS = 'tares';
 
-export class StrategyRefreqyFlexDoubleRulesTournament extends StrategyRefreqyFlexDoubleRules {
+export class StrategyHybridRefreqyFlexDoubleRulesSimGuessMinList extends StrategyRefreqyFlexDoubleRules {
     getSupportedOptions() {
         return [
             new StrategyOptionInteger(
@@ -33,8 +33,8 @@ export class StrategyRefreqyFlexDoubleRulesTournament extends StrategyRefreqyFle
         const bestWords = flexWordSubStrategy.scoreAndSortWords(this.words);
         const topWords = bestWords.slice(0, this.options.topWords).map(ws => ws.word);
 
-        Logger.log('strategy','debug','Starting tournament strategy with words', topWords);
-        const tournamentStrategy = new StrategySimGuessMinList(this.remainingWords, {
+        Logger.log('strategy','debug','Starting StrategySimGuessMinList strategy with words', topWords);
+        const simGuessStrategy = new StrategySimGuessMinList(this.remainingWords, {
             maxSolutionSims: this.options.topWords,
             maxGuessSims: this.options.maxGuessSims,
             letters: this.letters.clone(),
@@ -42,7 +42,7 @@ export class StrategyRefreqyFlexDoubleRulesTournament extends StrategyRefreqyFle
             samplingRandom: false,
         });
 
-        const tournamentWords = tournamentStrategy.scoreAndSortWords(topWords);
-        return tournamentWords[0];
+        const simGuessWords = simGuessStrategy.scoreAndSortWords(topWords);
+        return simGuessWords[0];
     }
 }
