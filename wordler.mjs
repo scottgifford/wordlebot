@@ -10,6 +10,7 @@ import commandLineUsage from "command-line-usage";
 import asciiHistogram from "bars";
 import chalk from "chalk";
 import { NUM_GUESSES, NUM_LETTERS } from "./gameRules.mjs";
+import * as fs from "fs/promises";
 
 const optionDefinitions = [
     { name: 'help', alias: 'h', type: Boolean, description: "Show usage instructions"},
@@ -17,6 +18,7 @@ const optionDefinitions = [
     { name: 'runs', alias: 'r', type: Number, description: "Number of times to run"},
     { name: 'pick-strategy', alias: 'p', type: String, description: "How to pick solution words (default random)"},
     { name: 'interactive', alias: 'i', type: Boolean, description: "Interactively prompt for Wordle result" },
+    { name: 'csv', alias: 'c', type: String, description: "Write CSV to the given file" },
     { name: 'words', alias: 'w', type: String, description: "JavaScript module exporting valid words" },
     { name: 'answer', alias: 'a', type: String, description: "Use the given answer instead of a random one" },
     { name: 'guess', alias: 'g', type: String, multiple: true, description: "Use these as initial guesses" },
@@ -108,6 +110,7 @@ const options = {
     answer: commandLineOptions.answer,
     guesses: commandLineOptions.guess || [],
     interactive: commandLineOptions.interactive,
+    csv: commandLineOptions.csv,
     strategyOptionsString: commandLineOptions['strategy-config'] || '{}',
     logConfigString: commandLineOptions['log-config'],
     solutionPicker: solutionPickerForOptions(commandLineOptions),
@@ -264,6 +267,7 @@ async function playGame(strategy, solutionWords, allwords, solutionPicker, strat
     return {
         solution,
         guesses: guessCount,
+        guessList: guesses,
     };
 }
 
@@ -273,6 +277,9 @@ async function playGame(strategy, solutionWords, allwords, solutionPicker, strat
             Logger.updateConfig(JSON.parse(options.logConfigString));
         }
 
+        let csvFile = options.csv
+            ? await fs.open(options.csv, 'w')
+            : undefined;
         const { solutionWords, allWords } = await import(options.wordList);
         const gameStats = {
             guesses: [],
@@ -296,6 +303,9 @@ async function playGame(strategy, solutionWords, allwords, solutionPicker, strat
             try {
                 const gameResult = await playGame(strategy.resetOrNew(), solutionWords, allWords, options.solutionPicker, strategyOptions);
                 gameStats.guesses[gameResult.guesses] = (gameStats.guesses[gameResult.guesses] || 0) + 1;
+                if (csvFile) {
+                    await csvFile.write(gameResult.guessList.join(",") + "\n");
+                }
 
                 // Track losing guesses for logging
                 if (gameResult.guesses > NUM_GUESSES) {
