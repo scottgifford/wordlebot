@@ -19,10 +19,10 @@ export class StrategyHybridRefreqyFlexDoubleRulesSimGuessMinList extends Strateg
                 'Use a pre-calculated word for our first guess instead of simulating'),
             new StrategyOption(
                 'initialGuess', DEFAULT_INITIAL_GUESS,
-                'Use a pre-calculated word for our first guess instead of simulating'),
+                'Pre-calculated initial guess, if useInitialGuess option is given.'),
             new StrategyOption(
                 'samplingRandom', true,
-                'Use a pre-calculated word for our first guess instead of simulating'),
+                'Use random sampling; if set to false, will use a deterministic approach for repeatable results.'),
 
             ...super.getSupportedOptions()
         ];
